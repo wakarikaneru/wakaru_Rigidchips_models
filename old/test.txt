@@ -1,0 +1,29 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Arm() { }
+		N:Frame(angle=-90, option=1) {
+			E:Frame() {
+				E:Frame(option=1) {
+					E:Frame() {
+						E:Frame() { }
+					}
+				}
+			}
+			W:Frame() {
+				W:Frame(option=1) {
+					W:Frame() {
+						W:Frame() { }
+					}
+				}
+			}
+		}
+	}
+}

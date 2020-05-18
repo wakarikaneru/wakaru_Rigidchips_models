@@ -1,0 +1,38 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Arm(angle=180, power=50000, option=0) { }
+		S:Weight(angle=-60, option=8) {
+			S:Weight(angle=150, option=8) { }
+		}
+		E:Weight(angle=-60, option=8) {
+			E:Weight(angle=150, option=8) { }
+		}
+		N:Weight(angle=-60, option=8) {
+			N:Weight(angle=150, option=8) { }
+		}
+		W:Weight(angle=-60, option=8) {
+			W:Weight(angle=150, option=8) { }
+		}
+	}
+}
+Lua
+{
+loadlib("NATSound.dll", "Load")();
+function main()
+	local line = 0;
+	for i = 0, 32 do
+		if IsValidID(i) == 1 then
+			out(line, string.format("#%d = \"%s\"", i, GetWaveFileName(i)));
+			line = line + 1;
+		end
+	end
+end
+}

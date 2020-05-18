@@ -1,0 +1,266 @@
+// [RCD] 
+Val
+{
+	HANDLE(default=180, min=150, max=210, step=1)
+	POWERL(default=0, min=-50000, max=50000, step=500)
+	POWERR(default=0, min=-50000, max=50000, step=500)
+	WING0(default=180, min=150, max=210)
+	WING1(default=180, min=150, max=210)
+	WING2(default=180, min=150, max=210)
+	WING3(default=180, min=150, max=210)
+	SUSP00(default=120, min=90, max=180)
+	SUSP01(default=120, min=0, max=180)
+	SUSP02(default=120, min=90, max=180)
+	SUSP10(default=120, min=90, max=180)
+	SUSP11(default=120, min=0, max=180)
+	SUSP12(default=120, min=90, max=180)
+	SUSP20(default=120, min=90, max=180)
+	SUSP21(default=120, min=0, max=180)
+	SUSP22(default=120, min=90, max=180)
+	SUSP30(default=120, min=90, max=180)
+	SUSP31(default=120, min=0, max=180)
+	SUSP32(default=120, min=90, max=180)
+}
+Key
+{
+	0:POWERR(step=500), POWERL(step=500)
+	1:POWERL(step=-500), POWERR(step=-500)
+	2:HANDLE(step=-1)
+	3:HANDLE(step=1)
+}
+Body
+{
+	Core(name=CORE) {
+		N:Frame(angle=135) {
+			N:Frame(angle=-135, name=BODY) {
+				S:Frame() {
+					W:Jet() {
+						W:Frame(name=WHEEL00, angle=90, option=1) {
+							W:RudderF(angle=SUSP00, option=1) {
+								W:RudderF(angle=SUSP01, option=1) {
+									W:RudderF(name=WHEEL01, angle=SUSP02, option=1) {
+										E:Wheel(name=WHEEL0, angle=180, power=POWERL, option=1, effect=4) { }
+									}
+								}
+							}
+						}
+						N:Chip(angle=WING0) { }
+					}
+					E:Jet() {
+						E:Frame(name=WHEEL10, angle=90, option=1) {
+							E:RudderF(angle=-SUSP10, option=1) {
+								E:RudderF(angle=-SUSP11, option=1) {
+									E:RudderF(name=WHEEL11, angle=-SUSP12, option=1) {
+										W:Wheel(name=WHEEL1, angle=180, power=-POWERR, option=1, effect=4) { }
+									}
+								}
+							}
+						}
+						N:Chip(angle=WING1) { }
+					}
+				}
+				N:TrimF() {
+					N:Frame(angle=0) {
+						E:Jet() {
+							E:RudderF(angle=HANDLE) {
+								W:Frame(name=WHEEL20, angle=90, option=1) {
+									W:RudderF(angle=SUSP20, option=1) {
+										W:RudderF(angle=SUSP21, option=1) {
+											W:RudderF(name=WHEEL21, angle=SUSP22, option=1) {
+												E:Wheel(name=WHEEL2, angle=180, option=1, effect=4) { }
+											}
+										}
+									}
+								}
+								S:Chip(angle=WING2) { }
+							}
+						}
+						W:Jet() {
+							W:RudderF(angle=HANDLE) {
+								E:Frame(name=WHEEL30, angle=90, option=1) {
+									E:RudderF(angle=-SUSP30, option=1) {
+										E:RudderF(angle=-SUSP31, option=1) {
+											E:RudderF(name=WHEEL31, angle=-SUSP32, option=1) {
+												W:Wheel(name=WHEEL3, angle=180, option=1, effect=4) { }
+											}
+										}
+									}
+								}
+								S:Chip(angle=WING3) { }
+							}
+						}
+					}
+				}
+				S:Trim(angle=90) { }
+			}
+		}
+	}
+}
+Lua
+{
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	initflag=false;
+	ac=0
+	
+	require("cel/Science/Vector.lua");
+	require("cel/Science/BasePhysic.lua");
+	
+function init()
+	initFlag=true;
+	for i=0, 3 do
+		_G["W"..i]=BasePhysic.new(_G["WHEEL"..i.."0"]);
+		_G["SUSP"..i]=0;
+	end
+end
+	
+function main()
+	if not initFlag then
+		init();
+	end
+	for i=0, 3 do
+		
+		_G["W"..i]:Renew();
+		v=(ChipVector(_G["WHEEL"..i.."1"])-ChipVector(_G["WHEEL"..i.."0"])):getLVec(_G["WHEEL"..i.."0"]);
+
+		_G["WING"..i]=step2(_G["WING"..i], PID("WING"..i, v.z*10, 0.02*10, 30, 5, 90, -30, 30, 0.95, 10+i)+180, 5);
+		_G["WING"..i]=180+30;
+		
+		acc=Vector.new(_G["W"..i].ax, _G["W"..i].ay, _G["W"..i].az):getLVec(_G["WHEEL"..i.."0"])/_BASE();
+		out(i, acc.z)
+		
+		_G["SUSP"..i]=step2(_G["SUSP"..i], limit(_G["SUSP"..i]*0.90-acc.z*0.95, -0.3, 0.3), 0.6/30);
+		
+		ac=-math.deg(math.asin(_G["SUSP"..i]-0.6));
+		_G["SUSP"..i.."0"]=90+ac
+		_G["SUSP"..i.."1"]=180-ac*2
+		_G["SUSP"..i.."2"]=360-_G["SUSP"..i.."0"]-_G["SUSP"..i.."1"]
+		
+		
+	end
+end
+
+function Vector:getWVec(chipName)
+	local t;
+	local lx; local ly; local lz;
+	local wx; local wy; local wz;
+			
+	lx=self.x;
+	ly=self.y;
+	lz=self.z;
+			
+	if chipName==0 then
+		--
+	elseif _DIR(chipName)==0 then
+		lx=-lx;
+		lz=-lz;
+	elseif _DIR(chipName)==1 then
+		t=lx
+		lx=-lz;
+		lz=t;
+	elseif _DIR(chipName)==2 then
+		--
+	elseif _DIR(chipName)==3 then
+		t=lx
+		lx=lz;
+		lz=-t;
+	end
+			
+	wx=_XX(chipName)*lx+_YX(chipName)*ly+_ZX(chipName)*lz;
+	wy=_XY(chipName)*lx+_YY(chipName)*ly+_ZY(chipName)*lz;
+	wz=_XZ(chipName)*lx+_YZ(chipName)*ly+_ZZ(chipName)*lz;
+
+	return Vector.new(wx, wy, wz);
+end
+
+function Vector:getLVec(chipName)
+	local t;
+	local wx; local wy; local wz;
+	local lx; local ly; local lz;
+	
+	wx=self.x;
+	wy=self.y;
+	wz=self.z;
+				
+	lx=_XX(chipName)*wx+_XY(chipName)*wy+_XZ(chipName)*wz;
+	ly=_YX(chipName)*wx+_YY(chipName)*wy+_YZ(chipName)*wz;
+	lz=_ZX(chipName)*wx+_ZY(chipName)*wy+_ZZ(chipName)*wz;
+	
+	if chipName==0 then
+		--
+	elseif _DIR(chipName)==0 then--
+		lx=-lx;
+		lz=-lz;
+	elseif _DIR(chipName)==1 then
+		t=lx;
+		lx=lz;
+		lz=-t;
+	elseif _DIR(chipName)==2 then
+		--
+	elseif _DIR(chipName)==3 then
+		t=lx;
+		lx=-lz;
+		lz=t;
+	end
+			
+	return Vector.new(lx, ly, lz);
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+	
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+}

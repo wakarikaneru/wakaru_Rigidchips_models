@@ -1,0 +1,318 @@
+// [RCD] 
+Val
+{
+	FIRE1(default=0, max=1200000)
+	FIRE2(default=0, max=1200000)
+	FIRE3(default=0, max=1200000)
+	PITCH(default=90, min=75, max=180)
+	YAW(default=0, min=-3600000, max=3600000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE, user2=811) {
+		S:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			S:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				S:Weight(angle=150, damper=0.9375, option=2, spring=0.9375) { }
+			}
+		}
+		W:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			W:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				W:Weight(angle=150, damper=0.9375, option=2, spring=0.9375) { }
+			}
+		}
+		N:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			N:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				N:Weight(angle=150, damper=0.9375, option=2, spring=0.9375) { }
+			}
+		}
+		E:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			E:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				E:Weight(angle=150, damper=0.9375, option=2, spring=0.9375) { }
+			}
+		}
+		S:Weight(angle=120, damper=1, spring=1) {
+			S:Weight(angle=150, damper=1, spring=1) {
+				S:Trim(angle=YAW, damper=1, spring=1) {
+					S:Rudder(name=ARM, angle=PITCH, damper=1, spring=1) {
+						N:Weight(angle=-90, spring=1, damper=1) {
+							E:Arm(name=ARM0, angle=90, power=FIRE1, option=50000, spring=1, damper=1) {
+								W:Arm(angle=0, power=0, option=0, spring=1, damper=1) { }
+							}
+							N:Arm(name=ARM1, angle=90, power=FIRE2, option=50000, spring=1, damper=1) {
+								S:Arm(angle=0, power=0, option=0, spring=1, damper=1) { }
+							}
+							W:Arm(name=ARM2, angle=90, power=FIRE3, option=50000, spring=1, damper=1) {
+								E:Arm(angle=0, power=0, option=0, spring=1, damper=1) { }
+							}
+						}
+						N:Weight(angle=90, spring=1, damper=1) {
+							E:Arm(name=ARM3, angle=-90, power=FIRE1, option=50000, spring=1, damper=1) {
+								W:Arm(angle=0, power=0, option=0, spring=1, damper=1) { }
+							}
+							N:Arm(name=ARM4, angle=-90, power=FIRE2, option=50000, spring=1, damper=1) {
+								S:Arm(angle=0, power=0, option=0, spring=1, damper=1) { }
+							}
+							W:Arm(name=ARM5, angle=-90, power=FIRE3, option=50000, spring=1, damper=1) {
+								E:Arm(angle=0, power=0, option=0, spring=1, damper=1) { }
+							}
+						}
+					}
+				}
+			}
+		}
+		N:Weight(angle=120, spring=1, damper=1) { }
+		N:Weight(angle=-150, damper=0.9375, option=1, spring=0.9375) { }
+		W:Weight(angle=-150, damper=0.9375, option=1, spring=0.9375) { }
+		S:Weight(angle=-150, damper=0.9375, option=1, spring=0.9375) { }
+		E:Weight(angle=-150, damper=0.9375, option=1, spring=0.9375) { }
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+	initflag=false;
+
+	require("wakaru/wakaru_eye.lua");
+function init()
+	initflag=true;
+	eye=Wakaru_Eye.new(CORE, 300);
+	BomberCharge=loadlib("BomberDLL.dll", "bomber_Charge");
+	
+	target=0;
+	targetPos=Wector.new(0, 0, 0);
+	readTime=0;
+	aimVec=targetPos-Wector.getPosVec(CORE);
+	yaw=0;
+	pitch=0;
+	t=0;
+end
+
+function main()
+	if not initflag then init() end
+	
+	--bomberRegulation();
+	
+	eye:tick();
+	eye:dispPlayer(0, KEY_DOWN, KEY_RIGHT, KEY_LEFT);
+	eye:dispOffset(1, KEY_G, KEY_B, KEY_V);
+	
+	armPos=getArmPos();
+	armSpd=getArmSpd();
+	
+	out(2, _FPS());
+	if _PLAYERS()~=0 then
+		if _KEYDOWN(KEY_C)==1 then target=target+1; end
+		if _KEYDOWN(KEY_Z)==1 then target=target-1; end
+		if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+		out(5, "TARGET (Z) ".._PLAYERNAME(target).." (C) ");
+		targetPos=eye:getFuturePos2(_PLAYERID(target), armPos, armSpd);
+	else
+		out(5, "OffLine");
+	end
+	
+	if _KEY(KEY_X)==1 then
+		FIRE1=FIRE1+1;
+		FIRE2=FIRE2+1;
+		FIRE3=FIRE3+1;
+	else
+		FIRE1=50000-1;
+		FIRE2=50000-1-2;
+		FIRE3=50000-1-4;
+	end
+	
+	aimVecV=-(targetPos-armPos):getLVec(ARM):getNormal();
+	aimVecV.y=0;
+	aimVecV=aimVecV:getNormal();
+	
+	rotV=math.deg(math.acos(Wector.new(0, 0, -1)^aimVecV));
+	if 0<aimVecV.x then else rotV=-rotV; end
+	
+	pitch=pitch+rotV;
+	
+	aimVecH=(targetPos-armPos):getLVec(CORE):getNormal();
+	aimVecH.y=0;
+	aimVecH=aimVecH:getNormal();
+	
+	rotH=math.deg(math.acos(Wector.new(0, 0, -1)^aimVecH));
+	
+	if 0<aimVecH.x then else rotH=-rotH; end
+	
+	local disR=angleNorm(angleNorm(rotH)-angleNorm(yaw));
+	
+	if yaw~=0 and yaw/yaw~=1 then rotH=0; yaw=0; disR=0; end
+	
+	yaw=yaw+disR;
+	
+	--[[
+	if _KEY(KEY_A)==1 then yaw=yaw+1; end
+	if _KEY(KEY_D)==1 then yaw=yaw-1; end
+	if _KEY(KEY_W)==1 then pitch=pitch+1; end
+	if _KEY(KEY_S)==1 then pitch=pitch-1; end
+	--]]
+	
+	pitch=limit(pitch, 0, 180);
+	YAW=step2(YAW, yaw+90, 15);
+	PITCH=step2(PITCH, 180-pitch, 15);
+end
+
+function getArmPos()
+	local pos=Wector.new(0, 0, 0);
+	local j=0;
+	for i=0, 5 do
+		if _TOP(_G["ARM"..i])==CORE then
+			j=j+1;
+			pos=pos+Wector.getPosVec(_G["ARM"..i]);
+		end
+	end
+	if j~=0 then
+		pos=pos/j;
+	end
+	return pos;
+end
+
+function getArmSpd()
+	local spd=Wector.new(0, 0, 0);
+	local j=0;
+	for i=0, 5 do
+		if _TOP(_G["ARM"..i])==CORE then
+			j=j+1;
+			spd=spd+getSpdVec2(_G["ARM"..i]);
+		end
+	end
+	if j~=0 then
+		spd=spd/j;
+	end
+	return spd;
+end
+
+function getArmVec()
+	local vec=Wector.new(0, 0, 0);
+	local j=0;
+	for i=0, 5 do
+		if _TOP(_G["ARM"..i])==CORE then
+			j=j+1;
+			vec=vec+Wector.new(0, 0, -1):getWVec(_G["ARM"..i]);
+		end
+	end
+	return vec:getNormal();
+end
+
+function bomberRegulation()
+	for i=0, _CHIPS()-1 do
+		if _TYPE(i)==10 then
+			BomberCharge(i);
+		end
+	end
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function step3(val, target, ratio)
+	return val+(target-val)/ratio;
+end
+
+function angleNorm(rot)
+	while(rot<-180) do
+		rot=rot+360;
+	end
+	while(rot>180) do
+		rot=rot-360;
+	end
+	return rot;
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function drawTarget(chip, pos, dis, fpos, fdis)
+	_SETCOLOR(tonumber("00FF00", 16));
+	
+	local p1=(Wector.new(1, 1, 0)*dis/60):getWVec(chip)+pos;
+	local p2=(Wector.new(1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p3=(Wector.new(-1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p4=(Wector.new(-1, 1, 0)*dis/60):getWVec(chip)+pos;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	local p1=(Wector.new(1, 1, 0)*fdis/60/2):getWVec(chip)+fpos;
+	local p2=(Wector.new(1, -1, 0)*fdis/60/2):getWVec(chip)+fpos;
+	local p3=(Wector.new(-1, -1, 0)*fdis/60/2):getWVec(chip)+fpos;
+	local p4=(Wector.new(-1, 1, 0)*fdis/60/2):getWVec(chip)+fpos;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+
+	_MOVE3D(pos.x, pos.y, pos.z);
+	_LINE3D(fpos.x, fpos.y, fpos.z);
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+	
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val, min, max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec2(chipName)
+	return (Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+end
+}

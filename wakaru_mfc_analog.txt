@@ -1,0 +1,241 @@
+// [RCD] 
+Val
+{
+	POWER(default=0, max=100000)
+	ROT(default=0, min=-10, max=10, step=1)
+	ROTL(default=0, min=-10, max=10)
+	ROTR(default=0, min=-10, max=10)
+	TRIG(default=1199999, max=1200000, step=1)
+	YAW(default=0, min=-15, max=15, step=1)
+}
+Key
+{
+	0:rotr(step=10), rotl(step=10)
+	1:rotr(step=-10), rotl(step=-10)
+	2:rotr(step=-10), rotl(step=10)
+	3:rotr(step=10), rotl(step=-10)
+	4:YAW(step=-1)
+	5:power(step=5000)
+	6:YAW(step=1)
+}
+Body
+{
+	Core() {
+		W:RudderF(angle=-20) {
+			W:Trim(angle=rotl) {
+				W:Chip() {
+					W:Chip() { }
+				}
+			}
+		}
+		E:RudderF(angle=20) {
+			E:Trim(angle=-rotr) {
+				E:Chip() {
+					E:Chip() { }
+				}
+			}
+		}
+		S:Chip() {
+			S:Frame(angle=-30) {
+				S:Jet(angle=120, power=-power, effect=2) { }
+			}
+			S:Frame() {
+				S:Chip() {
+					W:Chip(angle=-60) { }
+					E:Chip(angle=30) { }
+					W:Chip(angle=30) { }
+					E:Chip(angle=-60) { }
+				}
+			}
+			S:TrimF(angle=90) {
+				S:Chip(angle=YAW) { }
+			}
+		}
+		E:Wheel(angle=60) { }
+		W:Wheel(angle=60) { }
+	}
+}
+Lua
+{	bx=_X(CORE)
+	by=_Y(CORE)
+	bz=_Z(CORE)
+	length=1000
+function main()
+		local x=_X(CORE)
+		local y=_Y(CORE)
+		local z=_Z(CORE)
+
+		_SETCOLOR(tonumber("FF0000", 16))
+
+ 		_MOVE3D(_X(CORE),_Y(CORE),_Z(CORE))
+ 		_LINE3D(_X(CORE)+_ZX(CORE)*-length+(x-bx)*length/20,_Y(CORE)+_ZY(CORE)*-length+(y-by)*length/20,_Z(CORE)+_ZZ(CORE)*-length+(z-bz)*length/20)
+		bx=x
+		by=y
+		bz=z
+		
+		bodySpd=getSpdVec(0);
+		bodySpdL=bodySpd:getLVec(0);
+		s=limit(3/-bodySpdL.z, 0, 1);
+		
+		
+		s0=limit(_ANALOG(0)/math.abs(_ANALOG(0)), -1, 1);
+		s1=limit(_ANALOG(1)/math.abs(_ANALOG(1)), -1, 1);
+		
+		ROTL=((_ANALOG(0)/1000)^2*10*s0+(_ANALOG(1)/1000)^2*10*s1)*s;
+		ROTR=((_ANALOG(0)/1000)^2*10*-s0+(_ANALOG(1)/1000)^2*10*s1)*s;
+		POWER=math.sqrt((_ANALOG(2)/1000)^2+(_ANALOG(5)/1000)^2)^2*100000;
+		if POWER<10000 then POWER=0; end
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Vector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Vector.new(0, 0, 0);
+	local posVec=Vector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+----Vectorクラス
+--このゲーム内の、空間上のベクトルを扱う
+Vector={
+	getPosVec=function(self, chipName)
+		return Vector.new(_X(chipName), _Y(chipName), _Z(chipName));
+	end,
+};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+
+		getWVec=function(self, chipName)
+			local t;
+			local lx; local ly; local lz;
+			local wx; local wy; local wz;
+			
+			lx=self.x;
+			ly=self.y;
+			lz=self.z;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx
+				lx=-lz;
+				lz=t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx
+				lx=lz;
+				lz=-t;
+			end
+			
+			wx=_XX(chipName)*lx+_YX(chipName)*ly+_ZX(chipName)*lz;
+			wy=_XY(chipName)*lx+_YY(chipName)*ly+_ZY(chipName)*lz;
+			wz=_XZ(chipName)*lx+_YZ(chipName)*ly+_ZZ(chipName)*lz;
+
+			return Vector.new(wx, wy, wz);
+		end,
+
+		getLVec=function(self, chipName)
+			local t;
+			local wx; local wy; local wz;
+			local lx; local ly; local lz;
+			
+			wx=self.x;
+			wy=self.y;
+			wz=self.z;
+				
+			lx=_XX(chipName)*wx+_XY(chipName)*wy+_XZ(chipName)*wz;
+			ly=_YX(chipName)*wx+_YY(chipName)*wy+_YZ(chipName)*wz;
+			lz=_ZX(chipName)*wx+_ZY(chipName)*wy+_ZZ(chipName)*wz;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then--
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx;
+				lx=lz;
+				lz=-t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx;
+				lx=-lz;
+				lz=t;
+			end
+			
+			return Vector.new(lx, ly, lz);
+		end,
+	}
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+--[[
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+]]--
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+			--return "x="..math.floor(self.x)..",y="..math.floor(self.y)..",z="..math.floor(self.z);
+		end,
+	}
+	setmetatable(obj, operation);
+	return obj;
+end
+}

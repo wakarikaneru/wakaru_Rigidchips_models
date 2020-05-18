@@ -1,0 +1,380 @@
+// 例の狙撃ホバー
+// 作者 wakaru
+//
+// 例の奴です
+// Ctrl+F10を2回押してご利用ください
+//
+// 操作方法
+//
+// [右クリック]+[マウス移動] 照準
+// [右クリック]+[左クリック] ARM発射
+// [中クリック]+[マウス上下移動] ズーム倍率変更
+// [E][S][D][F] 水平移動
+// [G][V] 上昇/下降
+// [A] 制動
+//
+// 撃った弾は運がよければ赤いクロスヘアのところに飛んでいくはずです
+// すっげえぶれる
+Val
+{
+	CC(default=0)
+	JET_PITCH(default=0, min=-75000, max=75000)
+	JET_ROLL(default=0, min=-75000, max=75000)
+	JET_X(default=0, min=-75000, max=75000)
+	JET_Y(default=0, min=-75000, max=75000)
+	JET_YAW(default=0, min=-75000, max=75000)
+	JET_Z(default=0, min=-75000, max=75000)
+	TRIG(default=0, max=32000000, step=32000000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		S:Jet(angle=180, dumper=1, power=-JET_Y) { }
+		S:TrimF(dumper=1, angle=90, option=1) {
+			N:Jet(dumper=1, power=JET_X) { }
+			N:Jet(angle=180, power=-JET_YAW, name=JETY) { }
+		}
+		S:Jet(power=-JET_PITCH, name=JETP) { }
+		N:Frame(dumper=1, angle=150, option=1) {
+			N:Jet(dumper=1, angle=120, power=JET_Z) {
+				E:Arm(angle=90, power=TRIG, option=800000, dumper=1, name=ARM1) { }
+				W:Arm(angle=90, power=TRIG, option=800000, dumper=1, name=ARM2) { }
+			}
+			N:Wheel(dumper=1, angle=120, power=JET_ROLL) { }
+		}
+	}
+}
+Lua
+{
+if type(loadlib)=="function" then
+	loadlib("Spirytus.DLL", "rc_OpenSpirytus")();
+end
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+	Y=_Y(CORE);
+
+	prevX=_X(CORE);
+	prevY=_Y(CORE);
+	prevZ=_Z(CORE);
+
+	prevMx=_MX();
+	prevMy=_MY();
+
+	PITCH=0;
+	PITCHR=45;
+	YAW=_AY(CORE)*180/math.pi;
+
+
+	zoom=100;
+
+	bx=_X(CORE);
+	by=_Y(CORE);
+	bz=_Z(CORE);
+
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+	
+function init()
+	initflag=true;
+	eye=Wakaru_Eye.new(CORE, 300);
+end
+
+function main()
+	if not initflag then init() end
+	
+	eye:tick();
+	eye:dispPlayer(0, KEY_DOWN, KEY_RIGHT, KEY_LEFT);
+	
+	out(0,"ARM1 "..math.floor(_E(ARM1)/_OPTION(ARM1)*100).."%");
+	out(1,"ARM2 "..math.floor(_E(ARM2)/_OPTION(ARM2)*100).."%");
+	local mvx=0;
+	local mvy=0;
+	local mx=_MX()/_HEIGHT()*2;
+	local my=_MY()/_HEIGHT()*2;
+
+	if _MR()==1 then
+		mvx=mx-prevMx;
+		mvy=my-prevMy;
+		cross(2);
+	else
+		cross(1/10);
+	end
+
+	if _MM()==1 then
+		zoom=zoom+(my-prevMy)*100;
+	end
+
+	prevMx=mx;
+	prevMy=my;
+
+	zoom=math.min(100,math.max(1,zoom));
+
+	local S=1/_ZOOM(zoom);
+
+	YAW=YAW+mvx/S;
+	PITCH=PITCH-mvy/S;
+
+	if _ML()==1 and _MR()==1 and ((1<=_E(ARM1)/_OPTION(ARM1) and _TOP(ARM1)==CORE) or (1<=_E(ARM2)/_OPTION(ARM2) and _TOP(ARM2)==CORE)) then
+		TRIG=math.max(_OPTION(ARM1),_OPTION(ARM2));
+		zoom=zoom+30;
+	else
+		TRIG=0;
+	end
+
+	YAW=angleNorm(YAW);
+
+	if(_KEY(KEY_UP)==1)then
+		PITCH=PITCH+1/30/S;
+	end
+	if(_KEY(KEY_DOWN)==1)then
+		PITCH=PITCH-1/30/S;
+	end
+
+	PITCH=math.min(PITCHR,math.max(-PITCHR,PITCH));
+	
+
+	if(_KEY(KEY_V)==1)then
+		Y=Y-1;
+	end
+
+	if(0<_H(CORE) and _H(CORE)<0.5)then
+		Y=_Y(CORE)+2;
+	end
+
+	if(_KEY(KEY_G)==1)then
+		Y=Y+1;
+	end
+
+	local x=_X(CORE);
+	local y=_Y(CORE);
+	local z=_Z(CORE);
+
+	local vx=x-prevX;
+	local vy=y-prevY;
+	local vz=z-prevZ;
+
+	prevX=x;
+	prevY=y;
+	prevZ=z;
+
+	if _KEY(KEY_A)==1 then
+		b=500000;
+	else
+		b=500;
+	end
+
+	local ypow=(Y-_Y(CORE))*50000-vy*250000;
+
+	local xpow=0;
+	local zpow=0;
+
+	local hVec={x=0, y=0, z=0};
+
+	if(_KEY(KEY_E)==1)then
+		hVec.z=-1;
+	elseif(_KEY(KEY_D)==1)then
+		hVec.z=1;
+	end
+
+	if(_KEY(KEY_S)==1)then
+		hVec.x=1;
+	elseif(_KEY(KEY_F)==1)then
+		hVec.x=-1;
+	end
+
+	hVec=getWVec(hVec, CORE);
+
+	if hVec.x~=0 or hVec.y~=0 or hVec.z~=0 then
+		hVec=getNormVec(hVec);
+	end
+
+	xpow=hVec.x*50000-vx*b;
+	zpow=hVec.z*50000-vz*b;
+
+	local power=getLVec({x=xpow, y=ypow, z=zpow}, CORE);
+	JET_X=power.x;
+	JET_Y=power.y;
+	JET_Z=power.z;
+
+	disYaw=YAW-_AY(CORE)*180/math.pi;
+	disPitch=PITCH-_AX(CORE)*180/math.pi;
+	disRoll=-_AZ(CORE)*180/math.pi;
+
+	disYaw=angleNorm(disYaw);
+	disPitch=angleNorm(disPitch);
+	disRoll=angleNorm(disRoll);
+
+	if pdisYaw==nil then
+		pdisYaw=disYaw;
+		pdisPitch=disPitch;
+		pdisRoll=disRoll;
+	end
+
+	local vYaw=disYaw-pdisYaw;
+	local vPitch=disPitch-pdisPitch;
+	local vRoll=disRoll-pdisRoll;
+
+	pdisYaw=disYaw;
+	pdisPitch=disPitch;
+	pdisRoll=disRoll;
+
+	JET_YAW=disYaw*3000+vYaw*6000;
+	JET_PITCH=disPitch*3000+vPitch*6000;
+	JET_ROLL=disRoll*300+vRoll*600;
+	
+	for i=0, _PLAYERS()-1 do
+		id=_PLAYERID(i)
+		if id~=_PLAYERMYID() then
+			drawTarget(0, eye:getPos(id), eye:getDis(id), eye:getFuturePos2(id, Vector.new(_X(CORE),_Y(CORE),_Z(CORE)), Vector.new(_VX(CORE), _VY(CORE), _VZ(CORE))/30));
+		end
+	end
+end
+
+function cross(l)
+	local x=_X(CORE);
+	local y=_Y(CORE);
+	local z=_Z(CORE);
+
+	local vx=x-bx;
+	local vy=y-by;
+	local vz=z-bz;
+
+	bx=x;
+	by=y;
+	bz=z;
+
+	local lvec=getLVec({x=_VX(CORE)/30, y=_VY(CORE)/30, z=_VZ(CORE)/30},CORE);
+
+	local VX=(math.atan2(20-lvec.z,lvec.x)*180/math.pi-90)/(_ZOOM(0)/2);
+	local VY=(math.atan2(20-lvec.z,-lvec.y)*180/math.pi-90)/(_ZOOM(0)/2);
+
+	_SETCOLOR(tonumber("FF0000", 16));
+
+	_MOVE2D(VX,VY-0.05);
+	_LINE2D(VX,VY+0.05);
+
+	_MOVE2D(VX-0.05,VY);
+	_LINE2D(VX+0.05,VY);
+
+	_SETCOLOR(tonumber("000000", 16));
+
+	_MOVE2D(0,-l);
+	_LINE2D(0,l);
+
+	_MOVE2D(-l,0);
+	_LINE2D(l,0);
+end
+
+function getWVec(lVec, chipName)
+	local wVec={};
+	
+	wVec.x=_XX(chipName)*lVec.x+_YX(chipName)*lVec.y+_ZX(chipName)*lVec.z;
+	wVec.y=_XY(chipName)*lVec.x+_YY(chipName)*lVec.y+_ZY(chipName)*lVec.z;
+	wVec.z=_XZ(chipName)*lVec.x+_YZ(chipName)*lVec.y+_ZZ(chipName)*lVec.z;
+
+	return wVec;
+end
+
+function getLVec(wVec, chipName)
+	local lVec={};
+
+	lVec.x=_XX(chipName)*wVec.x+_XY(chipName)*wVec.y+_XZ(chipName)*wVec.z;
+	lVec.y=_YX(chipName)*wVec.x+_YY(chipName)*wVec.y+_YZ(chipName)*wVec.z;
+	lVec.z=_ZX(chipName)*wVec.x+_ZY(chipName)*wVec.y+_ZZ(chipName)*wVec.z;
+
+	return lVec;
+end
+
+function addVec(vec1, vec2)
+	local addVec={};
+	addVec.x=vec1.x+vec2.x;
+	addVec.y=vec1.y+vec2.y;
+	addVec.z=vec1.z+vec2.z;
+
+	return addVec;
+end
+
+function mulVec(vec, m)
+	local mulVec={};
+	mulVec.x=vec.x*m;
+	mulVec.y=vec.y*m;
+	mulVec.z=vec.z*m;
+
+	return mulVec;
+end
+
+function getDis(pos1,pos2)
+	local disX=pos1.x-pos2.x;
+	local disY=pos1.y-pos2.y;
+	local disZ=pos1.z-pos2.z;
+	return math.sqrt(disX^2+disY^2+disZ^2);
+end
+
+function getVecLength(vec)
+	return getDis(vec, {x=0, y=0, z=0});
+end
+
+function getNormVec(vec)
+	return mulVec(vec, 1/getVecLength(vec));
+end
+
+function angleNorm(rot)
+	while(rot<-180) do
+		rot=rot+360;
+	end
+	while(rot>180) do
+		rot=rot-360;
+	end
+	return rot;
+end
+
+function drawTarget(chip, pos, dis, fpos)
+	_SETCOLOR(tonumber("00FF00", 16));
+	
+	local p1=(Vector.new(1, 1, 0)*dis/60):getWVec(chip)+pos;
+	local p2=(Vector.new(1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p3=(Vector.new(-1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p4=(Vector.new(-1, 1, 0)*dis/60):getWVec(chip)+pos;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	local p1=(Vector.new(1, 1, 0)*3):getWVec(chip)+fpos;
+	local p2=(Vector.new(1, -1, 0)*3):getWVec(chip)+fpos;
+	local p3=(Vector.new(-1, -1, 0)*3):getWVec(chip)+fpos;
+	local p4=(Vector.new(-1, 1, 0)*3):getWVec(chip)+fpos;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+
+	_MOVE3D(pos.x, pos.y, pos.z);
+	_LINE3D(fpos.x, fpos.y, fpos.z);
+end
+}

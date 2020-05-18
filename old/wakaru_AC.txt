@@ -1,0 +1,171 @@
+// [RCD] 
+Val
+{
+	ANGLE(default=90, min=15, max=120)
+	ROT1(default=0, min=-1000000, max=1000000)
+	ROT2(default=90, min=-1000000, max=1000000)
+	TRIG0(default=0, min=0, max=50000)
+	TRIG1(default=0, min=0, max=50000)
+	TRIG2(default=0, min=0, max=50000)
+	TRIG3(default=0, min=0, max=50000)
+	ARM01(default=90, min=90, max=180)
+	ARM02(default=180, min=0, max=180)
+	ARM03(default=-90, min=-90, max=0)
+	ARM11(default=90, min=90, max=180)
+	ARM12(default=180, min=0, max=180)
+	ARM13(default=-90, min=-90, max=0)
+	ARM21(default=90, min=90, max=180)
+	ARM22(default=180, min=0, max=180)
+	ARM23(default=-90, min=-90, max=0)
+	ARM31(default=90, min=90, max=180)
+	ARM32(default=180, min=0, max=180)
+	ARM33(default=-90, min=-90, max=0)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		S:Weight(angle=ANGLE, name=BASE, option=1, damper=1) {
+			S:TrimF(angle=ROT1, option=1, damper=1) {
+				N:Weight(angle=90, option=1) { }
+				N:Weight(angle=-90, option=1) { }
+			}
+			S:TrimF(angle=ROT2, option=1, damper=1) {
+				N:Weight(angle=90, option=1) { }
+				N:Weight(angle=-90, option=1) { }
+			}
+		}
+		S:Weight() {}
+		S:Frame(angle=ARM01, name=MOUNT0, option=1) {
+			S:Frame(angle=ARM02, option=1) {
+				S:Arm(angle=ARM03, name=GUN0, power=TRIG0, option=50000) { }
+			}
+		}
+		S:Frame(angle=ARM11, name=MOUNT1, option=1) {
+			S:Frame(angle=ARM12, option=1) {
+				S:Arm(angle=ARM13, name=GUN1, power=TRIG1, option=50000) { }
+			}
+		}
+		S:Frame(angle=ARM21, name=MOUNT2, option=1) {
+			S:Frame(angle=ARM22, option=1) {
+				S:Arm(angle=ARM23, name=GUN2, power=TRIG2, option=50000) { }
+			}
+		}
+		S:Frame(angle=ARM31, name=MOUNT3, option=1) {
+			S:Frame(angle=ARM32, option=1) {
+				S:Arm(angle=ARM33, name=GUN3, power=TRIG3, option=50000) { }
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+	FIREANGLE=math.deg(math.acos(1/4+0.1));
+	STEP=(90-FIREANGLE)/3;
+
+	arm0r=90;
+	arm1r=90;
+	arm2r=90;
+	arm3r=90;
+
+	armNum=0;
+	ARMMAX=4;
+
+	pitch=0;
+	yaw=_AY(CORE)*180/math.pi;
+
+function main()
+	out(1,_WEIGHT());
+	local s=1/(_KEY(KEY_Z)*4+1);
+	if _KEY(KEY_UP)==1 then
+		pitch=pitch-1*s;
+	end
+	if _KEY(KEY_DOWN)==1 then
+		pitch=pitch+1*s;
+	end
+	if _KEY(KEY_LEFT)==1 then
+		yaw=yaw-1*s;
+	end
+	if _KEY(KEY_RIGHT)==1 then
+		yaw=yaw+1*s;
+	end
+
+	local disY=angleNorm(yaw-_AY(CORE)*180/math.pi)
+	disY=math.min(10,math.max(-10,disY))
+
+	ANGLE=pitch+90;
+
+	ROT1=ROT1-disY;
+	ROT2=ROT1+90;
+
+	for i=0,ARMMAX-1 do
+
+		if _TOP(_G["GUN"..i])~=CORE then
+			local aa=_BYE(_G["MOUNT"..i]);
+		end
+
+		if _G["arm"..i.."r"]==FIREANGLE then
+			_G["TRIG"..i]=_OPTION(_G["GUN"..i]);
+			armNum=armNum+1;
+		else
+			_G["TRIG"..i]=0;
+		end
+
+		armNum=math.mod(armNum,ARMMAX);
+
+		if i==armNum and _KEY(KEY_X)==1 and _OPTION(_G["GUN"..i])<=_E(_G["GUN"..i]) then
+			_G["arm"..i.."r"]=step2(_G["arm"..i.."r"], FIREANGLE, STEP);
+		else
+			_G["arm"..i.."r"]=step2(_G["arm"..i.."r"], 90, STEP);
+		end
+
+		_G["ARM"..i.."1"]=180-_G["arm"..i.."r"];
+		_G["ARM"..i.."2"]=2*_G["arm"..i.."r"];
+		_G["ARM"..i.."3"]=-_G["arm"..i.."r"];
+	end
+end
+
+function angleNorm(rot)
+	while(rot<-180) do
+		rot=rot+360;
+	end
+	while(rot>180) do
+		rot=rot-360;
+	end
+	return rot
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+}

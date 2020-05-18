@@ -1,0 +1,308 @@
+// GB用 爆撃ホバー
+
+// ためしに作ってみた12発の爆弾を持つホバーです
+
+// カーソルキー 水平移動
+// Z,C 回転
+// X 静止
+// F,V 上昇下降
+// S 爆弾投下
+
+Val
+{
+	PR(default=0, min=-200000, max=200000)
+	PX1(default=0, min=-200000, max=200000)
+	PX2(default=0, min=-200000, max=200000)
+	PY1(default=0, min=-200000, max=200000)
+	PY2(default=0, min=-200000, max=200000)
+	PY3(default=0, min=-200000, max=200000)
+	PY4(default=0, min=-200000, max=200000)
+	PZ1(default=0, min=-200000, max=200000)
+	PZ2(default=0, min=-200000, max=200000)
+	TRIG(default=0, min=0, max=100000, STEP=100000)
+
+	B1(default=0, min=0, max=1)
+	B2(default=0, min=0, max=1)
+	B3(default=0, min=0, max=1)
+	B4(default=0, min=0, max=1)
+	B5(default=0, min=0, max=1)
+	B6(default=0, min=0, max=1)
+	B7(default=0, min=0, max=1)
+	B8(default=0, min=0, max=1)
+	T1(default=0, min=0, max=6400000)
+	T2(default=0, min=0, max=6400000)
+	T3(default=0, min=0, max=6400000)
+	T4(default=0, min=0, max=6400000)
+	T5(default=0, min=0, max=6400000)
+	T6(default=0, min=0, max=6400000)
+	T7(default=0, min=0, max=6400000)
+	T8(default=0, min=0, max=6400000)
+
+	R(default=50, min=-100000)
+	Y(default=50, min=-100000)
+	MODE(default=0, min=0, max=1)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+	Core(name=CORE) {
+		N:Jet(power=PY1, name=JETY1) {
+			N:Arm(angle=90, power=TRIG, option=100000) {
+				S:Arm(){}
+			}
+			E:Arm(angle=90, power=TRIG, option=100000) {
+				W:Arm(){}
+			}
+			S:Arm(angle=90, power=TRIG, option=100000) {
+				N:Arm(){}
+			}
+			W:Arm(angle=90, power=TRIG, option=100000) {
+				E:Arm(){}
+			}
+		}
+		E:Jet(power=PY2, name=JETY2) {
+			N:Arm(angle=90, power=TRIG, option=100000) {
+				S:Arm(){}
+			}
+			E:Arm(angle=90, power=TRIG, option=100000) {
+				W:Arm(){}
+			}
+			S:Arm(angle=90, power=TRIG, option=100000) {
+				N:Arm(){}
+			}
+			W:Arm(angle=90, power=TRIG, option=100000) {
+				E:Arm(){}
+			}
+		}
+		S:Jet(power=PY3, name=JETY3) { 
+			N:Arm(angle=90, power=TRIG, option=100000) {
+				S:Arm(){}
+			}
+			E:Arm(angle=90, power=TRIG, option=100000) {
+				W:Arm(){}
+			}
+			S:Arm(angle=90, power=TRIG, option=100000) {
+				N:Arm(){}
+			}
+			W:Arm(angle=90, power=TRIG, option=100000) {
+				E:Arm(){}
+			}
+		}
+		W:Jet(power=PY4, name=JETY4) {
+			N:Arm(angle=90, power=TRIG, option=100000) {
+				S:Arm(){}
+			}
+			E:Arm(angle=90, power=TRIG, option=100000) {
+				W:Arm(){}
+			}
+			S:Arm(angle=90, power=TRIG, option=100000) {
+				N:Arm(){}
+			}
+			W:Arm(angle=90, power=TRIG, option=100000) {
+				E:Arm(){}
+			}
+		}
+		N:TrimF(angle=90) {
+			N:Jet(power=-PX1, name=JETX1, angle=180) { }
+		}
+		E:TrimF(angle=90) {
+			E:Jet(power=-PZ1, name=JETZ1, angle=180) { }
+		}
+		W:TrimF(angle=90) {
+			W:Jet(power=-PZ2, name=JETZ2, angle=180) { }
+		}
+		S:TrimF(angle=90) {
+			S:Jet(power=-PX2, name=JETX2, angle=180) { }
+		}
+		S:Frame(angle=180) {
+			N:Arm(angle=-90, power=T1, option=6400000, name=BOMB1, user1=B1, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				S:Trim(angle=90) { }
+				S:Trim(angle=0) { }
+			}
+			E:Arm(angle=-90, power=T2, option=6400000, name=BOMB2, user1=B2, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				W:Trim(angle=90) { }
+				W:Trim(angle=0) { }
+			}
+			S:Arm(angle=-90, power=T3, option=6400000, name=BOMB3, user1=B3, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				N:Trim(angle=90) { }
+				N:Trim(angle=0) { }
+			}
+			W:Arm(angle=-90, power=T4, option=6400000, name=BOMB4, user1=B4, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				E:Trim(angle=90) { }
+				E:Trim(angle=0) { }
+			}
+			N:Arm(angle=-90, power=T5, option=6400000, name=BOMB5, user1=B5, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				S:Trim(angle=90) { }
+				S:Trim(angle=0) { }
+			}
+			E:Arm(angle=-90, power=T6, option=6400000, name=BOMB6, user1=B6, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				W:Trim(angle=90) { }
+				W:Trim(angle=0) { }
+			}
+			S:Arm(angle=-90, power=T7, option=6400000, name=BOMB7, user1=B7, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				N:Trim(angle=90) { }
+				N:Trim(angle=0) { }
+			}
+			W:Arm(angle=-90, power=T8, option=6400000, name=BOMB8, user1=B8, user2=510) {
+				N:Weight(angle=180, option=4) { }
+				E:Trim(angle=90) { }
+				E:Trim(angle=0) { }
+			}
+		}
+	}
+	}
+}
+Lua
+{
+	--キー番号を分かりやすくするやつ
+	UP=0
+	DOWN=1
+	LEFT=2
+	RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+	
+	B=0
+
+	length=1000
+	
+	function OnInit()
+		R=_AY(CORE)*180/math.pi
+		Y=_Y(CORE)
+	end
+
+function main()
+	out(1,math.floor(_E(BOMB1)/_OPTION(BOMB1)*100).."%")
+
+	if _KEYDOWN(KEY_D)==1 then
+		B=B+1
+	end
+
+	for i=1,8 do
+		if i<=B then
+			_G["B"..i]=1
+			_G["T"..i]=_G["T"..i]+6400000/30/20
+			if 0<=_H(_G["BOMB"..i]) and _H(_G["BOMB"..i])<=1 then
+				_G["T"..i]=6400000
+			end
+		end
+	end
+
+	if _KEY(KEY_S)==1 then
+		TRIG=100000
+	end
+
+	j1=_Y(JETY1)
+	j2=_Y(JETY2)
+	j3=_Y(JETY3)
+	j4=_Y(JETY4)
+
+	if(_KEY(KEY_F)==1)then
+		Y=Y+0.5
+	elseif(_KEY(KEY_V)==1)then
+		Y=Y-0.5
+	end
+
+	if(0<_H(CORE) and _H(CORE)<1.5)then
+		Y=Y+(1.5-_H(CORE))
+	end
+
+	if 3<=math.abs(Y-_Y(CORE)) then
+		Y=_Y(CORE)
+	end
+
+	if(_KEY(KEY_Z)==1)then
+		R=R-2
+	elseif(_KEY(KEY_C)==1)then
+		R=R+2
+	end
+
+	j=Y-j1
+	PY1=j*200000-_VY(JETY1)*20000
+	j=Y-j2
+	PY2=j*200000-_VY(JETY2)*20000
+	j=Y-j3
+	PY3=j*200000-_VY(JETY3)*20000
+	j=Y-j4
+	PY4=j*200000-_VY(JETY4)*20000
+
+	if(180<R)then
+		R=R-360
+	elseif(R<-180)then
+		R=R+360
+	end
+
+	r=_AY(CORE)*180/math.pi
+	j=R-r
+	if(180<j)then
+		j=j-360
+	elseif(j<-180)then
+		j=j+360
+	end
+	vr=_WY(CORE)*180/math.pi
+	PR=j*1000-vr*100
+
+	PX1=PR
+	PX2=PR
+	PZ1=PR
+	PZ2=PR
+
+	if(_KEY(UP)==1)then
+		PZ1=PR-100000
+		PZ2=PR+100000
+	end
+	if(_KEY(DOWN)==1)then
+		PZ1=PR+100000
+		PZ2=PR-100000
+	end
+	if(_KEY(LEFT)==1)then
+		PX1=PR-100000
+		PX2=PR+100000
+	end
+	if(_KEY(RIGHT)==1)then
+		PX1=PR+100000
+		PX2=PR-100000
+	end
+
+	vx=_VX(CORE)
+	vz=_VZ(CORE)
+
+	if _KEY(KEY_X)==1 then
+		PX1=PX1+_VY(JETX1)*25000
+		PX2=PX2+_VY(JETX2)*25000
+		PZ1=PZ1+_VY(JETZ1)*25000
+		PZ2=PZ2+_VY(JETZ2)*25000
+	else
+		PX1=PX1+_VY(JETX1)
+		PX2=PX2+_VY(JETX2)
+		PZ1=PZ1+_VY(JETZ1)
+		PZ2=PZ2+_VY(JETZ2)
+	end
+
+		_SETCOLOR(tonumber("FF0000", 16))
+
+ 		_MOVE3D(_X(CORE),_Y(CORE),_Z(CORE))
+ 		_LINE3D(_X(CORE),_Y(CORE)-length,_Z(CORE))
+end
+}

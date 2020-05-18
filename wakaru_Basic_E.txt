@@ -1,0 +1,266 @@
+//Wakaru_BasicCar_Enhanced
+Val
+{
+	ENGINE1(default=0, min=-2147483648, max=2147483647)
+	ENGINE2(default=0, min=-2147483648, max=2147483647)
+	ENGINE3(default=0, min=-2147483648, max=2147483647)
+	ENGINE4(default=0, min=-2147483648, max=2147483647)
+	BREAK1(default=0, min=-2147483648, max=2147483647)
+	BREAK2(default=0, min=-2147483648, max=2147483647)
+	BREAK3(default=0, min=-2147483648, max=2147483647)
+	BREAK4(default=0, min=-2147483648, max=2147483647)
+	HANDLE(default=0, min=-90, max=90)
+	
+	ANGLE1(default=90, min=0, max=180)
+	ANGLE2(default=90, min=0, max=180)
+	ANGLE3(default=90, min=0, max=180)
+	ANGLE4(default=90, min=0, max=180)
+	
+	ANGLE21(default=0, min=-90, max=90)
+	ANGLE22(default=0, min=-90, max=90)
+	ANGLE23(default=0, min=-90, max=90)
+	ANGLE24(default=0, min=-90, max=90)
+}
+Key
+{
+}
+Body {
+	Core(name=CORE){
+		N:Chip(){
+			N:Rudder(angle=HANDLE){
+				W:Frame(angle=ANGLE21){
+					W:WHEEL(angle=ANGLE1, name=WHEEL1, power=-ENGINE1, break=BREAK1){
+					}
+				}
+				E:Frame(angle=ANGLE22){
+					E:WHEEL(angle=ANGLE2, name=WHEEL2, power=ENGINE2, break=BREAK2){
+					}
+				}
+			}
+		}
+		S:Chip(){
+			W:Frame(angle=ANGLE23){
+				W:WHEEL(angle=ANGLE3, name=WHEEL3, power=-ENGINE3, break=BREAK3){
+				}
+			}
+			E:Frame(angle=ANGLE24){
+				E:WHEEL(angle=ANGLE4, name=WHEEL4, power=ENGINE4, break=BREAK4){
+				}
+			}
+		}
+	}
+}
+Script
+{
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	
+	function analog(i)
+		if _ANALOG(i)==0 then
+			return 0;
+		else
+			return (_ANALOG(i)/1000)^2*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+	
+	
+	initflag=false;
+	
+	function init()
+		initflag=true;
+		
+		ticks=0;
+		
+		bodyWYbuf=0;
+		
+		DIR1=-1;
+		DIR2=1;
+		DIR3=-1;
+		DIR4=1;
+		
+		ANGLEBIAS1=15.0;
+		ANGLEBIAS2=15.0;
+		ANGLEBIAS3=-15.0;
+		ANGLEBIAS4=-15.0;
+		
+		ANGLEDIR1=1.0;
+		ANGLEDIR2=-1.0;
+		ANGLEDIR3=1.5;
+		ANGLEDIR4=-1.5;
+		
+		ANGLEDIR21=1.0;
+		ANGLEDIR22=-1.0;
+		ANGLEDIR23=1.5;
+		ANGLEDIR24=-1.5;
+		
+		
+		handleTemp=0;
+		handleDiffTemp=0;
+		
+		engineTemp1=0;
+		engineTemp2=0;
+		engineTemp3=0;
+		engineTemp4=0;
+		
+		engineDiffTemp1=0;
+		engineDiffTemp2=0;
+		engineDiffTemp3=0;
+		engineDiffTemp4=0;
+		
+		breakTemp1=0;
+		breakTemp2=0;
+		breakTemp3=0;
+		breakTemp4=0;
+		
+		breakDiffTemp1=0;
+		breakDiffTemp2=0;
+		breakDiffTemp3=0;
+		breakDiffTemp4=0;
+		
+		targetHandle=0;
+		
+		basicRatio=10/3;
+		slipRatio=1.5;
+		overSlipRatio=3.0
+		
+		engineMultiply=1000;
+	end
+	
+	
+	function main()
+		if not initflag then init(); end
+		ticks=ticks+1;
+		
+		--機体の状況
+		bodyVZ=-_VZ(CORE);
+		bodyVZKmh=bodyVZ*3600/1000;
+		out(20, bodyVZKmh);
+		bodyVX=-_VX(CORE);
+		bodyVXKmh=bodyVX*3600/1000;
+		out(21, bodyVXKmh);
+		bodyWY=(_WY(CORE)+bodyWYbuf)/2
+		bodyWYbuf=_WY(CORE);
+		
+		--ハンドルの制御
+		degWY=math.deg(bodyWY);
+		out(0, degWY);
+		targetHandle=limit(step2(targetHandle, -_KEY(KEY_LEFT)*60+_KEY(KEY_RIGHT)*60-analog(0)*360, 30), -360, 360);
+		out(1, targetHandle);
+		handleTempDiff=(targetHandle-degWY)/30;
+		out(2, handleTempDiff);
+		if bodyVZKmh<0 then
+			handleTempDiff=-handleTempDiff;
+		end
+		if math.abs(bodyVZKmh)<10 then
+			handleTempDiff=handleTempDiff*(math.abs(bodyVZKmh)/10)
+		end
+		handleTemp=handleTemp*0.9+handleTempDiff;
+		HANDLE=handleTemp
+		
+		--タイヤの制御
+		for i=1, 4 do
+			--タイヤの状態
+			wheelId=_G["WHEEL"..i];
+			rimId=wheelId-1;
+			spd=-_VZ(rimId);
+			spdKmh=spd*3600/1000;
+			wy=_WY(wheelId)*_G["DIR"..i];
+			if 5<math.abs(spdKmh) then
+				ratio=wy/spd/basicRatio;
+			else
+				ratio=1.0;
+			end
+			out(5+i,ratio)
+			
+			--アクセル
+			if (_KEY(KEY_UP)==0 or _KEY(KEY_DOWN)==0) and math.abs(ratio)<overSlipRatio then
+				if _KEY(KEY_UP)==1 then
+					_G["engineDiffTemp"..i]=(slipRatio-ratio)*engineMultiply;
+					_G["engineTemp"..i]=_G["engineTemp"..i]+_G["engineDiffTemp"..i];
+					_G["ENGINE"..i]=_G["engineTemp"..i];
+				elseif _KEY(KEY_DOWN)==1 then
+					_G["engineDiffTemp"..i]=-(slipRatio-ratio)*engineMultiply;
+					_G["engineTemp"..i]=_G["engineTemp"..i]*0.75+_G["engineDiffTemp"..i];
+					_G["ENGINE"..i]=_G["engineTemp"..i];
+				end
+			else
+				_G["engineDiffTemp"..i]=0;
+				_G["engineTemp"..i]=0;
+				_G["ENGINE"..i]=0;
+			end
+			--低速域での暴発防止
+			if math.abs(spdKmh)<5 then
+				_G["engineDiffTemp"..i]=0;
+				_G["engineTemp"..i]=0;
+				_G["ENGINE"..i]=limit(_G["ENGINE"..i], -10000, 10000);
+			end
+			
+			--DF・横滑り防止
+			--_G["ANGLE"..i]=limit(bodyVXKmh/10, -30, 30)*_G["ANGLEDIR"..i]-_G["ANGLEBIAS"..i]+90;
+			--_G["ANGLE2"..i]=limit(bodyVXKmh/10, -30, 30)*_G["ANGLEDIR2"..i]+_G["ANGLEBIAS"..i];
+		end
+		
+	end
+	
+	
+	--便利関数
+	
+	function step2(val, target, step)
+		if math.abs(val-target)<=step then
+			val=target;
+		else
+			if target<val then
+				val=val-step;
+			else
+				val=val+step;
+			end
+		end
+		return val;
+	end
+	
+	function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+		local p,i,d;
+		
+		local dis=target-val;
+		if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+		if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+		
+		p=dis*kp;
+		
+		_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+		_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+		i=_G["PID_I_"..id];
+		
+		d=(dis-_G["PID_D_"..id])*kd;
+		_G["PID_D_"..id]=dis;
+		
+		if debug~=nil then
+			out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+		end
+		
+		return p+i+d
+	end
+	
+	function limit(val,min,max)
+		return math.max(min,math.min(max,val));
+	end
+}

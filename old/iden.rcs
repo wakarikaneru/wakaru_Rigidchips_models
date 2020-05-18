@@ -1,0 +1,27 @@
+function main()
+	_LOADLAND("flat.x");
+	_WARP(0,0,15,0);
+	_DIRECT(0,0,90,0);
+end
+
+--itsumo kokokara
+
+--遺伝的アルゴリズム
+GA={
+}
+
+--一世代分のテスト
+Test={
+}
+
+--一体分のテスト
+Exec={
+}
+
+--全身の動きの命令のまとまり
+CodeSet={
+}
+
+--体の一部分の命令のまとまり
+Code={
+}

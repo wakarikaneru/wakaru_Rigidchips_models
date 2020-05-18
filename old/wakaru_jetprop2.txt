@@ -1,0 +1,13 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Jet(angle=180, power=-700000) { }
+	}
+}

@@ -1,0 +1,1017 @@
+// [RCD] 
+Val
+{
+	A0(default=-90, min=-180, max=0)
+	A1(default=-180, min=-180, max=0)
+	A10(default=-90, min=-180, max=0)
+	A11(default=-180, min=-180, max=0)
+	A12(default=-180, min=-180, max=0)
+	A13(default=-180, min=-180, max=0)
+	A14(default=-180, min=-180, max=0)
+	A15(default=-180, min=-180, max=0)
+	A16(default=-180, min=-180, max=0)
+	A17(default=-180, min=-180, max=0)
+	A18(default=-180, min=-180, max=0)
+	A19(default=-180, min=-180, max=0)
+	A2(default=-180, min=-180, max=0)
+	A20(default=-180, min=-180, max=0)
+	A21(default=-180, min=-180, max=0)
+	A22(default=-180, min=-180, max=0)
+	A23(default=-180, min=-180, max=0)
+	A24(default=-180, min=-180, max=0)
+	A25(default=-180, min=-180, max=0)
+	A26(default=-180, min=-180, max=0)
+	A27(default=-180, min=-180, max=0)
+	A28(default=-180, min=-180, max=0)
+	A29(default=-180, min=-180, max=0)
+	A3(default=-180, min=-180, max=0)
+	A30(default=-180, min=-180, max=0)
+	A31(default=-180, min=-180, max=0)
+	A32(default=-180, min=-180, max=0)
+	A33(default=-180, min=-180, max=0)
+	A34(default=-180, min=-180, max=0)
+	A35(default=-180, min=-180, max=0)
+	A36(default=-180, min=-180, max=0)
+	A37(default=-180, min=-180, max=0)
+	A38(default=-180, min=-180, max=0)
+	A39(default=-180, min=-180, max=0)
+	A4(default=-180, min=-180, max=0)
+	A40(default=-180, min=-180, max=0)
+	A41(default=-180, min=-180, max=0)
+	A42(default=-180, min=-180, max=0)
+	A43(default=-180, min=-180, max=0)
+	A44(default=-180, min=-180, max=0)
+	A45(default=-180, min=-180, max=0)
+	A46(default=-180, min=-180, max=0)
+	A47(default=-180, min=-180, max=0)
+	A48(default=-180, min=-180, max=0)
+	A49(default=-180, min=-180, max=0)
+	A5(default=-180, min=-180, max=0)
+	A50(default=-180, min=-180, max=0)
+	A51(default=-180, min=-180, max=0)
+	A52(default=-180, min=-180, max=0)
+	A53(default=-180, min=-180, max=0)
+	A54(default=-180, min=-180, max=0)
+	A55(default=-180, min=-180, max=0)
+	A56(default=-180, min=-180, max=0)
+	A57(default=-180, min=-180, max=0)
+	A58(default=-180, min=-180, max=0)
+	A59(default=-180, min=-180, max=0)
+	A6(default=-180, min=-180, max=0)
+	A60(default=-90, min=-180, max=0)
+	A61(default=-90, min=-180, max=0)
+	A62(default=-90, min=-180, max=0)
+	A63(default=-90, min=-180, max=0)
+	A7(default=-180, min=-180, max=0)
+	A8(default=-180, min=-180, max=0)
+	A9(default=-180, min=-180, max=0)
+	JET_SA1(default=0, min=-1000000, max=1000000)
+	JET_SA2(default=0, min=-1000000, max=1000000)
+	JET_SA3(default=0, min=-1000000, max=1000000)
+	PITCH_C(default=-90, min=-180, max=0)
+	ROT(default=0, min=-1000000, max=1000000)
+	T0(default=0, max=160000000)
+	T1(default=0, max=160000000)
+	T10(default=0, max=160000000)
+	T11(default=0, max=160000000)
+	T12(default=0, max=160000000)
+	T13(default=0, max=160000000)
+	T14(default=0, max=160000000)
+	T15(default=0, max=160000000)
+	T16(default=0, max=160000000)
+	T17(default=0, max=160000000)
+	T18(default=0, max=160000000)
+	T19(default=0, max=160000000)
+	T2(default=0, max=160000000)
+	T20(default=0, max=160000000)
+	T21(default=0, max=160000000)
+	T22(default=0, max=160000000)
+	T23(default=0, max=160000000)
+	T24(default=0, max=160000000)
+	T25(default=0, max=160000000)
+	T26(default=0, max=160000000)
+	T27(default=0, max=160000000)
+	T28(default=0, max=160000000)
+	T29(default=0, max=160000000)
+	T3(default=0, max=160000000)
+	T30(default=0, max=160000000)
+	T31(default=0, max=160000000)
+	T32(default=0, max=160000000)
+	T33(default=0, max=160000000)
+	T34(default=0, max=160000000)
+	T35(default=0, max=160000000)
+	T36(default=0, max=160000000)
+	T37(default=0, max=160000000)
+	T38(default=0, max=160000000)
+	T39(default=0, max=160000000)
+	T4(default=0, max=160000000)
+	T40(default=0, max=160000000)
+	T41(default=0, max=160000000)
+	T42(default=0, max=160000000)
+	T43(default=0, max=160000000)
+	T44(default=0, max=160000000)
+	T45(default=0, max=160000000)
+	T46(default=0, max=160000000)
+	T47(default=0, max=160000000)
+	T48(default=0, max=160000000)
+	T49(default=0, max=160000000)
+	T5(default=0, max=160000000)
+	T50(default=0, max=160000000)
+	T51(default=0, max=160000000)
+	T52(default=0, max=160000000)
+	T53(default=0, max=160000000)
+	T54(default=0, max=160000000)
+	T55(default=0, max=160000000)
+	T56(default=0, max=160000000)
+	T57(default=0, max=160000000)
+	T58(default=0, max=160000000)
+	T59(default=0, max=160000000)
+	T6(default=0, max=160000000)
+	T60(default=0, max=160000000)
+	T61(default=0, max=160000000)
+	T62(default=0, max=160000000)
+	T63(default=0, max=160000000)
+	T7(default=0, max=160000000)
+	T8(default=0, max=160000000)
+	T9(default=0, max=160000000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Weight(angle=PITCH_C, option=4) {
+			S:Jet(angle=180, power=JET_SA1, name=SA1) { }
+			S:Jet(angle=0, power=-JET_SA2, name=SA2) { }
+			S:Trim(angle=ROT) {
+				S:Weight(angle=75, option=8) {
+					E:Weight(angle=0, option=8) { }
+					W:Weight(angle=0, option=8) { }
+				}
+				S:Weight(angle=-75, option=8) {
+					W:Weight(angle=0, option=8) { }
+					E:Weight(angle=0, option=8) { }
+				}
+			}
+			S:Weight() {
+				N:Weight(angle=-180) {
+					S:Arm(angle=A0, power=T0, option=800000, spring=0.3, damper=0.3, name=ARM0) { }
+					S:Arm(angle=A1, power=T1, option=800000, spring=0.3, damper=0.3, name=ARM1) { }
+					S:Arm(angle=A2, power=T2, option=800000, spring=0.3, damper=0.3, name=ARM2) { }
+					S:Arm(angle=A3, power=T3, option=800000, spring=0.3, damper=0.3, name=ARM3) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A4, power=T4, option=800000, spring=0.3, damper=0.3, name=ARM4) { }
+					S:Arm(angle=A5, power=T5, option=800000, spring=0.3, damper=0.3, name=ARM5) { }
+					S:Arm(angle=A6, power=T6, option=800000, spring=0.3, damper=0.3, name=ARM6) { }
+					S:Arm(angle=A7, power=T7, option=800000, spring=0.3, damper=0.3, name=ARM7) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A8, power=T8, option=800000, spring=0.3, damper=0.3, name=ARM8) { }
+					S:Arm(angle=A9, power=T9, option=800000, spring=0.3, damper=0.3, name=ARM9) { }
+					S:Arm(angle=A10, power=T10, option=800000, spring=0.3, damper=0.3, name=ARM10) { }
+					S:Arm(angle=A11, power=T11, option=800000, spring=0.3, damper=0.3, name=ARM11) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A12, power=T12, option=800000, spring=0.3, damper=0.3, name=ARM12) { }
+					S:Arm(angle=A13, power=T13, option=800000, spring=0.3, damper=0.3, name=ARM13) { }
+					S:Arm(angle=A14, power=T14, option=800000, spring=0.3, damper=0.3, name=ARM14) { }
+					S:Arm(angle=A15, power=T15, option=800000, spring=0.3, damper=0.3, name=ARM15) { }
+				}
+			}
+			S:Weight() {
+				N:Weight(angle=-180) {
+					S:Arm(angle=A16, power=T16, option=800000, spring=0.3, damper=0.3, name=ARM16) { }
+					S:Arm(angle=A17, power=T17, option=800000, spring=0.3, damper=0.3, name=ARM17) { }
+					S:Arm(angle=A18, power=T18, option=800000, spring=0.3, damper=0.3, name=ARM18) { }
+					S:Arm(angle=A19, power=T19, option=800000, spring=0.3, damper=0.3, name=ARM19) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A20, power=T20, option=800000, spring=0.3, damper=0.3, name=ARM20) { }
+					S:Arm(angle=A21, power=T21, option=800000, spring=0.3, damper=0.3, name=ARM21) { }
+					S:Arm(angle=A22, power=T22, option=800000, spring=0.3, damper=0.3, name=ARM22) { }
+					S:Arm(angle=A23, power=T23, option=800000, spring=0.3, damper=0.3, name=ARM23) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A24, power=T24, option=800000, spring=0.3, damper=0.3, name=ARM24) { }
+					S:Arm(angle=A25, power=T25, option=800000, spring=0.3, damper=0.3, name=ARM25) { }
+					S:Arm(angle=A26, power=T26, option=800000, spring=0.3, damper=0.3, name=ARM26) { }
+					S:Arm(angle=A27, power=T27, option=800000, spring=0.3, damper=0.3, name=ARM27) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A28, power=T28, option=800000, spring=0.3, damper=0.3, name=ARM28) { }
+					S:Arm(angle=A29, power=T29, option=800000, spring=0.3, damper=0.3, name=ARM29) { }
+					S:Arm(angle=A30, power=T30, option=800000, spring=0.3, damper=0.3, name=ARM30) { }
+					S:Arm(angle=A31, power=T31, option=800000, spring=0.3, damper=0.3, name=ARM31) { }
+				}
+			}
+			S:Weight() {
+				N:Weight(angle=-180) {
+					S:Arm(angle=A32, power=T32, option=800000, spring=0.3, damper=0.3, name=ARM32) { }
+					S:Arm(angle=A33, power=T33, option=800000, spring=0.3, damper=0.3, name=ARM33) { }
+					S:Arm(angle=A34, power=T34, option=800000, spring=0.3, damper=0.3, name=ARM34) { }
+					S:Arm(angle=A35, power=T35, option=800000, spring=0.3, damper=0.3, name=ARM35) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A36, power=T36, option=800000, spring=0.3, damper=0.3, name=ARM36) { }
+					S:Arm(angle=A37, power=T37, option=800000, spring=0.3, damper=0.3, name=ARM37) { }
+					S:Arm(angle=A38, power=T38, option=800000, spring=0.3, damper=0.3, name=ARM38) { }
+					S:Arm(angle=A39, power=T39, option=800000, spring=0.3, damper=0.3, name=ARM39) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A40, power=T40, option=800000, spring=0.3, damper=0.3, name=ARM40) { }
+					S:Arm(angle=A41, power=T41, option=800000, spring=0.3, damper=0.3, name=ARM41) { }
+					S:Arm(angle=A42, power=T42, option=800000, spring=0.3, damper=0.3, name=ARM42) { }
+					S:Arm(angle=A43, power=T43, option=800000, spring=0.3, damper=0.3, name=ARM43) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A44, power=T44, option=800000, spring=0.3, damper=0.3, name=ARM44) { }
+					S:Arm(angle=A45, power=T45, option=800000, spring=0.3, damper=0.3, name=ARM45) { }
+					S:Arm(angle=A46, power=T46, option=800000, spring=0.3, damper=0.3, name=ARM46) { }
+					S:Arm(angle=A47, power=T47, option=800000, spring=0.3, damper=0.3, name=ARM47) { }
+				}
+			}
+			S:Weight() {
+				N:Weight(angle=-180) {
+					S:Arm(angle=A48, power=T48, option=800000, spring=0.3, damper=0.3, name=ARM48) { }
+					S:Arm(angle=A49, power=T49, option=800000, spring=0.3, damper=0.3, name=ARM49) { }
+					S:Arm(angle=A50, power=T50, option=800000, spring=0.3, damper=0.3, name=ARM50) { }
+					S:Arm(angle=A51, power=T51, option=800000, spring=0.3, damper=0.3, name=ARM51) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A52, power=T52, option=800000, spring=0.3, damper=0.3, name=ARM52) { }
+					S:Arm(angle=A53, power=T53, option=800000, spring=0.3, damper=0.3, name=ARM53) { }
+					S:Arm(angle=A54, power=T54, option=800000, spring=0.3, damper=0.3, name=ARM54) { }
+					S:Arm(angle=A55, power=T55, option=800000, spring=0.3, damper=0.3, name=ARM55) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A56, power=T56, option=800000, spring=0.3, damper=0.3, name=ARM56) { }
+					S:Arm(angle=A57, power=T57, option=800000, spring=0.3, damper=0.3, name=ARM57) { }
+					S:Arm(angle=A58, power=T58, option=800000, spring=0.3, damper=0.3, name=ARM58) { }
+					S:Arm(angle=A59, power=T59, option=800000, spring=0.3, damper=0.3, name=ARM59) { }
+				}
+				N:Weight(angle=-180) {
+					S:Arm(angle=A60, power=T60, option=800000, spring=0.3, damper=0.3, name=ARM60) { }
+					S:Arm(angle=A61, power=T61, option=800000, spring=0.3, damper=0.3, name=ARM61) { }
+					S:Arm(angle=A62, power=T62, option=800000, spring=0.3, damper=0.3, name=ARM62) { }
+					S:Arm(angle=A63, power=T63, option=800000, spring=0.3, damper=0.3, name=ARM63) { }
+				}
+			}
+		}
+		S:Frame(angle=150) {
+			S:Jet(angle=120, power=JET_SA3) { }
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0
+	KEY_DOWN=1
+	KEY_LEFT=2
+	KEY_RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+
+	ARMNUM=64
+	NUM=0
+	ROUND=64
+	CT=0
+	TARM=4
+
+	YAW=_AY(CORE)*180/math.pi
+	PITCH=0
+	PITCH_A=0
+
+	prevMx=_MX()
+	prevMy=_MY()
+
+	initflag=false;
+	
+function init()
+	initflag=true;
+	eye=Wakaru_Eye.new(CORE, 300);
+	
+	target=0;
+	targetPos=Vector.new(0, 0, 0);
+	readTime=0;
+	aimVec=targetPos-Vector.getPosVec(CORE);
+	yaw=0;
+	pitch=0;
+	t=0;
+end
+
+function main()
+	if not initflag then init() end
+	eye:tick();
+	eye:dispPlayer(0, KEY_DOWN, KEY_RIGHT, KEY_LEFT);
+	
+	out(10,_FPS())
+	if _KEYDOWN(KEY_A)==1 then
+		if TARM==6 then TARM=4
+		elseif TARM==5 then TARM=6
+		elseif TARM==4 then TARM=5 end
+	end
+	out(1,TARM)
+	
+	if _PLAYERS()~=0 then
+		if _KEYDOWN(KEY_C)==1 then target=target+1; end
+		if _KEYDOWN(KEY_Z)==1 then target=target-1; end
+		if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+		out(5, "TARGET (Z) ".._PLAYERNAME(target).." (C) ");
+		targetPos=eye:getFuturePos(_PLAYERID(target));
+		readTime=eye:getReadTime(_PLAYERID(target));
+	else
+		out(5, "OffLine");
+	end
+	
+	aimVec=(targetPos-(Vector.getPosVec(CORE)+Vector.new(0, 0.6, 0))):getLVec(CORE):getNormal();
+	rotV=90-math.deg(math.acos(Vector.new(0, 1, 0)^aimVec));
+	disV=rotV-_AX(0);
+	disV=math.min(10,math.max(-10,disV))
+	
+	PITCH=PITCH-disV;
+	
+	t=t+1;
+	if math.mod(t, 30*5)==0 then pitch=pitch+math.random()*30-15; end
+	
+	aimVecH=aimVec;
+	aimVecH.y=0;
+	aimVecH=aimVecH:getNormal();
+	
+	rotH=math.deg(math.acos(Vector.new(0, 0, -1)^aimVecH));
+	
+	if 0<aimVecH.x then else rotH=-rotH; end
+	
+	local disR=angleNorm(angleNorm(rotH)-_AY(0));
+	out(14, disR)
+	disR=math.min(10,math.max(-10,disR))
+	ROT=ROT+disR
+	
+	if yaw~=0 and yaw/yaw~=1 then rotH=0; yaw=0; disR=0; end
+	
+	if math.mod(t, 30*5)==0 then yaw=yaw+math.random()*30-15; end
+	
+
+
+	PITCH=math.min(25,math.max(-15,PITCH))
+
+	PITCH_C=-90-PITCH
+	PITCH_A=-90-PITCH
+
+	local ready=0
+
+	JET_SA1=-_VY(SA1)*100000
+	JET_SA2=_VY(SA2)*100000
+	JET_SA3=0
+
+	for i=0,ARMNUM-1 do
+		if _OPTION(_G["ARM"..i])<=_E(_G["ARM"..i]) and _TOP(_G["ARM"..i])==CORE then
+			ready=ready+1
+		end
+		if i==NUM then
+			if _TOP(_G["ARM"..i])==CORE then
+				if TARM<=CT and (_KEY(KEY_X)==1 or (_ML()==1 and _MR()==1)) and _OPTION(_G["ARM"..i])<=_E(_G["ARM"..i]) then
+					_G["T"..i]=_OPTION(_G["ARM"..i])
+					JET_SA3=_OPTION(_G["ARM"..i])
+					CT=0
+					NUM=NUM+1
+					_G["A"..i]=_G["A"..i]+(PITCH_A-90)/(TARM)
+				end
+				drawLine(_G["ARM"..i])
+				_G["A"..i]=_G["A"..i]-(PITCH_A-90)/(TARM)
+				if _G["A"..i]>=PITCH_A then _G["A"..i]=PITCH_A end
+			else
+				NUM=NUM+1
+			end
+		else
+			_G["A"..i]=_G["A"..i]+(PITCH_A-90)/(TARM)
+			_G["T"..i]=0
+		end
+	end
+
+	out(0,ready.." bullet ready")
+	NUM=math.mod(NUM,ARMNUM)
+	CT=CT+1
+end
+
+function drawLine(chipName)
+	if(_OPTION(chipName)<=_E(chipName))then
+		_SETCOLOR(tonumber("FF0000", 16))
+	else
+		_SETCOLOR(tonumber("FFFF00", 16))
+	end
+
+	local yaw=_AY(chipName)
+	local x=_X(chipName)
+	local y=_Y(chipName)
+	local z=_Z(chipName)
+	local tx=_X(chipName)+_ZX(chipName)*640
+	local ty=_Y(chipName)+_ZY(chipName)*640
+	local tz=_Z(chipName)+_ZZ(chipName)*640
+
+	_MOVE3D(x+math.sin(yaw+math.pi/2)*0.3,y,z+math.cos(yaw+math.pi/2)*0.3)
+	_LINE3D(tx+math.sin(yaw+math.pi/2)*0.3,ty,tz+math.cos(yaw+math.pi/2)*0.3)
+
+	_MOVE3D(x+math.sin(yaw-math.pi/2)*0.3,y,z+math.cos(yaw-math.pi/2)*0.3)
+	_LINE3D(tx+math.sin(yaw-math.pi/2)*0.3,ty,tz+math.cos(yaw-math.pi/2)*0.3)
+end
+
+-- 角度補正 -------------------------------------------------------------------
+function angle_correct(a)
+	while(a<-180) do a=a+360 end
+	while(a>180) do a=a-360 end
+	return a
+end
+
+function angleNorm(rot)
+	while(rot<-180) do
+		rot=rot+360;
+	end
+	while(rot>180) do
+		rot=rot-360;
+	end
+	return rot;
+end
+
+function drawTarget(chip, pos, dis, fpos, fdis)
+	_SETCOLOR(tonumber("00FF00", 16));
+	
+	local p1=(Vector.new(1, 1, 0)*dis/60):getWVec(chip)+pos;
+	local p2=(Vector.new(1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p3=(Vector.new(-1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p4=(Vector.new(-1, 1, 0)*dis/60):getWVec(chip)+pos;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	local p1=(Vector.new(1, 1, 0)*fdis/60/2):getWVec(chip)+fpos;
+	local p2=(Vector.new(1, -1, 0)*fdis/60/2):getWVec(chip)+fpos;
+	local p3=(Vector.new(-1, -1, 0)*fdis/60/2):getWVec(chip)+fpos;
+	local p4=(Vector.new(-1, 1, 0)*fdis/60/2):getWVec(chip)+fpos;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+
+	_MOVE3D(pos.x, pos.y, pos.z);
+	_LINE3D(fpos.x, fpos.y, fpos.z);
+end
+
+----Wakaru_Eyeクラス
+--オンライン上の他プレイヤーに関する処理
+--主に外部インターフェース、RadarとPlayerList間のやりとりの役割
+Wakaru_Eye={
+	MYNAME="",
+	noiseVec={x=0, y=0, z=0},	--仮のVector
+	timeOffset=4;	--ラグとかを補正したいときに使う
+};
+for i=0,_PLAYERS()-1 do
+	if _PLAYERMYID()==_PLAYERID(i) then
+		Wakaru_Eye.MYNAME=_PLAYERNAME(i);
+	end
+end
+function Wakaru_Eye.new(chipName, range)
+	local obj={
+		list=PlayerList.new(),
+		rader=Radar.new(chipName, range),
+		select=0,
+
+		tick=function(self)
+			if _PLAYERS()~=0 then
+				self.list:putData(self.rader:scan(Wakaru_Eye.MYNAME));
+				self.list:tick();
+				self.list:setMarker(self.rader:getMarker(Wakaru_Eye.MYNAME));
+			end
+		end,
+		dispPlayer=function(self, line, enter, right, left)
+			if _PLAYERS()~=0 then
+				if _KEYDOWN(enter)==1 then self.list:setState(_PLAYERID(self.select)) end
+				if _KEYDOWN(right)==1 then self.select=self.select+1; end
+				if _KEYDOWN(left)==1 then self.select=self.select-1; end
+				if self.select<0 then self.select=_PLAYERS()-1 elseif _PLAYERS()<=self.select then self.select=0 end
+				out(line, "Wakaru/Eye:Player ← ".._PLAYERNAME(self.select).." → "..Player.STATE_TABLE[self.list:getState(_PLAYERID(self.select))].." ");
+			else
+				out(line, "Wakaru/Eye:Player OffLine");
+			end
+		end,
+		dispOffset=function(self, line, enter, right, left)
+			if _KEYDOWN(enter)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset+1; end
+			if _KEYDOWN(right)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset+1; end
+			if _KEYDOWN(left)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset-1; end
+			if Wakaru_Eye.timeOffset<=0 then Wakaru_Eye.timeOffset=0; elseif 15<=Wakaru_Eye.timeOffset then Wakaru_Eye.timeOffset=15; end
+			out(line, "Wakaru/Eye:TimeOffset ← "..Wakaru_Eye.timeOffset.."frame → "..math.floor(Wakaru_Eye.timeOffset*1000/30).."ms ");
+
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self, id)
+			return self.list:getPos(id);
+		end,
+		getFuturePos=function(self, id)
+			return self.list:getFuturePos(id);
+		end,
+		getVel=function(self, id)
+			return self.list:getVel(id);
+		end,
+		getDis=function(self, id)
+			return self.list:getDis(id);
+		end,
+		getFutureDis=function(self, id)
+			return self.list:getFutureDis(id);
+		end,
+		getReadTime=function(self, id)
+			return self.list:getReadTime(id);
+		end,
+		getChip=function(self, id)
+			return self.list:getChip(id);
+		end,
+		getState=function(self, id)
+			return self.list:getState(id);
+		end,
+	}
+	return obj;
+end
+
+----Radarクラス
+--実際に敵の座標や距離の取得を行う
+--マーカーの設定や2次ノイズの処理もここでしてしまうことにした
+Radar={};
+function Radar.new(chipName, setRange)
+	local obj={
+		chip=chipName,
+		range=setRange;
+
+		scan=function(self, myName)
+			--2次ノイズ除去用
+			local markerNum=nil;
+			Wakaru_Eye.noiseVec=Vector.new(0, 0, 0);
+			for i=0,_PLAYERS()-1 do
+				if myName==_PLAYERNAME(i) and  _PLAYERMYID()~=_PLAYERID(i) then
+					Wakaru_Eye.noiseVec=(self:getPos(i)-Vector.new(100, 100, 100))/(_PLAYERCHIPS(i)^(1/3));
+					break;
+				end
+			end
+			local arr={};
+			local pos=Vector.getPosVec(chip);
+			for i=0,_PLAYERS()-1 do
+				arr[_PLAYERID(i)]={};
+				arr[_PLAYERID(i)].num=i;
+				if _PLAYERMYID()==_PLAYERID(i) then
+					arr[_PLAYERID(i)].pos=self:getPos(i);
+				else
+					arr[_PLAYERID(i)].pos=self:getPos(i)-Wakaru_Eye.noiseVec*(_PLAYERCHIPS(i)^(1/3));	--自機以外のデータからノイズ分を引く
+				end
+				arr[_PLAYERID(i)].dis=(arr[_PLAYERID(i)].pos-pos):getLength();
+				arr[_PLAYERID(i)].inRange=arr[_PLAYERID(i)].dis<=self.range;
+			end
+			return arr;
+		end,
+		getPos=function(self, playerNum)
+			math.randomseed(1519);	--魔法のおまじない
+			local x=_PLAYERX(playerNum);
+			math.randomseed(1519);
+			local y=_PLAYERY(playerNum);
+			math.randomseed(1519);
+			local z=_PLAYERZ(playerNum);
+			return Vector.new(x, y, z);
+		end,
+		getMarker=function(self, myName)	--番号が最も若い自分と同じ名前のモデルをマーカーに設定する
+			for i=0,_PLAYERS()-1 do
+				if myName==_PLAYERNAME(i) and _PLAYERMYID()~=_PLAYERID(i) then
+					return _PLAYERID(i);
+				end
+			end
+			return nil;
+		end,
+	}
+	return obj;
+end
+
+----PlayerListクラス
+--オンラインの他プレイヤーをリストにまとめ、管理を行う
+--PlayerIDをキーにしたテーブル
+PlayerList={};
+function PlayerList.new()
+	local obj={
+		list={},
+		
+		tick=function(self)
+			for key,value in self.list do
+				if self.list[key]:tick(self.noiseVec) then
+					self.list[key]=nil;
+				end
+			end
+		end,
+		putData=function(self, arr)
+			for key,value in arr do
+				if self.list[key]==nil then
+					self.list[key]={};
+					self.list[key]=Player.new(value);
+				else
+					self.list[key]:putData(value);
+				end
+			end
+		end,
+		setState=function(self, id)
+			return self.list[id]:setState();
+		end,
+		setMarker=function(self, id)
+			if id~=nil then
+				self.list[id]:setMarker();
+			end
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self, id)
+			return self.list[id]:getPos();
+		end,
+		getFuturePos=function(self, id)
+			return self.list[id]:getFuturePos();
+		end,
+		getVel=function(self, id)
+			return self.list[id]:getVel();
+		end,
+		getDis=function(self, id)
+			return self.list[id]:getDis();
+		end,
+		getFutureDis=function(self, id)
+			return self.list[id]:getFutureDis();
+		end,
+		getReadTime=function(self, id)
+			return self.list[id]:getReadTime();
+		end,
+		getChip=function(self, id)
+			return self.list[id]:getChip();
+		end,
+		getState=function(self, id)
+			return self.list[id]:getState();
+		end,
+	}
+	return obj;
+end
+
+----Playerクラス
+--オンラインのプレイヤーの情報、属性、状態を持ち、管理を行う
+Player={
+	STATE_MYSELF=-2,	--自分
+	STATE_MARKER=-1,	--2次ノイズ除去に用いるマーカーのプレイヤー
+	STATE_NEWTRAL=0,	--ARMを装備していないプレイヤー
+	STATE_FRIEND=1,	--交戦中で無いプレイヤー
+	STATE_HOSTILE=2,	--交戦中のプレイヤー
+	STATE_TABLE={},
+};
+	Player.STATE_TABLE[Player.STATE_MYSELF]="MYSELF";
+	Player.STATE_TABLE[Player.STATE_MARKER]="MARKER";
+	Player.STATE_TABLE[Player.STATE_NEWTRAL]="NEWTRAL";
+	Player.STATE_TABLE[Player.STATE_FRIEND]="FRIEND";
+	Player.STATE_TABLE[Player.STATE_HOSTILE]="HOSTILE";
+function Player.new(initData)
+	local obj={
+		num=initData.num,	--何番目か
+		chip=_PLAYERCHIPS(initData.num),	--チップの枚数 ノイズ除去やモデルロード検出に
+		arm=_PLAYERARMS(initData.num),	--ARMの枚数
+		state=Player.STATE_NEWTRAL,	--識別
+		inRange=false;	--レーダーの範囲内かどうか
+		locus=Locus.new(initData),	--座標や距離のデータ
+		refresh=true;	--更新チェック 更新されなかったPLAYERは消去される
+		reset=_PLAYERRESETS(initData.num)+_PLAYERINITS(initData.num);	--リセットチェック リセットされたら一旦消去する
+		
+		tick=function(self)
+			drawTarget(0, self.locus.pos, self.locus.dis, self.locus.futurePos, self.locus.futureDis);
+			if self:checkLost() or self:checkReset() or self:checkChange() then return true; else return false; end;
+		end,
+
+		setState=function(self)
+			if _PLAYERID(self.num)==_PLAYERMYID() then
+				self.state=Player.STATE_MYSELF;
+			elseif self.state==Player.STATE_MARKER then
+				self.state=Player.STATE_MARKER;
+			elseif self.arm==0 then
+				self.state=Player.STATE_NEWTRAL;
+			elseif self.state==Player.STATE_FRIEND then
+				self.state=Player.STATE_HOSTILE;
+			else
+				self.state=Player.STATE_FRIEND;
+			end
+		end,
+		setMarker=function(self)
+			self.state=Player.STATE_MARKER;
+		end,
+		putData=function(self, data)
+			self.refresh=true;
+			self.num=data.num;
+			self.inRange=data.inRange;
+			self.locus:putData(data);
+		end,
+		checkReset=function(self)
+			if self.reset==_PLAYERRESETS(self.num)+_PLAYERINITS(self.num) then
+				return false;
+			else
+				return true;
+			end;
+		end,
+		checkLost=function(self)
+			if self.refresh==true then
+				self.refresh=false; return false;
+			else
+				return true;
+			end
+		end,
+		checkChange=function(self)
+			if self.chip==_PLAYERCHIPS(self.num) and self.arm==_PLAYERARMS(self.num) then
+				return false;
+			else
+				return true;
+			end;
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self)
+			return self.locus:getPos();
+		end,
+		getNextPos=function(self)
+			return self.locus:getNextPos();
+		end,
+		getFuturePos=function(self)
+			return self.locus:getFuturePos();
+		end,
+		getVel=function(self)
+			return self.locus:getVel();
+		end,
+		getDis=function(self)
+			return self.locus:getDis();
+		end,
+		getFutureDis=function(self)
+			return self.locus:getFutureDis();
+		end,
+		getReadTime=function(self)
+			return self.locus:getReadTime();
+		end,
+		getChip=function(self)
+			return self.chip;
+		end,
+		getState=function(self)
+			return self.state;
+		end,
+	}
+	obj:setState();
+	return obj;
+end
+
+----Locusクラス
+--過去16フレーム分の座標データを持ち、座標、速度、加速度等の解析を行う
+--座標と距離を格納した配列　最小二乗法を用いた2次関数への近似
+Locus={
+	LS2={	{0.00017507002801, 0.00262605042017, 0.00612745098039},
+				{0.00262605042017, 0.04233193277311, 0.11397058823529},
+				{0.00612745098039, 0.11397058823529, 0.44240196078431}},
+};
+function Locus.new(initData)
+	local obj={
+		logPos=Fifo.new(16, initData.pos);
+		pos=initData.pos;	--現在の位置
+		nextPos=initData.pos;	--次フレームの予測位置
+		futurePos=initData.pos;	--弾が当たる瞬間の予測位置
+		errorPos=Vector.new(0, 0, 0);
+		
+		vel=Vector.new(0, 0, 0);	--現在の速度
+		
+		logDis=Fifo.new(16, initData.dis);
+		dis=initData.dis;	--現在の距離
+		nextDis=initData.dis;	--次フレームの予測距離
+		futureDis=initData.dis;	--弾が当たる瞬間の予測距離
+		errorDis=0;
+		
+		readTime=math.floor(initData.dis/20)+Wakaru_Eye.timeOffset;
+		
+		putData=function(self, data)
+			self.errorPos=data.pos-self.nextPos;
+			self.errorDis=data.dis-self.nextDis;
+			self.logPos:put(data.pos);
+			self.logDis:put(data.dis);
+			self:analyze();
+		end,
+		analyze=function(self)
+			self:leastSquaresDis();
+			self:leastSquaresPos(self.logPos);
+		end,
+		leastSquaresDis=function(self)
+			--3次関数の解を求めるのは大変なので2次関数に近似する
+			local sum_y=0;
+			local sum_xy=0;
+			local sum_xxy=0;
+			local i=0;
+			for i=0, 15 do	--データ数は16個固定
+				sum_y=sum_y+self.logDis:get(i);
+				sum_xy=sum_xy+self.logDis:get(i)*(-i);	--インデックスが大きいほど過去なので
+				sum_xxy=sum_xxy+self.logDis:get(i)*((-i)^2);
+			end
+			local a=sum_xxy*Locus.LS2[1][1]+sum_xy*Locus.LS2[1][2]+sum_y*Locus.LS2[1][3];
+			local b=sum_xxy*Locus.LS2[2][1]+sum_xy*Locus.LS2[2][2]+sum_y*Locus.LS2[2][3];
+			local c=sum_xxy*Locus.LS2[3][1]+sum_xy*Locus.LS2[3][2]+sum_y*Locus.LS2[3][3];
+
+			self.dis=self.logDis:get(0);
+			self.nextDis=a+b+self.dis;
+			
+			--着弾までの時間を求める
+			local v=b-20;	--接近速度から弾の速度を引く
+			if v<=0 then	--速度が弾の速度より速い→当たらない
+				if a~=0 then
+					local r=v^2-4*a*self.dis;
+					if 0<=r then	--2次関数の解がない→当たらない
+						r=math.sqrt(r);
+						self.readTime=(-v-r)/(2*a);
+					else
+						self.readTime=self.dis/20;
+					end
+				else
+					self.readTime=-self.dis/v;
+				end
+			else
+				self.readTime=self.dis/20;
+			end
+			self.readTime=math.floor(self.readTime)+Wakaru_Eye.timeOffset;
+			self.futureDis=a*self.readTime^2+b*self.readTime+self.dis;
+
+		end,
+		leastSquaresPos=function(self, fifo)
+			--本来3次関数で近似する予定だったがラグに対して敏感に反応してしまうため2次関数で近似
+			local sum_y=Vector.new(0, 0, 0);
+			local sum_xy=Vector.new(0, 0, 0);
+			local sum_xxy=Vector.new(0, 0, 0);
+			local i=0;
+			for i=0, 15 do	--データ数は16個固定
+				sum_y=sum_y+self.logPos:get(i);
+				sum_xy=sum_xy+self.logPos:get(i)*(-i);	--インデックスが大きいほど過去なので
+				sum_xxy=sum_xxy+self.logPos:get(i)*((-i)^2);
+			end
+			local a=sum_xxy*Locus.LS2[1][1]+sum_xy*Locus.LS2[1][2]+sum_y*Locus.LS2[1][3];
+			local b=sum_xxy*Locus.LS2[2][1]+sum_xy*Locus.LS2[2][2]+sum_y*Locus.LS2[2][3];
+			local c=sum_xxy*Locus.LS2[3][1]+sum_xy*Locus.LS2[3][2]+sum_y*Locus.LS2[3][3];
+
+			self.pos=self.logPos:get(0);
+			self.nextPos=a+b+self.pos;
+			self.vel=b;
+			
+			self.futurePos=a*self.readTime^2+b*self.readTime+self.pos;
+
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self)
+			return self.pos;
+		end,
+		getNextPos=function(self)
+			return self.nextPos;
+		end,
+		getFuturePos=function(self)
+			return self.futurePos;
+		end,
+		getVel=function(self)
+			return self.vel;
+		end,
+		getDis=function(self)
+			return self.dis;
+		end,
+		getFutureDis=function(self)
+			return self.futureDis;
+		end,
+		getReadTime=function(self)
+			return self.readTime;
+		end,
+	}
+	return obj;
+end
+
+----Fifoクラス
+--FIFO型のリスト
+--配列を使ってそれっぽくしてみた
+Fifo={};
+function Fifo.new(length, init)
+	local obj={
+		arr={},
+		len=length,
+		head=-1,
+		
+		put=function(self, val)
+			self.head=math.mod(self.head+1, self.len);
+			self.arr[self.head]=val;
+		end,
+		get=function(self, key)
+			key=math.mod(key, self.len);
+			if key<=self.head then
+				return self.arr[math.mod(self.head-key, self.len)];
+			else
+				return self.arr[self.len+math.mod(self.head-key, self.len)];
+			end
+		end,
+		getLength=function(self)
+			return self.len;
+		end,
+	}
+	for i=0, obj.len-1 do
+		obj.arr[i]=init;
+	end
+	return obj;
+end
+
+----Vectorクラス
+--このゲーム内の、空間上のベクトルを扱う
+Vector={
+	getPosVec=function(self, chipName)
+		return Vector.new(_X(chipName), _Y(chipName), _Z(chipName));
+	end,
+};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+
+		getWVec=function(self, chipName)
+			local wx=_XX(chipName)*self.x+_YX(chipName)*self.y+_ZX(chipName)*self.z;
+			local wy=_XY(chipName)*self.x+_YY(chipName)*self.y+_ZY(chipName)*self.z;
+			local wz=_XZ(chipName)*self.x+_YZ(chipName)*self.y+_ZZ(chipName)*self.z;
+
+			return Vector.new(wx, wy, wz);
+		end,
+
+		getLVec=function(self, chipName)
+			local lx=_XX(chipName)*self.x+_XY(chipName)*self.y+_XZ(chipName)*self.z;
+			local ly=_YX(chipName)*self.x+_YY(chipName)*self.y+_YZ(chipName)*self.z;
+			local lz=_ZX(chipName)*self.x+_ZY(chipName)*self.y+_ZZ(chipName)*self.z;
+
+			return Vector.new(lx, ly, lz);
+		end,
+	}
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+--[[
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+]]--
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+			--return "x="..math.floor(self.x)..",y="..math.floor(self.y)..",z="..math.floor(self.z);
+		end,
+	}
+	setmetatable(obj, operation);
+	return obj;
+end
+}

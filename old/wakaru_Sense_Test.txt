@@ -1,0 +1,81 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() { }
+}
+Lua
+{
+require("wakaru/wakaru_eye.lua");
+
+i=0;
+arr={};
+
+initFlag=false;
+
+function init()
+	initFlag=true;
+	
+	pos=Vector.new(0, 0, 0);
+	bpos=Vector.new(0, 0, 0);
+	spd=Vector.new(0, 0, 0);
+	bspd=Vector.new(0, 0, 0);
+	acc=Vector.new(0, 0, 0);
+end
+
+function main()
+	if not initFlag then init(); return end
+	pos=getPos(1);
+	spd=pos-bpos;
+	acc=spd-bspd;
+	bspd=spd;
+	bpos=pos;
+	
+	aa=0;
+	if acc:getLength()<spd:getLength()*0.02 then
+		aa=0;	--速度変化が速度の2％以内であれば、直線運動しているものとする
+	else
+		aa=1;	--速度変化=座標データを受信
+	end
+	
+	--データ出力
+	i=i+1;
+	arr[i]=i..","..pos.x..","..spd.x..","..aa.."\n";
+	out(0, arr[i]);
+		
+	if _KEYDOWN(0)==1 then
+		writeFile(arr, 1, i);
+		i=0;
+	end
+end
+	
+function writeFile(arr, s, e)
+	file=_EXFOPEN("_SenseTest.csv", "w");
+	for i=s,e do
+		_EXFPUTS(file,arr[i]);
+	end
+	_EXFCLOSE(file);
+end
+	
+function getPos(pNum)
+	local nt=_NTICKS();
+	local nx=(math.sin(nt/150)-math.sin(nt/350))/2;
+	local ny=(math.sin(nt/160)-math.sin(nt/360))/2;
+	local nz=(math.sin(nt/140)-math.sin(nt/340))/2;
+	local nn=_PLAYERCHIPS(pNum)^(1/3);
+		
+	math.randomseed(1519);
+	x=_PLAYERX(pNum)-nx*nn;
+	math.randomseed(1519);
+	y=_PLAYERY(pNum)-ny*nn;
+	math.randomseed(1519);
+	z=_PLAYERZ(pNum)-nz*nn;
+	
+	return Vector.new(x, y, z);
+end
+}

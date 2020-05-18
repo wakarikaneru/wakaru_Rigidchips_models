@@ -1,0 +1,118 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Frame(angle=90, option=1) {
+			N:Weight(angle=-90) {
+				N:Weight() {
+					N:Weight() {
+						N:RLW(angle=-90, power=720000) {
+							N:Trim(angle=45) { }
+							W:Trim(angle=45) { }
+							S:Trim(angle=45) { }
+							E:Trim(angle=45) { }
+						}
+					}
+				}
+				W:Weight(angle=15) {
+					W:Weight(angle=-30, option=3) {
+						W:Trim() {
+							W:Trim() {
+								W:Trim() {
+									W:Trim() { }
+								}
+							}
+						}
+					}
+					W:RLW(angle=60) { }
+				}
+				E:Weight(angle=15) {
+					E:Weight(angle=-30, option=3) {
+						E:Trim() {
+							E:Trim() {
+								E:Trim() {
+									E:Trim() { }
+								}
+							}
+						}
+					}
+					E:RLW(angle=60) { }
+				}
+				S:Chip() {
+					S:Trim(angle=90) {
+						S:Trim(angle=0) {
+							S:Trim() {
+								S:Trim() {
+									S:Trim() {
+										E:Chip(angle=90) {
+											E:Chip() { }
+										}
+										E:Chip(angle=-90) {
+											E:Chip() { }
+										}
+										E:Trim() {
+											S:Chip() { }
+										}
+										S:Chip() { }
+									}
+								}
+								S:RudderF(angle=30) {
+									S:RLW() { }
+								}
+							}
+						}
+					}
+					W:Chip(angle=15) {
+						S:Trim() { }
+						W:Chip(angle=-30) {
+							W:Rudder(angle=15) {
+								W:Trim() {
+									W:Trim() {
+										W:Trim() {
+											S:Chip() { }
+										}
+										S:Chip() { }
+									}
+									S:Chip() { }
+								}
+								S:Chip() { }
+							}
+							S:Trim() { }
+						}
+					}
+					E:Chip(angle=15) {
+						S:Trim() { }
+						E:Chip(angle=-30) {
+							E:Rudder(angle=-15) {
+								S:Chip() { }
+								E:Trim() {
+									S:Chip() { }
+									E:Trim() {
+										S:Chip() { }
+										E:Trim() {
+											S:Chip() { }
+										}
+									}
+								}
+							}
+							S:Trim() { }
+						}
+					}
+				}
+			}
+		}
+		S:TrimF(angle=90) {
+			N:RudderF(angle=180) {
+				S:Weight(angle=180, option=2) { }
+			}
+		}
+	}
+}
+Script
+{_ZOOM(90)}

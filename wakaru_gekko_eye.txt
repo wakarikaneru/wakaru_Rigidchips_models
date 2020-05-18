@@ -1,0 +1,2270 @@
+// [RCD] 
+Val
+{
+	AILERON(default=180, min=150, max=210)
+	AIRBRAKE(default=160, min=120, max=160)
+	BLADEL(default=45)
+	BLADER(default=45)
+	BRAKE(default=0, max=100)
+	COLOR_BODY(default=#222D28, disp=0)
+	COLOR_GEAR(default=#131814, disp=0)
+	COLOR_MARK1(default=#D3AC1C, disp=0)
+	COLOR_MARK2(default=#A42B2E, disp=0)
+	COLOR_PROP(default=#5D4D45, disp=0)
+	COLOR_WINDOW(default=#FFFFFF, disp=0)
+	DLC(default=180, min=150, max=210)
+	DSC(default=180, min=150, max=210)
+	ELEVATOR(default=180, min=150, max=210)
+	GEAR(default=180, min=180, max=270)
+	GUN_ARM01(default=90, min=90, max=180, disp=0)
+	GUN_ARM02(default=180, max=180, disp=0)
+	GUN_ARM03(default=-90, min=-90, max=0, disp=0)
+	GUN_ARM11(default=90, min=90, max=180, disp=0)
+	GUN_ARM12(default=180, max=180, disp=0)
+	GUN_ARM13(default=-90, min=-90, max=0, disp=0)
+	GUN_ARM21(default=90, min=90, max=180, disp=0)
+	GUN_ARM22(default=180, max=180, disp=0)
+	GUN_ARM23(default=-90, min=-90, max=0, disp=0)
+	GUN_ARM31(default=90, min=90, max=180, disp=0)
+	GUN_ARM32(default=180, max=180, disp=0)
+	GUN_ARM33(default=-90, min=-90, max=0, disp=0)
+	GUN_TRIG0(default=0, max=50000, disp=0)
+	GUN_TRIG1(default=0, max=50000, disp=0)
+	GUN_TRIG2(default=0, max=50000, disp=0)
+	GUN_TRIG3(default=0, max=50000, disp=0)
+	HANDLE(default=0, min=-30, max=30)
+	MAT_WINDOW(default=#00D0FB, disp=0)
+	POWER(default=0, max=360000)
+	REAR(default=30, max=30)
+	REARL_ARM1(default=5, min=-85, max=95, disp=0)
+	REARL_ARM2(default=180, min=180, max=270, disp=0)
+	REARL_TRIG(default=0, max=50000, step=1, disp=0)
+	REARR_ARM1(default=-5, min=-95, max=85, disp=0)
+	REARR_ARM2(default=180, min=180, max=270, disp=0)
+	REARR_TRIG(default=0, max=50000, step=1, disp=0)
+	RUDDER(default=180, min=150, max=210)
+	UP_TRIG(default=0, max=50000, step=1, disp=0)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		S:TrimF(angle=90, option=1, color=COLOR_BODY, damper=0.9375, spring=0.9375) {
+			S:RudderF(angle=30, color=COLOR_BODY, name=UP_MOUNT, option=1, damper=0.9375, spring=0.9375) {
+				E:Rudder(angle=90, color=COLOR_BODY, damper=0.9375, spring=0.9375) {
+					W:Arm(color=COLOR_BODY, name=UP_GUN, power=UP_TRIG, option=50000, damper=0.9375, spring=0.9375) { }
+				}
+			}
+			W:Trim(damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+				N:Weight(color=COLOR_BODY) {
+					N:TrimF(angle=90, color=COLOR_BODY) {
+						N:Chip(angle=DLC, color=COLOR_BODY) { }
+						N:Chip(angle=DLC, color=COLOR_BODY) { }
+					}
+					N:Weight(color=COLOR_BODY, name=BODY) {
+						W:Weight(angle=95, name=MOUNTR, damper=0.9375, option=2, color=COLOR_MARK1, spring=0.9375) {
+							W:Weight(damper=0.9375, color=COLOR_MARK1, spring=0.9375) {
+								N:TrimF(angle=95, option=1, damper=0.9375, color=#000000, spring=0.9375) {
+									N:RLW(angle=90, power=POWER, color=COLOR_PROP, name=ENGINER) {
+										W:Trim(angle=-BLADER, name=PROPR4, damper=0.9375, color=COLOR_PROP, spring=0.9375) { }
+										N:Trim(angle=-BLADER, name=PROPR1, damper=0.9375, color=COLOR_PROP, spring=0.9375) { }
+										E:Trim(angle=-BLADER, name=PROPR3, damper=0.9375, color=COLOR_PROP, spring=0.9375) { }
+										S:Trim(angle=-BLADER, name=PROPR2, damper=0.9375, color=COLOR_PROP, spring=0.9375) { }
+									}
+									S:Cowl(angle=90, color=COLOR_BODY) {
+										E:Cowl(angle=90, color=COLOR_GEAR) {
+											E:Cowl(angle=30, option=5, color=COLOR_BODY) { }
+										}
+										N:Cowl(angle=90, color=COLOR_GEAR) {
+											N:Cowl(angle=30, option=5, color=COLOR_BODY) { }
+										}
+										W:Cowl(angle=90, color=COLOR_GEAR) {
+											W:Cowl(angle=30, option=5, color=COLOR_BODY) { }
+										}
+										S:Cowl(angle=90, color=COLOR_GEAR) {
+											S:Cowl(angle=30, option=5, color=COLOR_BODY) { }
+										}
+										S:Cowl(angle=-105, option=0, color=COLOR_BODY) {
+											S:Cowl(option=0, color=COLOR_BODY) { }
+										}
+										N:Cowl(angle=-105, option=0, color=COLOR_BODY) {
+											N:Cowl(option=0, color=COLOR_BODY) { }
+										}
+										E:Cowl(angle=-120, color=COLOR_BODY) { }
+										W:Cowl(angle=-120, option=0, color=COLOR_BODY) { }
+									}
+								}
+								W:Frame(angle=-90, option=1, color=COLOR_GEAR) {
+									E:RudderF(angle=GEAR, color=COLOR_GEAR) {
+										E:RLW(brake=BRAKE, color=COLOR_GEAR) { }
+									}
+								}
+								N:Cowl(angle=-170, color=COLOR_BODY) { }
+								N:Cowl(angle=170, color=COLOR_BODY) { }
+								W:Trim(damper=0.9375, color=COLOR_MARK1, spring=0.9375) {
+									N:Cowl(angle=-170, color=COLOR_BODY) { }
+									N:Cowl(angle=170, color=COLOR_BODY) { }
+									W:Trim(color=COLOR_MARK1) {
+										W:Trim(color=COLOR_BODY) {
+											W:Trim(color=COLOR_BODY) {
+												N:Cowl(angle=-170, color=COLOR_BODY) { }
+												N:Cowl(angle=170, color=COLOR_BODY) { }
+												W:Cowl(option=5, color=COLOR_BODY) { }
+											}
+											N:Cowl(angle=-170, color=COLOR_BODY) { }
+											N:Cowl(angle=170, color=COLOR_BODY) { }
+											S:Cowl(angle=170, option=1, effect=#F000) {
+												S:Cowl(angle=-170, option=2, color=COLOR_MARK2) { }
+											}
+										}
+										N:Cowl(angle=-170, color=COLOR_BODY) { }
+										N:Cowl(angle=170, color=COLOR_BODY) { }
+										S:Cowl(angle=175, color=COLOR_MARK1) { }
+									}
+									S:Cowl(angle=175, color=COLOR_MARK1) { }
+								}
+								S:Cowl(angle=175, color=COLOR_MARK1) { }
+							}
+							S:Rudder(angle=10, color=COLOR_BODY) {
+								N:Chip(angle=AIRBRAKE, color=COLOR_BODY) { }
+								N:Chip(angle=-AIRBRAKE, color=COLOR_BODY) { }
+								W:Trim(option=1, color=COLOR_BODY) {
+									W:Trim(color=COLOR_BODY) {
+										W:TrimF(option=1, color=COLOR_BODY, name=WINGR) {
+											N:Chip(angle=AILERON, color=COLOR_BODY) {
+												N:Cowl(angle=-175, color=COLOR_BODY) { }
+												N:Cowl(angle=175, color=COLOR_BODY) { }
+											}
+											W:TrimF(option=1, color=COLOR_BODY) {
+												W:TrimF(option=1, color=COLOR_BODY) {
+													N:Chip(angle=AILERON, color=COLOR_BODY) {
+														N:Cowl(angle=-175, color=COLOR_BODY) { }
+														N:Cowl(angle=175, color=COLOR_BODY) { }
+													}
+													W:Cowl(option=5, color=COLOR_BODY) { }
+												}
+												N:Chip(angle=AILERON, color=COLOR_BODY) {
+													N:Cowl(angle=-175, color=COLOR_BODY) { }
+													N:Cowl(angle=175, color=COLOR_BODY) { }
+												}
+											}
+										}
+										S:Cowl(angle=-175, color=COLOR_BODY) { }
+										S:Cowl(angle=175, color=COLOR_BODY) { }
+									}
+									S:Cowl(angle=-175, color=COLOR_BODY) { }
+									S:Cowl(angle=175, color=COLOR_BODY) { }
+								}
+								S:Cowl(angle=-175, color=COLOR_BODY) { }
+								S:Cowl(angle=175, color=COLOR_BODY) { }
+							}
+							S:Trim(angle=REARR_ARM1, name=REARR_MOUNT, option=1, damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+								S:Rudder(angle=REARR_ARM2, damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+									N:Arm(power=REARR_TRIG, name=REARR_GUN, option=50000, damper=0.9375, color=COLOR_BODY, spring=0.9375) { }
+								}
+							}
+							N:Cowl(angle=-170, color=COLOR_BODY) { }
+							N:Cowl(angle=170, color=COLOR_BODY) { }
+							S:Cowl(angle=175, color=COLOR_MARK1) { }
+						}
+						W:Weight(angle=-95, name=MOUNTL, damper=0.9375, option=2, color=COLOR_MARK1, spring=0.9375) {
+							W:Weight(damper=0.9375, color=COLOR_MARK1, spring=0.9375) {
+								N:TrimF(angle=-95, option=1, damper=0.9375, color=#000000, spring=0.9375) {
+									N:RLW(angle=-90, power=POWER, color=COLOR_PROP, name=ENGINEL) {
+										E:Trim(angle=BLADEL, color=COLOR_PROP, spring=0.9375, damper=0.9375, name=PROPL3) { }
+										N:Trim(angle=BLADEL, name=PROPL1, damper=0.9375, color=COLOR_PROP, spring=0.9375) { }
+										W:Trim(angle=BLADEL, name=PROPL4, damper=0.9375, color=COLOR_PROP, spring=0.9375) { }
+										S:Trim(angle=BLADEL, name=PROPL2, damper=0.9375, color=COLOR_PROP, spring=0.9375) { }
+									}
+									S:Cowl(angle=-90, color=COLOR_BODY) {
+										E:Cowl(angle=-90, color=COLOR_GEAR) {
+											E:Cowl(angle=-30, option=5, color=COLOR_BODY) { }
+										}
+										N:Cowl(angle=-90, color=COLOR_GEAR) {
+											N:Cowl(angle=-30, option=5, color=COLOR_BODY) { }
+										}
+										W:Cowl(angle=-90, color=COLOR_GEAR) {
+											W:Cowl(angle=-30, option=5, color=COLOR_BODY) { }
+										}
+										S:Cowl(angle=-90, color=COLOR_GEAR) {
+											S:Cowl(angle=-30, option=5, color=COLOR_BODY) { }
+										}
+										E:Cowl(angle=120, color=COLOR_BODY) { }
+										W:Cowl(angle=120, option=0, color=COLOR_BODY) { }
+										S:Cowl(angle=105, option=0, color=COLOR_BODY) {
+											S:Cowl(option=0, color=COLOR_BODY) { }
+										}
+										N:Cowl(angle=105, option=0, color=COLOR_BODY) {
+											N:Cowl(option=0, color=COLOR_BODY) { }
+										}
+									}
+								}
+								W:Frame(angle=90, option=1, color=COLOR_GEAR) {
+									E:RudderF(angle=GEAR, color=COLOR_GEAR) {
+										E:RLW(brake=BRAKE, color=COLOR_GEAR) { }
+									}
+								}
+								N:Cowl(angle=-170, color=COLOR_BODY) { }
+								N:Cowl(angle=170, color=COLOR_BODY) { }
+								W:Trim(damper=0.9375, color=COLOR_MARK1, spring=0.9375) {
+									N:Cowl(angle=-170, color=COLOR_BODY) { }
+									N:Cowl(angle=170, color=COLOR_BODY) { }
+									W:Trim(color=COLOR_MARK1) {
+										W:Trim(color=COLOR_BODY) {
+											W:Trim(color=COLOR_BODY) {
+												N:Cowl(angle=-170, color=COLOR_BODY) { }
+												N:Cowl(angle=170, color=COLOR_BODY) { }
+												W:Cowl(option=5, color=COLOR_BODY) { }
+											}
+											N:Cowl(angle=-170, color=COLOR_BODY) { }
+											N:Cowl(angle=170, color=COLOR_BODY) { }
+											S:Cowl(angle=-170, option=1, effect=#F000) {
+												S:Cowl(angle=170, option=2, color=COLOR_MARK2) { }
+											}
+										}
+										N:Cowl(angle=-170, color=COLOR_BODY) { }
+										N:Cowl(angle=170, color=COLOR_BODY) { }
+										S:Cowl(angle=-175, color=COLOR_MARK1) { }
+									}
+									S:Cowl(angle=-175, color=COLOR_MARK1) { }
+								}
+								S:Cowl(angle=-175, color=COLOR_MARK1) { }
+							}
+							S:Rudder(angle=10, color=COLOR_BODY) {
+								N:Chip(angle=AIRBRAKE, color=COLOR_BODY) { }
+								N:Chip(angle=-AIRBRAKE, color=COLOR_BODY) { }
+								W:Trim(color=COLOR_BODY) {
+									W:Trim(color=COLOR_BODY) {
+										W:TrimF(option=1, color=COLOR_BODY, name=WINGL) {
+											N:Chip(angle=AILERON, color=COLOR_BODY) {
+												N:Cowl(angle=-175, color=COLOR_BODY) { }
+												N:Cowl(angle=175, color=COLOR_BODY) { }
+											}
+											W:TrimF(option=1, color=COLOR_BODY) {
+												W:TrimF(option=1, color=COLOR_BODY) {
+													N:Chip(angle=AILERON, color=COLOR_BODY) {
+														N:Cowl(angle=-175, color=COLOR_BODY) { }
+														N:Cowl(angle=175, color=COLOR_BODY) { }
+													}
+													W:Cowl(option=5, color=COLOR_BODY) { }
+												}
+												N:Chip(angle=AILERON, color=COLOR_BODY) {
+													N:Cowl(angle=-175, color=COLOR_BODY) { }
+													N:Cowl(angle=175, color=COLOR_BODY) { }
+												}
+											}
+										}
+										S:Cowl(angle=-175, color=COLOR_BODY) { }
+										S:Cowl(angle=175, color=COLOR_BODY) { }
+									}
+									S:Cowl(angle=-175, color=COLOR_BODY) { }
+									S:Cowl(angle=175, color=COLOR_BODY) { }
+								}
+								S:Cowl(angle=-175, color=COLOR_BODY) { }
+								S:Cowl(angle=175, color=COLOR_BODY) { }
+							}
+							S:Trim(angle=REARL_ARM1, name=REARL_MOUNT, option=1, damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+								S:Rudder(angle=REARL_ARM2, damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+									N:Arm(power=REARL_TRIG, name=REARL_GUN, option=50000, damper=0.9375, color=COLOR_BODY, spring=0.9375) { }
+								}
+							}
+							N:Cowl(angle=-170, color=COLOR_BODY) { }
+							N:Cowl(angle=170, color=COLOR_BODY) { }
+							S:Cowl(angle=-175, color=COLOR_MARK1) { }
+						}
+						N:Weight(color=COLOR_BODY, name=NOSEV) {
+							S:Frame(angle=GUN_ARM01, name=GUN_MOUNT0, option=1, color=COLOR_BODY) {
+								S:Frame(angle=GUN_ARM02, option=1, color=COLOR_BODY) {
+									S:Arm(angle=GUN_ARM03, name=GUN_GUN0, power=GUN_TRIG0, option=50000, color=COLOR_BODY) { }
+								}
+							}
+							S:Frame(angle=-GUN_ARM11, name=GUN_MOUNT1, option=1, color=COLOR_BODY) {
+								S:Frame(angle=-GUN_ARM12, option=1, color=COLOR_BODY) {
+									S:Arm(angle=-GUN_ARM13, name=GUN_GUN1, power=GUN_TRIG1, option=50000, color=COLOR_BODY) { }
+								}
+							}
+							S:Frame(angle=GUN_ARM21, name=GUN_MOUNT2, option=1, color=COLOR_BODY) {
+								S:Frame(angle=GUN_ARM22, option=1, color=COLOR_BODY) {
+									S:Arm(angle=GUN_ARM23, name=GUN_GUN2, power=GUN_TRIG2, option=50000, color=COLOR_BODY) { }
+								}
+							}
+							S:Frame(angle=-GUN_ARM31, name=GUN_MOUNT3, option=1, color=COLOR_BODY) {
+								S:Frame(angle=-GUN_ARM32, option=1, color=COLOR_BODY) {
+									S:Arm(angle=-GUN_ARM33, name=GUN_GUN3, power=GUN_TRIG3, option=50000, color=COLOR_BODY) { }
+								}
+							}
+							W:RudderF(angle=45, color=COLOR_GEAR, name=RADER) { }
+						}
+						N:Chip(angle=DSC, color=COLOR_BODY) { }
+						N:Chip(angle=DSC, color=COLOR_BODY) { }
+					}
+				}
+				N:Trim(angle=90, color=COLOR_BODY) {
+					S:Cowl(angle=-150, color=COLOR_BODY) {
+						S:Cowl(angle=150, color=COLOR_BODY) {
+							W:Cowl(angle=90, color=COLOR_BODY) { }
+							E:Cowl(angle=90, color=COLOR_BODY) { }
+							N:Cowl(angle=0, color=COLOR_BODY) {
+								E:Cowl(angle=90, color=COLOR_BODY) {
+									N:Cowl(angle=15, color=COLOR_BODY) {
+										N:Cowl(option=5, color=COLOR_BODY) { }
+									}
+								}
+								W:Cowl(angle=90, color=COLOR_BODY) {
+									N:Cowl(angle=15, color=COLOR_BODY) {
+										N:Cowl(option=5, color=COLOR_BODY) { }
+									}
+								}
+								N:Cowl(option=5, color=COLOR_BODY) { }
+								N:Cowl(angle=-120, option=1, color=COLOR_GEAR) {
+									N:Cowl(angle=-60, option=1, color=COLOR_GEAR) {
+										N:Cowl(angle=0, option=1, color=COLOR_GEAR) {
+											E:Cowl(angle=-90, option=1, color=COLOR_GEAR) { }
+											W:Cowl(angle=-90, option=1, color=COLOR_GEAR) { }
+											N:Cowl(angle=-60, option=1, color=COLOR_GEAR) { }
+										}
+										E:Cowl(angle=-90, option=1, color=COLOR_GEAR) { }
+										W:Cowl(angle=-90, option=1, color=COLOR_GEAR) { }
+									}
+								}
+							}
+							S:Cowl(color=COLOR_BODY) {
+								W:Cowl(angle=90, color=COLOR_BODY) {
+									S:Cowl(angle=5, color=COLOR_BODY) {
+										S:Cowl(color=COLOR_BODY) {
+											S:Cowl(color=COLOR_BODY) {
+												S:Cowl(color=COLOR_BODY) {
+													S:Cowl(color=COLOR_BODY) {
+														E:Cowl(option=5, color=COLOR_BODY) { }
+													}
+												}
+											}
+											S:Cowl(angle=-5, option=2, color=COLOR_MARK2) { }
+										}
+									}
+								}
+								E:Cowl(angle=90, color=COLOR_BODY) {
+									S:Cowl(angle=5, color=COLOR_BODY) {
+										S:Cowl(color=COLOR_BODY) {
+											S:Cowl(color=COLOR_BODY) {
+												S:Cowl(color=COLOR_BODY) {
+													S:Cowl(color=COLOR_BODY) {
+														W:Cowl(option=5, color=COLOR_BODY) { }
+													}
+												}
+											}
+											S:Cowl(angle=-5, option=2, color=COLOR_MARK2) { }
+										}
+									}
+								}
+								S:Cowl(angle=0, option=0, color=COLOR_BODY) {
+									S:Cowl(angle=0, option=5, color=COLOR_BODY) { }
+								}
+							}
+						}
+					}
+					S:Cowl(angle=30, color=COLOR_BODY) {
+						S:Cowl(angle=-30, option=0, color=COLOR_BODY) {
+							S:Cowl(angle=0, option=5, color=COLOR_BODY) { }
+						}
+					}
+				}
+				S:Trim(damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+					S:Trim(damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+						S:Trim(damper=0.9375, color=COLOR_BODY, spring=0.9375) {
+							S:RudderF(angle=REAR, color=COLOR_GEAR) {
+								S:RLW(angle=HANDLE, brake=BRAKE, color=COLOR_GEAR) { }
+							}
+							S:Trim(damper=0.9375, color=COLOR_BODY, spring=1) {
+								S:Trim(option=1, color=COLOR_BODY, name=TAIL) {
+									N:Chip(angle=RUDDER, color=COLOR_BODY) { }
+									E:Frame(angle=-90, option=1, color=COLOR_BODY, name=TAILL) {
+										E:TrimF(option=1, color=COLOR_BODY, name=TAILL2) {
+											N:Chip(angle=ELEVATOR, color=COLOR_BODY) {
+												S:Cowl(angle=-175, color=COLOR_BODY) { }
+												S:Cowl(angle=175, color=COLOR_BODY) { }
+											}
+											N:Chip(angle=ELEVATOR, color=COLOR_BODY) { }
+										}
+										N:Chip(angle=ELEVATOR, color=COLOR_BODY) {
+											S:Cowl(angle=-175, color=COLOR_BODY) { }
+											S:Cowl(angle=175, color=COLOR_BODY) { }
+										}
+										N:Chip(angle=ELEVATOR, color=COLOR_BODY) { }
+									}
+									E:Frame(angle=90, option=1, color=COLOR_BODY, name=TAILR) {
+										E:TrimF(option=1, color=COLOR_BODY, name=TAILR2) {
+											N:Chip(angle=-ELEVATOR, color=COLOR_BODY) {
+												S:Cowl(angle=-175, color=COLOR_BODY) { }
+												S:Cowl(angle=175, color=COLOR_BODY) { }
+											}
+											N:Chip(angle=-ELEVATOR, color=COLOR_BODY) { }
+										}
+										N:Chip(angle=-ELEVATOR, color=COLOR_BODY) {
+											S:Cowl(angle=-175, color=COLOR_BODY) { }
+											S:Cowl(angle=175, color=COLOR_BODY) { }
+										}
+										N:Chip(angle=-ELEVATOR, color=COLOR_BODY) { }
+									}
+									E:Trim(option=1, color=COLOR_BODY, name=TAILV) {
+										N:Chip(angle=RUDDER, color=COLOR_BODY) { }
+										N:Chip(angle=RUDDER, color=COLOR_BODY) { }
+									}
+									S:Rudder(angle=-30, color=COLOR_BODY) {
+										E:Chip(color=COLOR_BODY) { }
+										S:Cowl(angle=175, color=COLOR_BODY) {
+											E:Cowl(option=5, color=COLOR_BODY) { }
+										}
+										S:Cowl(angle=-175, color=COLOR_BODY) {
+											E:Cowl(option=5, color=COLOR_BODY) { }
+										}
+									}
+									N:Chip(angle=RUDDER, color=COLOR_BODY) { }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua
+{
+	require("wakaru/wakaru_eye.lua");
+
+	KEY_UP=0
+	KEY_DOWN=1
+	KEY_LEFT=2
+	KEY_RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+
+function init()
+	eye=Wakaru_Eye.new();
+	BomberCharge=loadlib("BomberDLL.dll", "bomber_Charge");
+	
+	_ZOOM(90);
+	isLanding=true;
+	isFireMode=true;
+	fireRearGun=false;
+	canFire=true;
+
+	SENSITIVITY=3;
+
+	lockedEnemy=nil;
+	LOCKANGLE=math.cos(math.rad(10));
+	aimVec={x=0, y=0, z=0};
+
+	bodySpd={x=0, y=0, z=0};
+
+	mouseR=0;
+	mouseX=0;
+	mouseY=0;
+	pointX=0;
+	pointY=0;
+
+	MPITCH=0.1;
+	MROLL=0.1;
+	MYAW=0.05;
+
+	MDFC=45;
+
+	p=0;
+	r=0;
+	y=0;
+end
+
+function main()
+	if not Init then
+		init()
+		Init=true;
+	end
+	--eye:tick();
+	LimitAmmoRegulation();
+	bomberRegulation();
+
+	--表示に関する処理
+	out(0,"_FPS()= ", _FPS())
+
+	out(1,"_WEIGHT()-178*2= ", _WEIGHT()-178*2);
+
+	out(3,"RearGun ", fireRearGun);
+
+	out(14, "AMMO ", math.floor(LimitAmmo/2));
+
+	if isLanding then out(15, "LDG  ","DOWN"); else out(15, "LDG  ","UP"); end
+
+	out(16, "POW  ", POWER);
+
+	_SETCOLOR(tonumber("00FF00", 16));
+
+	observation();
+
+	drawRader(0.75, 0.625, 0.5, 300);
+
+	cross();
+
+	_MOVE2D(pointX, pointY);
+	_LINE2D(mouseX, mouseY);
+
+	drawRect(pointX, pointY, 1/SENSITIVITY);
+
+	--入力に関する処理
+
+	local inputX=0;
+	local inputY=0;
+	local inputZ=0;
+
+	local inputP=0;
+	local inputB=0;
+
+	if _MR()==1 then mouseR=mouseR+1; else mouseR=0; end
+
+	mouseX=-(_WIDTH()/2-_MX())*2/_HEIGHT();
+	mouseY=(_HEIGHT()/2-_MY())*2/_HEIGHT();
+
+	if mouseR==0 then
+		pointX=mouseX;
+		pointY=mouseY;
+	end
+
+	inputX=limit((mouseX-pointX)*SENSITIVITY, -2, 2);
+	inputY=limit((mouseY-pointY)*SENSITIVITY, -2, 2);
+
+	if _MR()==0 then
+		if _KEY(KEY_UP)==1 then inputY=1; end
+		if _KEY(KEY_DOWN)==1 then inputY=-1; end
+		if _KEY(KEY_LEFT)==1 then inputX=-1; end
+		if _KEY(KEY_RIGHT)==1 then inputX=1; end
+	end
+
+	if _KEY(KEY_Z)==1 then inputZ=-1; end
+	if _KEY(KEY_C)==1 then inputZ=1; end
+
+	if _KEY(KEY_Q)==1 then inputP=1; end
+	if _KEY(KEY_A)==1 then inputP=-1; end
+
+	if _KEY(KEY_X)==1 then inputB=1; else inputB=0; end
+
+	if _KEYDOWN(KEY_W)==1 then isLanding=not isLanding; end
+
+	if _KEYDOWN(KEY_F)==1 then fireRearGun=not fireRearGun; end
+
+	local fire=false;
+
+	if _MR()*_ML()==1 then isFireMode=true; else isFireMode=false end
+
+	p=step3(p, inputY*MPITCH, 15);
+	r=step3(r, -inputX*MROLL, 15);
+	y=step3(y, -inputZ*MYAW, 15);
+
+	--現在の機体情報を取得する処理
+
+	if LimitAmmo<=0 then canFire=false; else canFire=true; end
+
+	bodySpd=getSpdVec(BODY);
+
+	local spd=(-getLVec(getSpdVec(ENGINEL),ENGINEL).y+getLVec(getSpdVec(ENGINER),ENGINER).y)/2;
+	local s=spd/(100/3.6/30);
+	if s<=0.5 then s=0.5; end
+
+	local livewl=inLiving(WINGL);
+	local livewr=inLiving(WINGR);
+	local livetl=inLiving(TAILL);
+	local livetr=inLiving(TAILR);
+
+	local gp={x=_GX(CORE), y=_GY(CORE), z=_GZ(CORE)};
+
+	DISELEVATOR=(getDis(getPosVec(TAILL),gp)*livetl+getDis(getPosVec(TAILR),gp)*livetr)/(livetl+livetr);
+	DISAILERON=(getDis(getPosVec(WINGL),gp)*livewl+getDis(getPosVec(WINGR),gp)*livewr)/(livewl+livewr);
+	DISRUDDER=getDis(getPosVec(TAIL),gp);
+
+	local pitching=(-getLVec(getSpdVec(TAILL),TAILL).y*livetl+getLVec(getSpdVec(TAILR),TAILR).y*livetr)/DISELEVATOR/(livetl+livetr);
+	local rolling=-(getLVec(getSpdVec(WINGL),WINGL).y*livewl+getLVec(getSpdVec(WINGR),WINGR).y*livewr)/DISAILERON/(livewl+livewr);
+	local yawing=-getLVec(getSpdVec(TAIL),TAIL).y/DISRUDDER;
+
+	--機体を制御する処理
+
+	ELEVATOR=step2(ELEVATOR,180+PID("ELEVATOR", pitching, p, 90, 90, 90, -45, 45, 0.75)/s, 15);
+	AILERON=step2(AILERON,180+PID("AILERON", rolling, r, 90, 90, 90, -45, 45, 0.75)/s, 15);
+	RUDDER=step2(RUDDER,180+PID("RUDDER", yawing, y, 90, 90, 90, -45, 45, 0.75)/s, 15);
+
+	POWER=POWER+inputP*360000/30;
+	AIRBRAKE=step2(AIRBRAKE, 160-40*inputB, 5);
+
+	if isLanding then
+		GEAR=step2(GEAR, 180, 5);
+		REAR=step2(REAR, 30, 5);
+		BRAKE=step2(BRAKE, 60*inputB, 5);
+		HANDLE=step2(HANDLE, 15*inputZ/s, 5);
+	else
+		GEAR=step2(GEAR, 270, 1);
+		REAR=step2(REAR, 0, 1);
+		BRAKE=step2(BRAKE, 15, 5);
+		HANDLE=step2(HANDLE, 0, 5);
+	end
+
+	local localBodySpd=getLVec(bodySpd, BODY);
+
+	if isFireMode and lockedEnemy~=nil then
+		--敵機の捕捉を補助
+		drawLock(lockedEnemy, 2, 300);
+
+		local aimVec=getLVec(getSpdVec2(_G["LOG"..lockedEnemy].future, getPosVec(BODY), 1), BODY);
+		local length=getVecLength(aimVec);
+
+		aimVec=getNormVec(aimVec);
+
+		if math.sin(math.acos(getInner(aimVec, {x=0, y=0, z=-1})))*length<=0.6*5 then fire=true; end
+
+		DLC=step2(DLC, 180+PID("DLC", -aimVec.x, 0, 180, 180, 180, -30, 30, 0.75)/s, 15);
+		DSC=step2(DSC, 180-PID("DSC", -aimVec.y, 0, 180, 180, 180, -30, 30, 0.75)/s, 15);
+	else
+		--安定性の向上
+		DLC=step2(DLC,180+PID("DLC", localBodySpd.x, 0, 30, 30, 30, -30, 30, 0.75)/s, 15);
+		DSC=step2(DSC,180-PID("DSC", localBodySpd.y, 0, 30, 30, 30, -30, 30, 0.75)/s, 15);
+	end
+
+	local aa=0;
+	if inLiving(PROPR1)*inLiving(PROPR2)==0 then aa=_BYE(PROPR1); aa=_BYE(PROPR2); end
+	if inLiving(PROPR3)*inLiving(PROPR4)==0 then aa=_BYE(PROPR3); aa=_BYE(PROPR4); end
+	if inLiving(PROPL1)*inLiving(PROPL2)==0 then aa=_BYE(PROPL1); aa=_BYE(PROPL2); end
+	if inLiving(PROPL3)*inLiving(PROPL4)==0 then aa=_BYE(PROPL3); aa=_BYE(PROPL4); end
+
+	BLADEL=step2(BLADEL,SAE416(-_VY(ENGINEL),_Y(ENGINEL),POWER,_WY(ENGINEL),inLiving(PROPL1)+inLiving(PROPL2)+inLiving(PROPL3)+inLiving(PROPL4)),5);
+	BLADER=step2(BLADER,SAE416(_VY(ENGINER),_Y(ENGINER),POWER,_WY(ENGINER),inLiving(PROPR1)+inLiving(PROPR2)+inLiving(PROPR3)+inLiving(PROPR4)),5);
+
+	--gunControl("GUN", fire and canFire);
+	gunControl("GUN", isFireMode and canFire);
+	rearGunControl(fireRearGun and canFire);
+	upGunControl(fireRearGun and canFire);
+
+end
+
+function inLiving(chipName)
+	if _TOP(chipName)==CORE then
+		return 1;
+	else
+		return 0;
+	end
+end
+
+	FIREANGLE=math.deg(math.acos(1/4+0.05));
+	STEP=(90-FIREANGLE)/2;
+
+	GUN_arm0r=90;
+	GUN_arm1r=90;
+	GUN_arm2r=90;
+	GUN_arm3r=90;
+
+	GUN_armNum=0;
+	ARMMAX=4;
+
+function gunControl(id, fire)
+	for i=0,ARMMAX-1 do
+
+		if _TOP(_G[id.."_GUN"..i])~=CORE then
+			local aa=_BYE(_G[id.."_MOUNT"..i]);
+		end
+
+		if _G[id.."_arm"..i.."r"]==FIREANGLE then
+			_G[id.."_TRIG"..i]=_OPTION(_G[id.."_GUN"..i]);
+			_G[id.."_armNum"]=_G[id.."_armNum"]+1;
+		else
+			_G[id.."_TRIG"..i]=0;
+		end
+
+		_G[id.."_armNum"]=math.mod(_G[id.."_armNum"],ARMMAX);
+
+		if i==_G[id.."_armNum"] and fire and _OPTION(_G[id.."_GUN"..i])<=_E(_G[id.."_GUN"..i]) then
+			_G[id.."_arm"..i.."r"]=step2(_G[id.."_arm"..i.."r"], FIREANGLE, STEP);
+		else
+			_G[id.."_arm"..i.."r"]=step2(_G[id.."_arm"..i.."r"], 90, STEP);
+		end
+
+		_G[id.."_ARM"..i.."1"]=180-_G[id.."_arm"..i.."r"];
+		_G[id.."_ARM"..i.."2"]=2*_G[id.."_arm"..i.."r"];
+		_G[id.."_ARM"..i.."3"]=-_G[id.."_arm"..i.."r"];
+	end
+end
+
+	REARANGLEMAX=math.cos(math.rad(90));
+	REARANGLEMIN=math.cos(math.rad(0));
+	timeL=0;
+	timeR=0;
+
+function rearGunControl(fire)
+	local aimVec={x=0, y=0, z=0};
+	local length=0;
+	local rad=0;
+	local inner=-1;
+	local maxThreatL=-1;
+	local maxThreatR=-1;
+	local targetL=nil;
+	local targetR=nil;
+
+	if _TOP(REARL_GUN)~=CORE then
+		local aa=_BYE(REARL_MOUNT);
+	end
+
+	if _TOP(REARR_GUN)~=CORE then
+		local aa=_BYE(REARR_MOUNT);
+	end
+
+	for i=1,_PLAYERS()-1 do
+		if _PLAYERID(i)~=_PLAYERMYID() then
+			if _G["LOG"..i].dis[0]<=300 then
+				aimVec=getNormVec(getSpdVec2(_G["LOG"..i].future, getPosVec(BODY), 1));
+				inner=getInner(getWVec({x=0,y=0,z=1}, BODY), aimVec);
+
+				if REARANGLEMAX<=inner and inner<=REARANGLEMIN and 0<_PLAYERARMS(i) then
+					spdVec=getSpdVec2(_G["LOG"..i][0], _G["LOG"..i][4], 5);
+					if 1.5/30<=getVecLength(spdVec) then
+						threat=getInner(getNormVec(bodySpd), getNormVec(spdVec));
+
+						localaimVec=getLVec(aimVec, BODY);
+
+						if 0<localaimVec.y then
+							if maxThreatL<=threat then
+								targetL=i;
+								maxThreatL=threat;
+							end
+						else
+							if maxThreatR<=threat then
+								targetR=i;
+								maxThreatR=threat;
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+
+	mountLSpd=getSpdVec2(getSpdVec(MOUNTL), bodySpd, 1);
+	mountRSpd=getSpdVec2(getSpdVec(MOUNTR), bodySpd, 1);
+
+	if targetL~=nil and fire then
+		out(4,"RearGunL Target ", _PLAYERNAME(targetL));
+		aimVec=getNormVec(getSpdVec2(addVec(_G["LOG"..targetL].future, mulVec(mountLSpd, _G["LOG"..targetL].time)), getPosVec(REARL_GUN), 1));
+
+		for key,value in {TAILL,TAILL2} do
+			local shootVec=getNormVec(getSpdVec2(_G["LOG"..targetL].future, getPosVec(REARL_GUN), 1));
+			local colVec=getSpdVec2(getPosVec(value), getPosVec(REARL_GUN), 1);
+			local colLength=getVecLength(colVec);
+			colVec=getNormVec(colVec);
+
+			if math.sin(math.acos(getInner(shootVec, colVec)))*colLength<=0.45 then
+				fire=false;
+			end
+		end
+
+		inner=getInner(getWVec({x=0,y=0,z=1}, BODY), aimVec);
+		radARM2=math.acos(inner);
+
+		aimVec=getLVec(aimVec, BODY);
+		aimVec.z=0;
+		aimVec=getNormVec(aimVec);
+
+		local s=0;
+		if aimVec.x<0 then s=-1; else s=1; end
+		radARM1=math.acos(getInner({x=0,y=1,z=0}, aimVec))*s;
+
+		if 3<=timeL and fire then REARL_TRIG=50000; end
+		timeL=timeL+1;
+
+		REARL_ARM1=step2(REARL_ARM1, 5+math.deg(radARM1), 15);
+		REARL_ARM2=step2(REARL_ARM2, 180+math.deg(radARM2), 15);
+	else
+		timeL=0;
+		REARL_ARM1=step2(REARL_ARM1, 5, 1);
+		REARL_ARM2=step2(REARL_ARM2, 210, 1);
+		REARL_TRIG=0;
+	end
+
+
+	if targetR~=nil and fire then
+		out(5,"RearGunR Target ", _PLAYERNAME(targetR));
+		aimVec=getNormVec(getSpdVec2(addVec(_G["LOG"..targetR].future, mulVec(mountRSpd, _G["LOG"..targetR].time)), getPosVec(REARR_GUN), 1));
+
+		for key,value in {TAILR,TAILR2} do
+			local shootVec=getNormVec(getSpdVec2(_G["LOG"..targetR].future, getPosVec(REARR_GUN), 1));
+			local colVec=getSpdVec2(getPosVec(value), getPosVec(REARR_GUN), 1);
+			local colLength=getVecLength(colVec);
+			colVec=getNormVec(colVec);
+
+			if math.sin(math.acos(getInner(shootVec, colVec)))*colLength<=0.45 then
+				fire=false;
+			end
+		end
+
+		inner=getInner(getWVec({x=0,y=0,z=1}, BODY), aimVec);
+		radARM2=math.acos(inner);
+
+		aimVec=getLVec(aimVec, BODY);
+		aimVec.z=0;
+		aimVec=getNormVec(aimVec);
+
+		local s=0;
+		if aimVec.x<0 then s=1; else s=-1; end
+		radARM1=math.acos(getInner({x=0,y=-1,z=0}, aimVec))*s;
+
+		if 3<=timeR and fire then REARR_TRIG=50000; end
+		timeR=timeR+1;
+
+		REARR_ARM1=step2(REARR_ARM1, -5+math.deg(radARM1), 15);
+		REARR_ARM2=step2(REARR_ARM2, 180+math.deg(radARM2), 15);
+	else
+		timeR=0;
+		REARR_ARM1=step2(REARR_ARM1, -5, 1);
+		REARR_ARM2=step2(REARR_ARM2, 210, 1);
+		REARR_TRIG=0;
+	end
+
+end
+
+function upGunControl(fire)
+	local aimVec={x=0, y=0, z=0};
+	local length=0;
+
+	if _TOP(UP_GUN)~=CORE then
+		local aa=_BYE(UP_MOUNT);
+	end
+
+	UP_TRIG=0;
+
+	for i=1,_PLAYERS()-1 do
+		if _PLAYERID(i)~=_PLAYERMYID() then
+			if _G["LOG"..i].dis[0]<=300 then
+				aimVec=getLVec(getSpdVec2(_G["LOG"..i].future, getPosVec(UP_GUN), 1), UP_GUN);
+				length=getVecLength(aimVec);
+				aimVec=getNormVec(aimVec);
+				if math.sin(math.acos(getInner(aimVec, {x=0, y=0, z=-1})))*length<=0.6*3 and fire and 0<_PLAYERARMS(i)then
+					UP_TRIG=50000;
+				end
+			end
+		end
+	end
+
+end
+
+noiseX=0;
+noiseY=0;
+noiseZ=0;
+
+function observation()
+	noiseCanceller2();
+	for i=1,_PLAYERS()-1 do
+		if _PLAYERID(i)~=_PLAYERMYID() then
+			logCheck(i);
+			--noiseCanceller(i);
+			recordPos(i);
+			FCS(i);
+			drawTarget2D(i, 2, 300);
+		end
+	end
+
+	selectTarget();
+end
+
+function logInit(pNum)
+	_G["LOG"..pNum]={};
+	_G["LOG"..pNum].dis={};
+
+	local pos={};
+
+	pos=getPos(pNum);
+	_G["LOG"..pNum][0]=pos;
+	_G["LOG"..pNum].future=pos;
+
+	_G["LOG"..pNum].dis[0]=getDis(_G["LOG"..pNum][0], getPosVec(CORE));
+	_G["LOG"..pNum].time=_G["LOG"..pNum].dis[0]/20;
+
+	for i=1,5 do
+		_G["LOG"..pNum][i]=_G["LOG"..pNum][0];
+		_G["LOG"..pNum].dis[i]=_G["LOG"..pNum].dis[0];
+	end
+end
+
+function logCheck(pNum)
+	if _G["LOG"..pNum]==nil then
+		logInit(pNum);
+	end
+end
+
+function getPos(pNum)
+	local t;
+	t=math.randomseed(1519);
+	local x=_PLAYERX(pNum);
+	t=math.randomseed(1519);
+	local y=_PLAYERY(pNum);
+	t=math.randomseed(1519);
+	local z=_PLAYERZ(pNum);
+
+	local pos={};
+	pos.x=x+noiseX*_PLAYERCHIPS(pNum)^(1/3);
+	pos.y=y+noiseY*_PLAYERCHIPS(pNum)^(1/3);
+	pos.z=z+noiseZ*_PLAYERCHIPS(pNum)^(1/3);
+
+	return pos, getDis(pos, getPosVec(BODY));
+end
+
+function getPos2(pNum)
+	local t;
+	t=math.randomseed(1519);
+	local x=_PLAYERX(pNum);
+	t=math.randomseed(1519);
+	local y=_PLAYERY(pNum);
+	t=math.randomseed(1519);
+	local z=_PLAYERZ(pNum);
+
+	local pos={};
+	pos.x=x;
+	pos.y=y;
+	pos.z=z;
+
+	return pos;
+end
+
+function noiseCanceller(pNum)
+	if _PLAYERNAME(pNum)=="wakaru" then
+		local wakaruPos=getPos2(pNum);
+		noiseX=(100-wakaruPos.x)/_PLAYERCHIPS(pNum)^(1/3);
+		noiseY=(100-wakaruPos.y)/_PLAYERCHIPS(pNum)^(1/3);
+		noiseZ=(100-wakaruPos.z)/_PLAYERCHIPS(pNum)^(1/3);
+	end
+end
+
+function noiseCanceller2()
+	if type(_NTICKS)=="function" then
+		local nt=_NTICKS();
+		noiseX=-(math.sin(nt/150)-math.sin(nt/350))/2;
+		noiseY=-(math.sin(nt/160)-math.sin(nt/360))/2;
+		noiseZ=-(math.sin(nt/140)-math.sin(nt/340))/2;
+	end
+end
+
+function recordPos(pNum)
+	for i=5,1,-1 do
+		_G["LOG"..pNum][i]=_G["LOG"..pNum][i-1];
+		_G["LOG"..pNum].dis[i]=_G["LOG"..pNum].dis[i-1];
+	end
+	_G["LOG"..pNum][0], _G["LOG"..pNum].dis[0]=getPos(pNum);
+end
+
+function FCS(pNum)
+	local c=_G["LOG"..pNum].dis[0];
+	local b=c-_G["LOG"..pNum].dis[1];
+	_G["LOG"..pNum].time=math.ceil(c/(20-b));
+
+	local r0=Vector.new(_G["LOG"..pNum][0].x,_G["LOG"..pNum][0].y,_G["LOG"..pNum][0].z);
+	local r1=Vector.new(_G["LOG"..pNum][1].x,_G["LOG"..pNum][1].y,_G["LOG"..pNum][1].z);
+	local v0=r0-r1; 
+	c=r0;
+	b=v0;
+
+	_G["LOG"..pNum].future=addVec(c,mulVec(getSpdVec2(b, bodySpd, 1), _G["LOG"..pNum].time+4));
+end
+
+function selectTarget()
+	local aimVec=getWVec({x=0, y=0, z=-1}, BODY);
+	local inner=-1
+	local maxInner=-1;
+	lockedEnemy=nil;
+
+	for i=1,_PLAYERS()-1 do
+		if _PLAYERID(i)~=_PLAYERMYID() then
+			if _G["LOG"..i].dis[0]<=300 then
+				inner=getInner(aimVec, getNormVec(getSpdVec2(_G["LOG"..i].future, getPosVec(BODY), 1)));
+				if LOCKANGLE<=inner and maxInner<=inner and 0<_PLAYERARMS(i) then
+					lockedEnemy=i;
+					maxInner=inner;
+				end
+			end
+		end
+	end
+	if lockedEnemy~=nil then out(2,"Target ", _PLAYERNAME(lockedEnemy)); end
+end
+
+function getSpdVec2(pos1, pos2, tarm)
+	local spdVec={};
+	spdVec=mulVec(addVec(pos1,mulVec(pos2,-1)), 1/tarm);
+	return spdVec;
+end
+
+function drawTarget(pNum, size, range)
+	local t=_G["LOG"..pNum][0];
+	local tdis=getDis(getPosVec(CORE),t);
+
+	if tdis<=range then
+		local p1=addVec(getWVec(mulVec({x=1, y=1, z=0}, tdis/60*size), CORE), t);
+		local p2=addVec(getWVec(mulVec({x=1, y=-1, z=0}, tdis/60*size), CORE), t);
+		local p3=addVec(getWVec(mulVec({x=-1, y=-1, z=0}, tdis/60*size), CORE), t);
+		local p4=addVec(getWVec(mulVec({x=-1, y=1, z=0}, tdis/60*size), CORE), t);
+
+		_MOVE3D(p1.x,p1.y,p1.z);
+		_LINE3D(p2.x,p2.y,p2.z);
+		_LINE3D(p3.x,p3.y,p3.z);
+		_LINE3D(p4.x,p4.y,p4.z);
+		_LINE3D(p1.x,p1.y,p1.z);
+
+		local f={};
+
+		f.x=_G["LOG"..pNum].future.x;
+		f.y=_G["LOG"..pNum].future.y;
+		f.z=_G["LOG"..pNum].future.z;
+
+		p1=addVec(getWVec(mulVec({x=1, y=1, z=0}, tdis/60*size/2), CORE), f);
+		p2=addVec(getWVec(mulVec({x=1, y=-1, z=0}, tdis/60*size/2), CORE), f);
+		p3=addVec(getWVec(mulVec({x=-1, y=-1, z=0}, tdis/60*size/2), CORE), f);
+		p4=addVec(getWVec(mulVec({x=-1, y=1, z=0}, tdis/60*size/2), CORE), f);
+
+		_MOVE3D(p1.x,p1.y,p1.z);
+		_LINE3D(p2.x,p2.y,p2.z);
+		_LINE3D(p3.x,p3.y,p3.z);
+		_LINE3D(p4.x,p4.y,p4.z);
+		_LINE3D(p1.x,p1.y,p1.z);
+
+		_MOVE3D(t.x,t.y,t.z);
+		_LINE3D(f.x,f.y,f.z);
+	end
+end
+
+function drawTarget2D(pNum, size, range)
+	local t=getSpdVec2(_G["LOG"..pNum][0], getPosVec(CORE), 1);
+	local f=getSpdVec2(_G["LOG"..pNum].future, getPosVec(CORE), 1);
+
+	if _G["LOG"..pNum].dis[0]<=range then
+
+		t=getLVec(t, CORE);
+
+		if t.z<-1 then
+			t=mulVec(t, -(1/t.z));
+			drawRect(-t.x, t.y, 0.05);
+		end
+
+		f=getLVec(f, CORE);
+
+		if f.z<-1 then
+			f=mulVec(f, -(1/f.z));
+			drawRect(-f.x, f.y, 0.025);
+		end
+
+		_MOVE2D(-t.x,t.y);
+		_LINE2D(-f.x,f.y);
+
+	end
+end
+
+function drawLock(pNum, size, range)
+	if pNum~=nil then
+		local t={};
+		t.x=_G["LOG"..pNum][0].x;
+		t.y=_G["LOG"..pNum][0].y;
+		t.z=_G["LOG"..pNum][0].z;
+		local tdis=getDis(getPosVec(CORE),t);
+
+		if tdis<=range then
+			local p1=addVec(getWVec(mulVec({x=0.5, y=0, z=0}, tdis/60*size), CORE), t);
+			local p12=addVec(getWVec(mulVec({x=1.5, y=0, z=0}, tdis/60*size), CORE), t);
+			local p2=addVec(getWVec(mulVec({x=0, y=0.5, z=0}, tdis/60*size), CORE), t);
+			local p22=addVec(getWVec(mulVec({x=0, y=1.5, z=0}, tdis/60*size), CORE), t);
+			local p3=addVec(getWVec(mulVec({x=-0.5, y=0, z=0}, tdis/60*size), CORE), t);
+			local p32=addVec(getWVec(mulVec({x=-1.5, y=0, z=0}, tdis/60*size), CORE), t);
+			local p4=addVec(getWVec(mulVec({x=0, y=-0.5, z=0}, tdis/60*size), CORE), t);
+			local p42=addVec(getWVec(mulVec({x=0, y=-1.5, z=0}, tdis/60*size), CORE), t);
+
+			_MOVE3D(p1.x,p1.y,p1.z);
+			_LINE3D(p12.x,p12.y,p12.z);
+			_MOVE3D(p2.x,p2.y,p2.z);
+			_LINE3D(p22.x,p22.y,p22.z);
+			_MOVE3D(p3.x,p3.y,p3.z);
+			_LINE3D(p32.x,p32.y,p32.z);
+			_MOVE3D(p4.x,p4.y,p4.z);
+			_LINE3D(p42.x,p42.y,p42.z);
+		end
+	end
+end
+
+function drawRader(x, y, size, range)
+	drawRect(x, y, size/2);
+	_MOVE2D(x+size/2,y);
+	_LINE2D(x-size/2,y);
+	_MOVE2D(x,y+size/2);
+	_LINE2D(x,y-size/2);
+
+	for i=1,_PLAYERS()-1 do
+		if _PLAYERID(i)~=_PLAYERMYID() and getDis(getPosVec(0), _G["LOG"..i][0])<=range then
+			drawMarker(getLVec(addVec(_G["LOG"..i][0], mulVec(getPosVec(0), -1)), 0), x, y, size, range);
+		end
+	end
+end
+
+function drawRect(x, y, size)
+	_MOVE2D(x+size/2,y+size/2);
+	_LINE2D(x+size/2,y-size/2);
+	_LINE2D(x-size/2,y-size/2);
+	_LINE2D(x-size/2,y+size/2);
+	_LINE2D(x+size/2,y+size/2);
+end
+
+function drawMarker(pos, x, y, size, range)
+	local disX=pos.x/range*size/2
+	local disZ=pos.z/range*size/2
+	local disY=pos.y/range*size/4
+
+	drawRect(x-disX, y-disZ, 0.0125);
+	_MOVE2D(x-disX, y-disZ);
+	_LINE2D(x-disX, y-disZ+disY);
+	drawRect(x-disX, y-disZ+disY, 0.025);
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(_G["PID_D_"..id]-dis)*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function step3(val, target, ratio)
+	return val+(target-val)/ratio;
+end
+
+function angleNorm(rot)
+	while(rot<-180) do
+		rot=rot+360;
+	end
+	while(rot>180) do
+		rot=rot-360;
+	end
+	return rot
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getPosVec(chipName)
+	local posVec={};
+	posVec.x=_X(chipName)
+	posVec.y=_Y(chipName)
+	posVec.z=_Z(chipName)
+	return posVec;
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec={}; posVec=getPosVec(chipName);
+	spdVec=addVec(posVec, mulVec(_G["getSpdVec_prevSpdVec"..chipName], -1));
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function addVec(vec1, vec2)
+	local addVec={};
+	addVec.x=vec1.x+vec2.x;
+	addVec.y=vec1.y+vec2.y;
+	addVec.z=vec1.z+vec2.z;
+
+	return addVec;
+end
+
+function mulVec(vec, m)
+	if vec~=nil then
+		local mulVec={};
+		mulVec.x=vec.x*m;
+		mulVec.y=vec.y*m;
+		mulVec.z=vec.z*m;
+
+		return mulVec;
+	else
+		return {x=0, y=0, z=0};
+	end
+end
+
+function getDis(pos1,pos2)
+	local disX=pos1.x-pos2.x;
+	local disY=pos1.y-pos2.y;
+	local disZ=pos1.z-pos2.z;
+	return math.sqrt(disX^2+disY^2+disZ^2);
+end
+
+function getVecLength(vec)
+	return getDis(vec, {x=0, y=0, z=0});
+end
+
+function getNormVec(vec)
+	return mulVec(vec, 1/getVecLength(vec))
+end
+
+function getWVec(lVec, chipName)
+	local wVec={};
+	
+	wVec.x=_XX(chipName)*lVec.x+_YX(chipName)*lVec.y+_ZX(chipName)*lVec.z;
+	wVec.y=_XY(chipName)*lVec.x+_YY(chipName)*lVec.y+_ZY(chipName)*lVec.z;
+	wVec.z=_XZ(chipName)*lVec.x+_YZ(chipName)*lVec.y+_ZZ(chipName)*lVec.z;
+
+	return wVec;
+end
+
+function getLVec(wVec, chipName)
+	local lVec={};
+
+	lVec.x=_XX(chipName)*wVec.x+_XY(chipName)*wVec.y+_XZ(chipName)*wVec.z;
+	lVec.y=_YX(chipName)*wVec.x+_YY(chipName)*wVec.y+_YZ(chipName)*wVec.z;
+	lVec.z=_ZX(chipName)*wVec.x+_ZY(chipName)*wVec.y+_ZZ(chipName)*wVec.z;
+
+	return lVec;
+end
+
+function getInner(vec1, vec2)
+	return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+end
+
+function cross()
+	drawRect(0,60/_ZOOM(),0.05);
+
+
+	_MOVE2D(0,-0.075);
+	_LINE2D(0,0.075);
+
+	_MOVE2D(-0.1,0);
+	_LINE2D(0.1,0);
+end
+
+function wing(x, y, size)
+	_MOVE2D(x,y);
+	_LINE2D(x,y);
+end
+
+function bomberRegulation()
+	BomberCharge(REARL_GUN);
+	BomberCharge(REARR_GUN);
+	BomberCharge(UP_GUN);
+	for i=0, 3 do
+		BomberCharge(_G["GUN_GUN"..i]);
+	end
+end
+---------------------------------------------------------------- ;
+--[[
+  Seydlitz Aero Engines AG.
+  ㈱ザイドリッツ航空発動機製造
+
+  SAE416 "Nieselregen II" - Operating manual
+  霧雨二型 - 運用マニュアル
+
+  ①
+  このエンジンは次のような設計を対象にしています。
+  異なる場合は、最大の性能を保障するためにも
+  SAE製の他のエンジンをお求めください。
+    プロペラ枚数 : 2 - 4
+    エンジン出力 : 180,000 - 360,000
+    実用上昇限度 : 6000m
+
+  構造例 1:
+	N:Frame(Angle=-30,Damper=0.9375,Spring=0.9375){
+		N:RLW(Name=ENGINE,Angle=120,Damper=0.9375,Spring=0.9375,Power=THRUST){
+			N:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			S:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			E:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			W:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+		}
+	}
+
+  構造例 2:
+	N:Frame(Angle=-30,Damper=0.9375,Spring=0.9375){
+		N:RLW(Name=ENGINE,Angle=120,Damper=0.9375,Spring=0.9375,Power=THRUST){
+			N:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			S:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+		}
+	}
+
+  ②
+  次に示すライン
+    ---------------------------------------------------------------- ;
+  で囲まれる範囲を機体のLuaにコピーしてください。
+  ただし main() 等の関数の中は避けてください。
+
+  ③
+  main() 関数ないしは処理のどこかで次に示す関数
+    [プロペラピッチを示すVAL変数名] = SAE416( [前進速度] , [高度] , [出力] , [エンジン回転数] , [ブレード枚数] )
+  を呼び出してください。
+  エンジンに使われているホイール付近の速度が
+  もっとも適切と思われるので、たとえば次のような場合
+    エンジンのホイール名 : name = ENGINE
+    プロペラピッチの変数 : angle = ±BLADE
+    エンジン出力         : power = THRUST
+    ブレード枚数         : 4
+  ならば、次のような例になります。
+    BLADE = ±SAE416( ±_VY(ENGINE), _Y(ENGINE), ±THRUST, ±_WY(ENGINE), 4 );
+  ただし、±は前進時に値が正になるように適宜調整してください。
+
+  ④機能紹介
+    1. エンジン出力をゼロにすると惰性飛行モードに入ります。
+    2. 対応出力における最高効率を提供します。
+    3. 対応高度における最高効率を提供します。
+    4. 対応ブレード枚数における最高効率を提供します。
+  
+]]
+SAE416DatAlt = {300, 1000, 2000, 3000, 4000, 5000, 6000};
+SAE416DatPwr = {180000, 360000};
+SAE416Dat = {
+	[2] = {
+		[180000] = {};
+		[360000] = {};
+	};
+	[4] = {
+		[180000] = {};
+		[360000] = {};
+	};
+};
+SAE416Dat[2][180000][0] = {
+	MinVel =  -2.677664	;
+	MinAng =   0.86466496110832802	;
+	[0] =  4.2446139492086559	;
+	[1] =  1.9014540791614643	;
+	[2] =  0.12539276732577509	;
+	[3] = -0.030388096517108498	;
+	[4] =  0.0035994156411873479	;
+	[5] = -0.00027630560828737199	;
+	[6] =  0.000014633450029450371	;
+	[7] = -0.00000055000377836943402	;
+	[8] =  0.000000014744199958217255	;
+	[9] = -0.0000000002784625973407689	;
+	[10] =  0.0000000000035998178532640037	;
+	[11] = -0.00000000000003018775530705908	;
+	[12] =  0.00000000000000014749488383067818	;
+	[13] = -0.00000000000000000031805209920818614	;
+	MaxVel =  74.995345999999998	;
+	MaxAng =  76.072678407537751	;
+};
+SAE416Dat[2][360000][0] = {
+	MinVel =   0.182781	;
+	MinAng =   4.2274433621594047	;
+
+	[0] =  4.0351822893331359	;
+	[1] =  1.0271653769832589	;
+	[2] =  0.13730726956266537	;
+	[3] = -0.011967561024727638	;
+	[4] =  0.00049858964908116839	;
+	[5] = -0.000011852749475333399	;
+	[6] =  0.00000015501234682449067	;
+	[7] = -0.00000000086354702837868556	;
+	[8] = -0.0000000000013040966533385843	;
+	[9] =  0.000000000000024803586054022669	;
+	[10] = 0.	;
+	[11] = 0.	;
+	[12] = 0.	;
+	[13] = 0.	;
+	MaxVel =  70.345695000000006	;
+	MaxAng =  68.675221828615008	;
+};
+SAE416Dat[4][180000][0] = {
+	MinVel =  -1.9992350000000001	;
+	MinAng =   1.1989944238255885	;
+	[0] =  4.8580904143774717	;
+	[1] =  2.2698946082472258	;
+	[2] =  0.12009229803800636	;
+	[3] = -0.037506250990974932	;
+	[4] =  0.0052887030251932005	;
+	[5] = -0.0004206726774262223	;
+	[6] =  0.000019622651632267496	;
+	[7] = -0.00000053703606899947355	;
+	[8] =  0.000000007665977928830052	;
+	[9] = -0.000000000013472187165227526	;
+	[10] = -0.0000000000014198101299231878	;
+	[11] =  0.000000000000023912599526258464	;
+	[12] = -0.0000000000000001687540555720393	;
+	[13] =  0.00000000000000000046323345531409463	;
+	MaxVel =  73.064423000000005	;
+	MaxAng =  79.918634680099785	;
+};
+SAE416Dat[4][360000][0] = {
+	MinVel =   0.65013900000000002	;
+	MinAng =   4.4868074665630386	;
+	[0] =  3.0905116220261277	;
+	[1] =  2.2057693908650933	;
+	[2] = -0.10748291070122207	;
+	[3] =  0.030416755729962053	;
+	[4] = -0.0040337916708709093	;
+	[5] =  0.00028487505488285127	;
+	[6] = -0.000011914744121254721	;
+	[7] =  0.00000030239558290790933	;
+	[8] = -0.0000000044125752390040158	;
+	[9] =  0.000000000026574850566707629	;
+	[10] =  0.00000000000019242859529531194	;
+	[11] = -0.0000000000000046059208431298036	;
+	[12] =  0.000000000000000031214328386143728	;
+	[13] = -0.000000000000000000076403518040850942	;
+	MaxVel =  73.885666000000001	;
+	MaxAng =  74.883033075981075	;
+};
+SAE416Dat[2][180000][300] = {
+	MinVel = -30.008841	;
+	MinAng =  24.106831068032822	;
+	[0] = 42.744659969751638	;
+	[1] =  0.66695428486790898	;
+	[2] = -0.00033395057100727571	;
+	[3] = -0.000049526922873892798	;
+	[4] = -0.000003491164434496419	;
+	[5] =  0.000000022364349217199732	;
+	[6] =  0.0000000046210875605246452	;
+	[7] = -0.00000000010594027429655587	;
+	[8] = -0.0000000000005210974367489709	;
+	[9] =  0.000000000000050964571373007826	;
+	[10] = -0.00000000000000084134225277694024	;
+	[11] =  0.0000000000000000067414894675139611	;
+	[12] = -0.000000000000000000027498926978955131	;
+	[13] =  0.000000000000000000000045832435540765351	;
+	MaxVel = 129.473434	;
+	MaxAng =  86.300471084192395	;
+};
+SAE416Dat[2][180000][1000] = {
+	MinVel = -30.012796000000002	;
+	MinAng =  24.941484320809739	;
+	[0] = 43.613718070524399	;
+	[1] =  0.67809795977465337	;
+	[2] = -0.0012266764769531466	;
+	[3] = -0.00009942659770941875	;
+	[4] = -0.0000004545452628443933	;
+	[5] = -0.000000017922965621633721	;
+	[6] =  0.0000000036670925513704311	;
+	[7] = -0.000000000047965799152795926	;
+	[8] = -0.0000000000020649189142378752	;
+	[9] =  0.000000000000076691811565068799	;
+	[10] = -0.0000000000000011119286567314938	;
+	[11] =  0.0000000000000000084641147196019349	;
+	[12] = -0.000000000000000000033535036853465628	;
+	[13] =  0.000000000000000000000054754310244616454	;
+	MaxVel = 129.309967	;
+	MaxAng =  86.619834719313076	;
+};
+SAE416Dat[2][180000][2000] = {
+	MinVel = -29.992477000000001	;
+	MinAng =  26.599392995166898	;
+	[0] = 44.749059277446591	;
+	[1] =  0.62942538366936307	;
+	[2] = -0.00061165773927492062	;
+	[3] = -0.000055177885668866483	;
+	[4] = -0.0000016589936362998631	;
+	[5] =  0.00000001914104403965668	;
+	[6] =  0.0000000017735649053582892	;
+	[7] = -0.000000000041549740109848739	;
+	[8] = -0.00000000000011691765921932347	;
+	[9] =  0.000000000000016331154895744766	;
+	[10] = -0.00000000000000027173591539255839	;
+	[11] =  0.0000000000000000021958330797274526	;
+	[12] = -0.0000000000000000000091258342161249966	;
+	[13] =  0.000000000000000000000015656409197496827	;
+	MaxVel = 129.519577	;
+	MaxAng =  88.222054971774924	;
+};
+SAE416Dat[2][180000][3000] = {
+	MinVel = -30.023264000000001	;
+	MinAng =  28.963583825733259	;
+	[0] = 46.09724186895717	;
+	[1] =  0.63231449192310207	;
+	[2] = -0.0024584263188283939	;
+	[3] = -0.00016701633585433444	;
+	[4] =  0.0000045721327382635397	;
+	[5] =  0.00000013026907208890276	;
+	[6] = -0.0000000076383836462284131	;
+	[7] =  0.000000000046660472344790423	;
+	[8] =  0.0000000000037693077472438662	;
+	[9] = -0.00000000000010812935199830225	;
+	[10] =  0.0000000000000013654697991186165	;
+	[11] = -0.0000000000000000093347021175463661	;
+	[12] =  0.000000000000000000033616737748205492	;
+	[13] = -0.000000000000000000000050083597554308655	;
+	MaxVel = 129.42569	;
+	MaxAng =  89.676904572785133	;
+};
+SAE416Dat[2][180000][4000] = {
+	MinVel = -30.007019	;
+	MinAng =  30.161074314922647	;
+	[0] = 46.930603621981206	;
+	[1] =  0.5919299547367034	;
+	[2] = -0.0013589379858725201	;
+	[3] = -0.00012345698495551806	;
+	[4] =  0.0000040649474961474254	;
+	[5] =  0.000000069134951240250888	;
+	[6] = -0.0000000075729884297424509	;
+	[7] =  0.00000000010917213495953644	;
+	[8] =  0.000000000002694184848180225	;
+	[9] = -0.00000000000011172952390890586	;
+	[10] =  0.0000000000000016330965498320975	;
+	[11] = -0.000000000000000012309287717087889	;
+	[12] =  0.000000000000000000047840576540694869	;
+	[13] = -0.000000000000000000000076033560792844321	;
+	MaxVel = 129.02932699999999	;
+	MaxAng =  90.52972633522586	;
+};
+SAE416Dat[2][180000][5000] = {
+	MinVel = -30.497858000000001	;
+	MinAng =  31.043249490682072	;
+	[0] = 48.052719808991185	;
+	[1] =  0.58326267597092762	;
+	[2] = -0.00068399476961557293	;
+	[3] = -0.00009495801675188774	;
+	[4] = -0.0000005206944870550715	;
+	[5] =  0.000000059039160348785908	;
+	[6] =  0.00000000013741429008042814	;
+	[7] = -0.000000000036080253107609015	;
+	[8] =  0.00000000000031958076575585173	;
+	[9] =  0.000000000000010541277600914292	;
+	[10] = -0.00000000000000028039188169868285	;
+	[11] =  0.0000000000000000028451487554809078	;
+	[12] = -0.000000000000000000013799974059619316	;
+	[13] =  0.000000000000000000000026559437254803491	;
+	MaxVel = 126.87370300000001	;
+	MaxAng =  90.208488922464312	;
+};
+SAE416Dat[2][180000][6000] = {
+	MinVel = -30.651373	;
+	MinAng =  32.997846567819721	;
+	[0] = 49.020683818608084	;
+	[1] =  0.54213949015565321	;
+	[2] = -0.00092493977298408608	;
+	[3] = -0.000075539908916230836	;
+	[4] = -0.00000001280452407565445	;
+	[5] =  0.00000010287140294531939	;
+	[6] = -0.000000002419442733438575	;
+	[7] = -0.000000000037533312282352646	;
+	[8] =  0.0000000000024229762555743286	;
+	[9] = -0.000000000000041514539324141975	;
+	[10] =  0.0000000000000003228299503405953	;
+	[11] = -0.00000000000000000092783227709653916	;
+	[12] = -0.0000000000000000000015762452832708072	;
+	[13] =  0.000000000000000000000010611325231098744	;
+	MaxVel = 125.957176	;
+	MaxAng =  89.903543254833494	;
+};
+SAE416Dat[2][360000][300] = {
+	MinVel = -30.032883000000002	;
+	MinAng =  28.399731406773562	;
+	[0] = 44.391932967233195	;
+	[1] =  0.50512010267281404	;
+	[2] = -0.0011961569830905641	;
+	[3] =  0.000082198847174811763	;
+	[4] = -0.0000015103125114142795	;
+	[5] = -0.0000002010520842821669	;
+	[6] =  0.000000005225013596004777	;
+	[7] =  0.000000000079888356854579499	;
+	[8] = -0.0000000000041464907295749446	;
+	[9] =  0.000000000000040856922056560772	;
+	[10] =  0.00000000000000022149203110815946	;
+	[11] = -0.0000000000000000068894922441284402	;
+	[12] =  0.000000000000000000047251005926129914	;
+	[13] = -0.00000000000000000000011040497996781019	;
+	MaxVel = 116.96867399999999	;
+	MaxAng =  82.423480832119822	;
+};
+SAE416Dat[2][360000][1000] = {
+	MinVel = -31.017944	;
+	MinAng =  28.750611941820512	;
+	[0] = 45.119566245236996	;
+	[1] =  0.50743996464972763	;
+	[2] = -0.0014958686497740237	;
+	[3] = -0.000029105732190357688	;
+	[4] =  0.0000011446718406765275	;
+	[5] = -0.000000059234884291221591	;
+	[6] =  0.0000000013088214526051579	;
+	[7] =  0.000000000022576171476890905	;
+	[8] = -0.0000000000018830876070443796	;
+	[9] =  0.00000000000004457530088511573	;
+	[10] = -0.0000000000000005505881413221349	;
+	[11] =  0.0000000000000000038048633213376341	;
+	[12] = -0.000000000000000000013862062212404191	;
+	[13] =  0.000000000000000000000020620320145808966	;
+	MaxVel = 116.992615	;
+	MaxAng =  84.083578067848066	;
+};
+SAE416Dat[2][360000][2000] = {
+	MinVel = -30.018360000000001	;
+	MinAng =  31.701825454278531	;
+	[0] = 46.022406415839939	;
+	[1] =  0.48776691621060375	;
+	[2] =  0.00068770159601682377	;
+	[3] =  0.000010649340857321263	;
+	[4] = -0.0000067892975600667267	;
+	[5] =  0.000000018084759598958774	;
+	[6] =  0.0000000092573707807705461	;
+	[7] = -0.00000000019617275757612314	;
+	[8] = -0.0000000000018447588605619357	;
+	[9] =  0.00000000000012288966194365167	;
+	[10] = -0.0000000000000019761420391478616	;
+	[11] =  0.000000000000000015723111544675543	;
+	[12] = -0.000000000000000000063791284607218818	;
+	[13] =  0.00000000000000000000010552745963433829	;
+	MaxVel = 114.97283899999999	;
+	MaxAng =  83.71859634116845	;
+};
+SAE416Dat[2][360000][3000] = {
+	MinVel = -29.970103999999999	;
+	MinAng =  32.952581950526984	;
+	[0] = 47.275412017875006	;
+	[1] =  0.46516962782175392	;
+	[2] = -0.0012786597755491012	;
+	[3] = -0.000026214132254927675	;
+	[4] =  0.0000005639136917374917	;
+	[5] =  0.000000018819225096263389	;
+	[6] = -0.0000000011523372451219337	;
+	[7] =  0.0000000000027723120540988761	;
+	[8] =  0.00000000000073950257772926638	;
+	[9] = -0.000000000000017765218594392492	;
+	[10] =  0.00000000000000018750250777327737	;
+	[11] = -0.0000000000000000010072087838687637	;
+	[12] =  0.0000000000000000000025462171761579335	;
+	[13] = -0.0000000000000000000000020347592061032513	;
+	MaxVel = 115.803223	;
+	MaxAng =  86.958868848010752	;
+};
+SAE416Dat[2][360000][4000] = {
+	MinVel = -30.057562000000001	;
+	MinAng =  34.44341717265543	;
+	[0] = 48.211302971977048	;
+	[1] =  0.44267366997313595	;
+	[2] =  0.00047681368271619562	;
+	[3] = -0.000031453233794318837	;
+	[4] = -0.0000064178361326877484	;
+	[5] =  0.00000015505633064685427	;
+	[6] =  0.0000000066865071552207436	;
+	[7] = -0.00000000027575368790170697	;
+	[8] =  0.00000000000074126085232743876	;
+	[9] =  0.00000000000011419041111771615	;
+	[10] = -0.0000000000000024547284445906268	;
+	[11] =  0.000000000000000023019299050292962	;
+	[12] = -0.00000000000000000010572660276775776	;
+	[13] =  0.00000000000000000000019393113542745833	;
+	MaxVel = 115.827316	;
+	MaxAng =  83.672406955287443	;
+};
+SAE416Dat[2][360000][5000] = {
+	MinVel = -29.974862999999999	;
+	MinAng =  36.166330535766598	;
+	[0] = 49.056550866599615	;
+	[1] =  0.44879598441401675	;
+	[2] = -0.0019300393766869461	;
+	[3] = -0.000019131419206691092	;
+	[4] =  0.0000013871412518811506	;
+	[5] = -0.0000000070538651677189208	;
+	[6] = -0.000000001443021216405465	;
+	[7] =  0.000000000020994210529035908	;
+	[8] =  0.0000000000010211101902802736	;
+	[9] = -0.000000000000041616360124139572	;
+	[10] =  0.00000000000000067744079509877059	;
+	[11] = -0.0000000000000000059023819622833443	;
+	[12] =  0.000000000000000000027218284144102343	;
+	[13] = -0.000000000000000000000052377472301924852	;
+	MaxVel = 115.97473100000001	;
+	MaxAng =  87.294480406373623	;
+};
+SAE416Dat[2][360000][6000] = {
+	MinVel = -30.001324	;
+	MinAng =  36.993876463845936	;
+	[0] = 49.678001859269756	;
+	[1] =  0.44718652722935059	;
+	[2] =  0.00017984318765240301	;
+	[3] = -0.00010557575801792101	;
+	[4] = -0.0000018694079673017445	;
+	[5] =  0.00000017559570458899542	;
+	[6] = -0.0000000011869179548270874	;
+	[7] = -0.00000000010343900228207188	;
+	[8] =  0.000000000002642224381518061	;
+	[9] = -0.0000000000000213510781864573	;
+	[10] = -0.000000000000000032839283391645131	;
+	[11] =  0.0000000000000000014955940188722713	;
+	[12] = -0.0000000000000000000079615432768323212	;
+	[13] =  0.000000000000000000000012654834706771564	;
+	MaxVel = 117.049561	;
+	MaxAng =  89.232384880482641	;
+};
+SAE416Dat[4][180000][300] = {
+	MinVel = -30.360050000000001	;
+	MinAng =  18.313963246023867	;
+	[0] = 41.463261817398845	;
+	[1] =  0.87667576726941698	;
+	[2] = -0.0015253582775190955	;
+	[3] = -0.00019629584498416497	;
+	[4] = -0.000000081992036307083042	;
+	[5] =  0.000000056620646652687115	;
+	[6] =  0.0000000018969887578633833	;
+	[7] = -0.000000000060170664547742438	;
+	[8] = -0.00000000000063656673160219872	;
+	[9] =  0.000000000000043418786181780144	;
+	[10] = -0.0000000000000007038264292258755	;
+	[11] =  0.0000000000000000055843878446439957	;
+	[12] = -0.000000000000000000022463224943893092	;
+	[13] =  0.000000000000000000000036721213545771085	;
+	MaxVel = 134.27024800000001	;
+	MaxAng =  86.768938738241559	;
+};
+SAE416Dat[4][180000][1000] = {
+	MinVel = -30.458548	;
+	MinAng =  19.18079092699757	;
+	[0] = 42.762485880477527	;
+	[1] =  0.82588759527808153	;
+	[2] = -0.0043309661651522516	;
+	[3] = -0.00003859712156854757	;
+	[4] =  0.0000030136801203500189	;
+	[5] = -0.00000019283700940439235	;
+	[6] =  0.0000000038887529175257916	;
+	[7] =  0.000000000047366558542082995	;
+	[8] = -0.0000000000036262867701625291	;
+	[9] =  0.000000000000075579208326347448	;
+	[10] = -0.00000000000000084653153247137982	;
+	[11] =  0.0000000000000000054915259644109979	;
+	[12] = -0.000000000000000000019467579217045918	;
+	[13] =  0.000000000000000000000029262325508102447	;
+	MaxVel = 134.25058000000001	;
+	MaxAng =  86.962075445771916	;
+};
+SAE416Dat[4][180000][2000] = {
+	MinVel = -29.994049	;
+	MinAng =  21.503611750446314	;
+	[0] = 43.785080991203898	;
+	[1] =  0.79086061938771979	;
+	[2] = -0.0026840126508850259	;
+	[3] = -0.00009072579129105389	;
+	[4] =  0.0000012788999923581727	;
+	[5] = -0.000000013926095352756402	;
+	[6] =  0.00000000016489309611151947	;
+	[7] = -0.00000000000094366203391433684	;
+	[8] = -0.000000000000032800235641655508	;
+	[9] =  0.0000000000000022471124370081274	;
+	[10] = -0.000000000000000051848007836111453	;
+	[11] =  0.00000000000000000055801010255714366	;
+	[12] = -0.0000000000000000000028760258762361581	;
+	[13] =  0.0000000000000000000000057625589328665406	;
+	MaxVel = 134.14544699999999	;
+	MaxAng =  87.641369971461245	;
+};
+SAE416Dat[4][180000][3000] = {
+	MinVel = -30.53219	;
+	MinAng =  23.163687168665625	;
+	[0] = 44.941927891383727	;
+	[1] =  0.80781924355622747	;
+	[2] = -0.0010884231773236885	;
+	[3] = -0.00023712190424612394	;
+	[4] =  0.00000011540904441605663	;
+	[5] =  0.00000015159997014338082	;
+	[6] = -0.00000000095682549959309549	;
+	[7] = -0.00000000006237400129017986	;
+	[8] =  0.00000000000096124821717090832	;
+	[9] =  0.0000000000000065140024616242245	;
+	[10] = -0.00000000000000028214743201750203	;
+	[11] =  0.0000000000000000028734602368547746	;
+	[12] = -0.000000000000000000013092745704259489	;
+	[13] =  0.000000000000000000000023147506643556504	;
+	MaxVel = 134.377228	;
+	MaxAng =  89.863138180327951	;
+};
+SAE416Dat[4][180000][4000] = {
+	MinVel = -30.405688999999999	;
+	MinAng =  25.319830328817403	;
+	[0] = 46.355627056281307	;
+	[1] =  0.75436465190032842	;
+	[2] = -0.0021337136572610327	;
+	[3] = -0.00014384593997679896	;
+	[4] =  0.0000014594652237168405	;
+	[5] =  0.000000044200336360240346	;
+	[6] = -0.0000000012177759190356395	;
+	[7] = -0.0000000000018788164956019932	;
+	[8] =  0.00000000000053342642138902224	;
+	[9] = -0.0000000000000094540353152908658	;
+	[10] =  0.000000000000000068991470676268237	;
+	[11] = -0.00000000000000000014119862577643602	;
+	[12] = -0.00000000000000000000073729446400843794	;
+	[13] =  0.0000000000000000000000031049915388645065	;
+	MaxVel = 134.12402299999999	;
+	MaxAng =  90.24818745326229	;
+};
+SAE416Dat[4][180000][5000] = {
+	MinVel = -30.454687	;
+	MinAng =  26.907469691030592	;
+	[0] = 47.587477409213733	;
+	[1] =  0.73428054369339979	;
+	[2] = -0.0032162573594762961	;
+	[3] = -0.00020284367495921685	;
+	[4] =  0.0000068737549374200594	;
+	[5] =  0.000000075648537501528161	;
+	[6] = -0.0000000084581040384767119	;
+	[7] =  0.00000000011394756166942138	;
+	[8] =  0.0000000000021818106397995471	;
+	[9] = -0.000000000000085756078525122255	;
+	[10] =  0.0000000000000011501861233329426	;
+	[11] = -0.0000000000000000079494895266419271	;
+	[12] =  0.000000000000000000028374456596726835	;
+	[13] = -0.000000000000000000000041471153229520115	;
+	MaxVel = 134.06021100000001	;
+	MaxAng =  91.175081597844837	;
+};
+SAE416Dat[4][180000][6000] = {
+	MinVel = -30.007757000000002	;
+	MinAng =  29.089217498360259	;
+	[0] = 48.656172665135784	;
+	[1] =  0.70720834725802861	;
+	[2] = -0.0015038647790237905	;
+	[3] = -0.00015732911473154956	;
+	[4] = -0.0000014747538295325821	;
+	[5] =  0.00000012655096340857627	;
+	[6] =  0.0000000016000236173813431	;
+	[7] = -0.00000000011701030054816601	;
+	[8] =  0.00000000000078821665481610496	;
+	[9] =  0.000000000000032350627747499959	;
+	[10] = -0.00000000000000074552035469811621	;
+	[11] =  0.000000000000000006811200363169728	;
+	[12] = -0.0000000000000000000298834135069877	;
+	[13] =  0.00000000000000000000005206467777443879	;
+	MaxVel = 131.982147	;
+	MaxAng =  89.703169402899221	;
+};
+SAE416Dat[4][360000][300] = {
+	MinVel = -30.080072000000001	;
+	MinAng =  24.111280371753843	;
+	[0] = 43.646362511409023	;
+	[1] =  0.6772994255672351	;
+	[2] = -0.0049391588051598337	;
+	[3] = -0.00011935405604758488	;
+	[4] =  0.0000086091856743454141	;
+	[5] =  0.000000022160737377580773	;
+	[6] = -0.000000010319804098794369	;
+	[7] =  0.00000000015947944997449014	;
+	[8] =  0.0000000000034121135361375173	;
+	[9] = -0.00000000000014366231273823442	;
+	[10] =  0.0000000000000020705236731544509	;
+	[11] = -0.000000000000000015407874638742619	;
+	[12] =  0.000000000000000000059412890459364283	;
+	[13] = -0.000000000000000000000094220809042369421	;
+	MaxVel = 126.936729	;
+	MaxAng =  84.144386664003832	;
+};
+SAE416Dat[4][360000][1000] = {
+	MinVel = -30.839376000000001	;
+	MinAng =  24.781780153267793	;
+	[0] = 44.366150939473215	;
+	[1] =  0.6750385927847562	;
+	[2] = -0.0045884039456137587	;
+	[3] = -0.00014878096217435174	;
+	[4] =  0.0000084145032595928559	;
+	[5] =  0.00000001885544786525919	;
+	[6] = -0.0000000089175242969261503	;
+	[7] =  0.00000000014761358332342217	;
+	[8] =  0.0000000000021251409572996408	;
+	[9] = -0.00000000000010130653206660964	;
+	[10] =  0.0000000000000014732792406571056	;
+	[11] = -0.000000000000000010925404880763512	;
+	[12] =  0.000000000000000000041856852036732383	;
+	[13] = -0.000000000000000000000065899458718558486	;
+	MaxVel = 127.68446400000001	;
+	MaxAng =  84.745491906214738	;
+};
+SAE416Dat[4][360000][2000] = {
+	MinVel = -30.030391999999999	;
+	MinAng =  27.06312191738337	;
+	[0] = 45.519910689077292	;
+	[1] =  0.58911084381273848	;
+	[2] = -0.0023876738746598306	;
+	[3] =  0.00011730449809505775	;
+	[4] = -0.0000017559127039152661	;
+	[5] = -0.00000025032781255782207	;
+	[6] =  0.0000000079221347646576327	;
+	[7] =  0.000000000018571014558722658	;
+	[8] = -0.0000000000045557973247403732	;
+	[9] =  0.000000000000093475076886267657	;
+	[10] = -0.00000000000000092982829537120903	;
+	[11] =  0.0000000000000000050307493963376183	;
+	[12] = -0.000000000000000000013986063564051515	;
+	[13] =  0.000000000000000000000015231481062646109	;
+	MaxVel = 125.90849300000001	;
+	MaxAng =  84.637961604810698	;
+};
+SAE416Dat[4][360000][3000] = {
+	MinVel = -30.010691000000001	;
+	MinAng =  29.396647306130617	;
+	[0] = 46.392274834930589	;
+	[1] =  0.6005814222243322	;
+	[2] = -0.00036561021672414443	;
+	[3] = -0.000079769014943534516	;
+	[4] = -0.0000020588985287102842	;
+	[5] =  0.00000011350940057238321	;
+	[6] = -0.0000000012261600026581336	;
+	[7] = -0.000000000051708702625123248	;
+	[8] =  0.0000000000026407244659618327	;
+	[9] = -0.000000000000057558974150785428	;
+	[10] =  0.00000000000000071068720328711656	;
+	[11] = -0.0000000000000000050914758573936826	;
+	[12] =  0.000000000000000000019708257551797473	;
+	[13] = -0.000000000000000000000031886105504469353	;
+	MaxVel = 127.024086	;
+	MaxAng =  86.802746193963685	;
+};
+SAE416Dat[4][360000][4000] = {
+	MinVel = -30.902301999999999	;
+	MinAng =  30.511286733948776	;
+	[0] = 47.495868458972467	;
+	[1] =  0.6071628676035612	;
+	[2] = -0.0013817928933440998	;
+	[3] = -0.0002419024987208372	;
+	[4] =  0.0000053467370055573717	;
+	[5] =  0.00000022847901131423208	;
+	[6] = -0.000000012437020162575018	;
+	[7] =  0.00000000011010774992169603	;
+	[8] =  0.0000000000052532105430991439	;
+	[9] = -0.00000000000017537220737777347	;
+	[10] =  0.0000000000000024385245827091101	;
+	[11] = -0.000000000000000018205828072032338	;
+	[12] =  0.000000000000000000071511317803580927	;
+	[13] = -0.00000000000000000000011633635097204861	;
+	MaxVel = 127.99580400000001	;
+	MaxAng =  88.095697742246557	;
+};
+SAE416Dat[4][360000][5000] = {
+	MinVel = -31.037319	;
+	MinAng =  31.138506997527752	;
+	[0] = 48.621909101832131	;
+	[1] =  0.55008544491000799	;
+	[2] = -0.0029038601450033612	;
+	[3] =  0.00001580290399123439	;
+	[4] =  0.0000042986356572283024	;
+	[5] = -0.00000017972105781008748	;
+	[6] = -0.0000000022246824847576502	;
+	[7] =  0.00000000018577517949267368	;
+	[8] = -0.0000000000018015903823342656	;
+	[9] = -0.000000000000041367615143919542	;
+	[10] =  0.0000000000000011441469357710413	;
+	[11] = -0.000000000000000011264817055649371	;
+	[12] =  0.00000000000000000005208656354510068	;
+	[13] = -0.000000000000000000000094676329327926886	;
+	MaxVel = 127.02113300000001	;
+	MaxAng =  87.069877771078609	;
+};
+SAE416Dat[4][360000][6000] = {
+	MinVel = -30.019521999999998	;
+	MinAng =  33.949142349442923	;
+	[0] = 49.550414716470613	;
+	[1] =  0.58743495382973643	;
+	[2] = -0.0034018609101947178	;
+	[3] = -0.00024993870941957983	;
+	[4] =  0.0000088348340744998056	;
+	[5] =  0.00000019531301744322074	;
+	[6] = -0.000000014189952859501796	;
+	[7] =  0.00000000014117918500856557	;
+	[8] =  0.0000000000055908235571825731	;
+	[9] = -0.00000000000019041750705751517	;
+	[10] =  0.0000000000000026304495557703535	;
+	[11] = -0.000000000000000019469384565536994	;
+	[12] =  0.000000000000000000075952493258003368	;
+	[13] = -0.00000000000000000000012305475425515634	;
+	MaxVel = 127.963036	;
+	MaxAng =  88.436182354402263	;
+};
+function SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, Alt, Pwr)
+		local Ang;
+
+		if ( Vel > SAE416Dat[Bld][Pwr][Alt].MaxVel ) then
+			Ang = SAE416Dat[Bld][Pwr][Alt].MaxAng ;
+		elseif ( Vel < SAE416Dat[Bld][Pwr][Alt].MinVel ) then
+			Ang = SAE416Dat[Bld][Pwr][Alt].MinAng ;
+		else
+			Ang
+			 = SAE416Dat[Bld][Pwr][Alt][13] * V13
+			 + SAE416Dat[Bld][Pwr][Alt][12] * V12
+			 + SAE416Dat[Bld][Pwr][Alt][11] * V11
+			 + SAE416Dat[Bld][Pwr][Alt][10] * V10
+			 + SAE416Dat[Bld][Pwr][Alt][9] * Vl9
+			 + SAE416Dat[Bld][Pwr][Alt][8] * Vl8
+			 + SAE416Dat[Bld][Pwr][Alt][7] * Vl7
+			 + SAE416Dat[Bld][Pwr][Alt][6] * Vl6
+			 + SAE416Dat[Bld][Pwr][Alt][5] * Vl5
+			 + SAE416Dat[Bld][Pwr][Alt][4] * Vl4
+			 + SAE416Dat[Bld][Pwr][Alt][3] * Vl3
+			 + SAE416Dat[Bld][Pwr][Alt][2] * Vl2
+			 + SAE416Dat[Bld][Pwr][Alt][1] * Vel
+			 + SAE416Dat[Bld][Pwr][Alt][0] ;
+		end
+
+		return Ang;
+end
+function SAE416(Vel, Alt, Pwr, AngVel, Bld)
+	if (Pwr == 0) then
+		if (Vel < 0) then
+			return 45;
+		else
+			local Ang = math.deg(math.atan2(Vel, AngVel * 0.6));
+			if (Vel < 1) then
+				Ang = Ang * Vel +(1 -Vel) *45;
+			end
+			return Ang;
+		end
+	end
+	local Vl2 = Vel * Vel;
+	local Vl3 = Vl2 * Vel;
+	local Vl4 = Vl3 * Vel;
+	local Vl5 = Vl4 * Vel;
+	local Vl6 = Vl5 * Vel;
+	local Vl7 = Vl6 * Vel;
+	local Vl8 = Vl7 * Vel;
+	local Vl9 = Vl8 * Vel;
+	local V10 = Vl9 * Vel;
+	local V11 = V10 * Vel;
+	local V12 = V11 * Vel;
+	local V13 = V12 * Vel;
+	local Bld = Bld;
+	if (Bld <= 2) then
+		Bld = 2;
+	elseif (Bld >= 4) then
+		Bld = 4;
+	else
+		Bld = math.floor(Bld + 0.5);
+	end
+	local Ang;
+	local LowPwr;
+	local HigPwr;
+	local PwrBal;
+	if (Pwr < SAE416DatPwr[ 1 ]) then
+		LowPwr = SAE416DatPwr[ 1 ];
+		HigPwr = SAE416DatPwr[ 1 ];
+		PwrBal = 0;
+	else
+		local SAE416DatPwrLen = table.getn(SAE416DatPwr);
+		for i = 2, SAE416DatPwrLen do
+			if (Pwr <= SAE416DatPwr[ i ]) then
+				LowPwr = SAE416DatPwr[ i - 1 ];
+				HigPwr = SAE416DatPwr[ i ];
+
+				break;
+			end
+		end
+
+		if (LowPwr == nil) then
+			LowPwr = SAE416DatPwr[ SAE416DatPwrLen ];
+			HigPwr = SAE416DatPwr[ SAE416DatPwrLen ];
+			PwrBal = 1;
+		else
+			PwrBal = (Pwr - LowPwr) / (HigPwr - LowPwr);
+		end
+	end
+	if (Alt < -0.45) then
+
+		local AngLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, 0, LowPwr);
+		local AngHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, 0, HigPwr);
+
+		Ang = (1 - PwrBal) * AngLowPwr + PwrBal * AngHigPwr;
+
+	elseif (Alt <= SAE416DatAlt[ 1 ]) then
+
+		local AngLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, SAE416DatAlt[ 1 ], LowPwr);
+		local AngHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, SAE416DatAlt[ 1 ], HigPwr);
+
+		Ang = (1 - PwrBal) * AngLowPwr + PwrBal * AngHigPwr;
+
+	else
+		local HigAlt;
+		local LowAlt;
+		local SAE416DatAltLen = table.getn(SAE416DatAlt);
+		for i = 2, SAE416DatAltLen do
+			if (Alt <= SAE416DatAlt[ i ]) then
+				LowAlt = SAE416DatAlt[ i - 1 ];
+				HigAlt = SAE416DatAlt[ i ];
+
+				break;
+			end
+		end
+
+		if (LowAlt == nil) then
+			LowAlt = SAE416DatAlt[ SAE416DatAltLen ];
+			HigAlt = SAE416DatAlt[ SAE416DatAltLen ];
+			AltBal = 1;
+		else
+			AltBal = (Alt - LowAlt) / (HigAlt - LowAlt);
+		end
+
+		local AngLowAltLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, LowAlt, LowPwr);
+		local AngLowAltHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, LowAlt, HigPwr);
+
+		local AngLowAlt = (1 - PwrBal) * AngLowAltLowPwr + PwrBal * AngLowAltHigPwr;
+
+		local AngHigAltLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, HigAlt, LowPwr);
+		local AngHigAltHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, HigAlt, HigPwr);
+
+		local AngHigAlt = (1 - PwrBal) * AngHigAltLowPwr + PwrBal * AngHigAltHigPwr;
+
+		Ang = (1 - AltBal) * AngLowAlt + AltBal * AngHigAlt;
+	end
+	return Ang;
+end
+---------------------------------------------------------------- ;
+LimitAmmo = 0;           --自機の持つ残り弾薬ポイント。残弾表示やフラグに使ってください。
+LimitAmmoMax = 0;
+isJetPlaneLimitAmmo = false;--ジェット機ならtrueに汁
+isBomberLimitAmmo = true;--爆撃機ならtrueに汁
+isLimitAmmoInitialized = false;--内部的な初期化フラグ。いじったらだめーよｗ
+Cost100k = 12;           --100k(Option=100000)以上のARMの弾薬コスト
+Cost50k = 2;             --50k以上100k未満の弾薬コスト
+ListChipType = {};       --ARMのチップ番号を格納
+ArmCostList = {}; --発見されたArmのコストを順に収納
+function LimitAmmoRegulation()
+        --初期設定
+        if not isLimitAmmoInitialized then
+                --重量に応じて弾薬ポイントを決定
+                if isJetPlaneLimitAmmo then
+                        LimitAmmo = 1200;
+                elseif isBomberLimitAmmo then
+			LimitAmmo = 600;
+		else
+                        if _WEIGHT() <= 2200 then
+                                LimitAmmo = 500;
+			else
+                                LimitAmmo = (_WEIGHT()-1300)/100*20+350;
+                        end
+                end
+                LimitAmmoMax= LimitAmmo;
+                local chipNum = _CHIPS() - 1;
+                for i = 1, chipNum do
+                        --ARMチェック
+                        if _TYPE(i) == 10 then
+                                --50kの場合、100kの場合でそれぞれ弾薬コストを格納
+                                if _OPTION(i) == 50000 then
+                                        table.insert(ListChipType, i);
+                                        table.insert(ArmCostList, Cost50k);
+                                elseif _OPTION(i) >= 100000 then
+                                        table.insert(ListChipType, i);
+                                        table.insert(ArmCostList, Cost100k);
+                                end
+                        end 
+                end
+                isLimitAmmoInitialized = true;
+        elseif _TICKS() > 150 then
+                --発射カウント
+                local n = table.getn(ListChipType);
+                for i = 1, n do
+                        --発射判定
+                        if _E(ListChipType[i]) == 0 and _TOP(ListChipType[i]) == 0 then
+                                LimitAmmo = LimitAmmo - ArmCostList[i];  --弾薬ポイントから弾薬コストを減算
+                        end
+                end
+                local h = _H(0);
+                local speed = _VZ(0);
+                if (0 < h and h < 2) and math.abs(speed) < 1.5 then
+                        if isJetPlaneLimitAmmo then
+                                LimitAmmo = LimitAmmo + 1;
+                        else
+                                LimitAmmo = LimitAmmo + 0.5;
+                        end
+                        if LimitAmmo > LimitAmmoMax then LimitAmmo = LimitAmmoMax; end
+                end
+        end
+end
+
+Vector={};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+	}
+
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+		end,
+	}
+
+	setmetatable(obj, operation);
+
+	return obj;
+end
+}

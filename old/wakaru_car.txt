@@ -1,0 +1,125 @@
+// [RCD] 
+Val
+{
+	HANDLE(default=180, min=160, max=200, step=1)
+	MAN(default=0, min=-180, max=180)
+	POWER(default=0, min=-10000, max=10000, step=500)
+}
+Key
+{
+	0:power(step=50)
+	1:power(step=-50)
+	2:HANDLE(step=-1)
+	3:HANDLE(step=1)
+}
+Body
+{
+	Core() {
+		N:RudderF(angle=man, option=1) {
+			S:Frame(angle=135, option=1) {
+				S:Frame(angle=0, option=1) {
+					S:Chip(angle=-135) {
+						E:Chip() {
+							S:Chip() {
+								S:Chip() {
+									E:Frame(angle=-75, option=1) {
+										E:Wheel(angle=165, power=power, option=1, effect=2) { }
+									}
+									N:Chip(angle=-150) { }
+								}
+							}
+							E:RudderF(angle=handle, option=1) {
+								W:Frame(angle=-75, option=1) {
+									W:Wheel(angle=165, option=1, effect=2) { }
+								}
+							}
+							N:Chip(angle=-150) { }
+							N:Cowl(angle=-90) {
+								N:Cowl(angle=-90) {
+									N:Cowl(angle=90, option=0, color=#000000, effect=#F1FF) {
+										N:Cowl(angle=-90) {
+											N:Cowl() { }
+										}
+										E:Cowl(angle=-90, option=1, color=#000000) {
+											S:Cowl() { }
+											E:Cowl(option=0) {
+												S:Cowl() { }
+												E:Cowl(angle=-90, option=0, color=#000000, effect=#F1FF) {
+													S:Cowl() {
+														N:Cowl(angle=-90) {
+															N:Cowl(angle=-90) { }
+														}
+													}
+												}
+											}
+										}
+									}
+									E:Cowl(angle=-90) { }
+									N:Cowl(angle=-90) { }
+								}
+							}
+						}
+						S:Chip() {
+							S:Chip() {
+								W:Frame(angle=-75, option=1) {
+									W:Wheel(angle=165, power=-power, option=1, effect=2) { }
+								}
+								N:Chip(angle=-150) { }
+								E:Chip(angle=-90) { }
+							}
+							E:Chip(angle=-90) {
+								N:Chip(angle=160) { }
+								N:Chip(angle=-160) { }
+							}
+						}
+						W:RudderF(angle=handle, option=1) {
+							E:Frame(angle=-75, option=1) {
+								E:Wheel(angle=165, option=1, effect=2) { }
+							}
+						}
+						N:Chip(angle=-150) { }
+						N:Cowl(angle=-90) {
+							N:Cowl(angle=-90) {
+								N:Cowl(angle=90, option=0, color=#000000, effect=#F1FF) {
+									N:Cowl(angle=-90) {
+										N:Cowl() { }
+									}
+									W:Cowl(angle=-90, option=1, color=#000000) {
+										S:Cowl() { }
+										W:Cowl(option=0) {
+											S:Cowl() { }
+											W:Cowl(angle=-90, option=0, color=#000000, effect=#F1FF) {
+												S:Cowl() {
+													N:Cowl(angle=-90) {
+														N:Cowl(angle=-90) { }
+													}
+												}
+											}
+										}
+									}
+								}
+								W:Cowl(angle=-90) { }
+								N:Cowl(angle=-90) { }
+							}
+						}
+						E:Frame(angle=-30) {
+							E:Weight(angle=-150, option=1) {
+								S:Rudder(angle=-15, option=1) {
+									S:Chip(angle=1, option=1) { }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua
+{function main()
+	_ZOOM(30)
+	if(_ML()==1)then
+		HANDLE=180+(_MX()/_WIDTH()-0.5)*20
+	end
+	MAN=-(HANDLE-180)*2
+end}

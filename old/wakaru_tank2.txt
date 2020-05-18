@@ -1,0 +1,45 @@
+// [RCD] 
+Val
+{
+	C(default=#FFFFFF, step=16777215)
+	L(default=#FFFFFF, step=16777215)
+	POWER(default=0, min=-2500, max=2500, step=100)
+	POWERL(default=0, min=-2500, max=2500, step=100)
+	POWERR(default=0, min=-2500, max=2500, step=100)
+	R(default=#FFFFFF, step=16777215)
+	TRIG(default=0, max=400000, step=400000)
+}
+Key
+{
+	0:POWER(step=100)
+	1:POWER(step=-100)
+}
+Body
+{
+	Core(color=C) {
+		E:Wheel(angle=5, power=POWERR, brake=15, color=R) { }
+		W:Wheel(angle=5, power=POWERL, brake=15, color=L) { }
+		N:Arm(power=trig, option=400000, color=C) {
+			E:Wheel(angle=5, power=POWERR, brake=15, color=R) { }
+			W:Wheel(angle=5, power=POWERL, brake=15, color=L) { }
+		}
+	}
+}
+Lua
+{
+	function main()
+		optical()
+	end
+
+	function optical()
+		_ZOOM(20)
+		A=_CCD(63, 0)
+		L= ( math.mod(math.floor(A/1024), 32) * 65536 + math.mod(math.floor(A/32), 32) * 256 + math.mod(A, 32) ) * 8
+
+		A=_CCD(63, 31)
+		C= ( math.mod(math.floor(A/1024), 32) * 65536 + math.mod(math.floor(A/32), 32) * 256 + math.mod(A, 32) ) * 8
+
+		A=_CCD(63,63)
+		R= ( math.mod(math.floor(A/1024), 32) * 65536 + math.mod(math.floor(A/32), 32) * 256 + math.mod(A, 32) ) * 8
+	end
+}

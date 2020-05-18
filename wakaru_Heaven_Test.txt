@@ -1,0 +1,31 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() { }
+}
+Lua
+{
+require("wakaru/wakaru_sense.lua");
+
+initFlag=false;
+
+function init()
+	initFlag=true;
+	sense=Wakaru_Sense.new();
+	sense:setDisp(true);
+end
+
+function main()
+	if not initFlag then init(); return end
+	out(0,"Sense Test");
+	out(20,_FPS());
+	sense:tick();
+end
+
+}

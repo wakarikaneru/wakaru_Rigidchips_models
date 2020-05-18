@@ -1,0 +1,76 @@
+// [RCD] 
+Val
+{
+	POWER(default=0, max=100000, step=5000)
+	ROT(default=0, min=-10, max=10, step=1)
+	ROTL(default=0, min=-5, max=5, step=5)
+	ROTR(default=0, min=-5, max=5, step=5)
+	TRIG(default=1199999, max=1200000, step=1)
+	YAW(default=0, min=-15, max=15, step=1)
+}
+Key
+{
+	0:rotr(step=10), rotl(step=10)
+	1:rotr(step=-10), rotl(step=-10)
+	2:rotr(step=-10), rotl(step=10)
+	3:rotr(step=10), rotl(step=-10)
+	4:YAW(step=-1)
+	5:power(step=5000)
+	6:YAW(step=1)
+}
+Body
+{
+	Core() {
+		W:RudderF(angle=-20) {
+			W:Trim(angle=rotl) {
+				W:Chip() {
+					W:Chip() { }
+				}
+			}
+		}
+		E:RudderF(angle=20) {
+			E:Trim(angle=-rotr) {
+				E:Chip() {
+					E:Chip() { }
+				}
+			}
+		}
+		S:Chip() {
+			S:Frame(angle=-30) {
+				S:Jet(angle=120, power=-power, effect=2) { }
+			}
+			S:Frame() {
+				S:Chip() {
+					W:Chip(angle=-60) { }
+					E:Chip(angle=30) { }
+					W:Chip(angle=30) { }
+					E:Chip(angle=-60) { }
+				}
+			}
+			S:TrimF(angle=90) {
+				S:Chip(angle=YAW) { }
+			}
+		}
+		E:Wheel(angle=60) { }
+		W:Wheel(angle=60) { }
+	}
+}
+Lua
+{	bx=_X(CORE)
+	by=_Y(CORE)
+	bz=_Z(CORE)
+	length=1000
+function main()
+		local x=_X(CORE)
+		local y=_Y(CORE)
+		local z=_Z(CORE)
+
+		_SETCOLOR(tonumber("FF0000", 16))
+
+ 		_MOVE3D(_X(CORE),_Y(CORE),_Z(CORE))
+ 		_LINE3D(_X(CORE)+_ZX(CORE)*-length+(x-bx)*length/20,_Y(CORE)+_ZY(CORE)*-length+(y-by)*length/20,_Z(CORE)+_ZZ(CORE)*-length+(z-bz)*length/20)
+		bx=x
+		by=y
+		bz=z
+end
+}

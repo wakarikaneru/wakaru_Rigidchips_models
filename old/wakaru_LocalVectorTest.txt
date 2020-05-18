@@ -1,0 +1,242 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Arm() {
+			N:Arm() {
+				E:Arm() { }
+				W:Arm() { }
+			}
+		}
+		W:Arm() {
+			W:Arm() {
+				N:Arm() { }
+				S:Arm() { }
+			}
+		}
+		E:Arm() {
+			E:Arm() {
+				S:Arm() { }
+				N:Arm() { }
+			}
+		}
+		S:Arm() {
+			S:Arm() {
+				W:Arm() { }
+				E:Arm() { }
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+function main()
+	col="00FF00";
+	
+	for hoge=0, _CHIPS()-1 do
+	
+		piyo=_DIR(hoge);
+		
+		if piyo==0 then
+			col="FFFFFF";
+		elseif piyo==1 then
+			col="FF0000";
+		elseif piyo==2 then
+			col="00FF00";
+		else
+			col="0000FF";
+		end
+		
+		_SETCOLOR(tonumber(col, 16));
+		
+		fuga=Vector:getPosVec(hoge)+Vector.new(0, 0.1, 0):getWVec(hoge);
+		
+		aa1=fuga+Vector.new(0.25, 0, 0.25):getWVec(hoge);
+		aa2=fuga+Vector.new(0.25, 0, -0.25):getWVec(hoge);
+		aa3=fuga+Vector.new(-0.25, 0, -0.25):getWVec(hoge);
+		aa4=fuga+Vector.new(-0.25, 0, 0.25):getWVec(hoge);
+		
+		_MOVE3D(aa1.x, aa1.y, aa1.z);
+		_LINE3D(aa2.x, aa2.y, aa2.z);
+		_LINE3D(aa3.x, aa3.y, aa3.z);
+		_LINE3D(aa4.x, aa4.y, aa4.z);
+		_LINE3D(aa1.x, aa1.y, aa1.z);
+		
+		
+		_SETCOLOR(tonumber("FF00FF", 16));
+		hogera=fuga+Vector.new(-0.25, 0, -0.25):getWVec(hoge);
+		_MOVE3D(fuga.x, fuga.y, fuga.z);
+		_LINE3D(hogera.x, hogera.y, hogera.z);
+		
+		_SETCOLOR(tonumber("00FFFF", 16));
+		hogera=fuga+Vector.new(0.25, 0, -0.25):getWVec(hoge);
+		_MOVE3D(fuga.x, fuga.y, fuga.z);
+		_LINE3D(hogera.x, hogera.y, hogera.z);
+		
+		_SETCOLOR(tonumber("FFFF00", 16));
+		hogera=fuga+Vector.new(0, 0, -0.25):getWVec(hoge);
+		_MOVE3D(fuga.x, fuga.y, fuga.z);
+		_LINE3D(hogera.x, hogera.y, hogera.z);
+		
+		hogehoge=Vector.new(1, 2, 3):getWVec(hoge):getLVec(hoge);
+		out(hoge, _DIR(hoge), " : ",hogehoge.x, " ", hogehoge.y, " ", hogehoge.z);
+	end
+end
+
+----Vectorクラス
+--このゲーム内の、空間上のベクトルを扱う
+Vector={
+	getPosVec=function(self, chipName)
+		return Vector.new(_X(chipName), _Y(chipName), _Z(chipName));
+	end,
+};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+
+		getWVec=function(self, chipName)
+			local t;
+			local lx; local ly; local lz;
+			local wx; local wy; local wz;
+			
+			lx=self.x;
+			ly=self.y;
+			lz=self.z;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx
+				lx=-lz;
+				lz=t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx
+				lx=lz;
+				lz=-t;
+			end
+			
+			wx=_XX(chipName)*lx+_YX(chipName)*ly+_ZX(chipName)*lz;
+			wy=_XY(chipName)*lx+_YY(chipName)*ly+_ZY(chipName)*lz;
+			wz=_XZ(chipName)*lx+_YZ(chipName)*ly+_ZZ(chipName)*lz;
+
+			return Vector.new(wx, wy, wz);
+		end,
+
+		getLVec=function(self, chipName)
+			local t;
+			local wx; local wy; local wz;
+			local lx; local ly; local lz;
+			
+			wx=self.x;
+			wy=self.y;
+			wz=self.z;
+				
+			lx=_XX(chipName)*wx+_XY(chipName)*wy+_XZ(chipName)*wz;
+			ly=_YX(chipName)*wx+_YY(chipName)*wy+_YZ(chipName)*wz;
+			lz=_ZX(chipName)*wx+_ZY(chipName)*wy+_ZZ(chipName)*wz;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then--
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx;
+				lx=lz;
+				lz=-t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx;
+				lx=-lz;
+				lz=t;
+			end
+			
+			return Vector.new(lx, ly, lz);
+		end,
+	}
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+--[[
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+]]--
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+			--return "x="..math.floor(self.x)..",y="..math.floor(self.y)..",z="..math.floor(self.z);
+		end,
+	}
+	setmetatable(obj, operation);
+	return obj;
+end
+}

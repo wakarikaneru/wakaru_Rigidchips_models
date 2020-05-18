@@ -1,0 +1,483 @@
+// [RCD] 
+Val{
+	A(default=90,min=-3600000,max=3600000,disp=0)
+	B(default=0,min=-3600000,max=3600000,disp=0)
+	GANG1(default=40,min=-360,max=360,disp=0)
+	GANG10(default=40,min=-360,max=360,disp=0)
+	GANG11(default=40,min=-360,max=360,disp=0)
+	GANG12(default=40,min=-360,max=360,disp=0)
+	GANG13(default=40,min=-360,max=360,disp=0)
+	GANG14(default=40,min=-360,max=360,disp=0)
+	GANG15(default=40,min=-360,max=360,disp=0)
+	GANG16(default=40,min=-360,max=360,disp=0)
+	GANG17(default=40,min=-360,max=360,disp=0)
+	GANG18(default=40,min=-360,max=360,disp=0)
+	GANG19(default=40,min=-360,max=360,disp=0)
+	GANG2(default=0,min=-360,max=360,disp=0)
+	GANG20(default=40,min=-360,max=360,disp=0)
+	GANG21(default=40,min=-360,max=360,disp=0)
+	GANG22(default=40,min=-360,max=360,disp=0)
+	GANG23(default=40,min=-360,max=360,disp=0)
+	GANG24(default=40,min=-360,max=360,disp=0)
+	GANG25(default=40,min=-360,max=360,disp=0)
+	GANG26(default=40,min=-360,max=360,disp=0)
+	GANG27(default=40,min=-360,max=360,disp=0)
+	GANG28(default=40,min=-360,max=360,disp=0)
+	GANG29(default=40,min=-360,max=360,disp=0)
+	GANG3(default=40,min=-360,max=360,disp=0)
+	GANG30(default=40,min=-360,max=360,disp=0)
+	GANG31(default=40,min=-360,max=360,disp=0)
+	GANG32(default=40,min=-360,max=360,disp=0)
+	GANG33(default=40,min=-360,max=360,disp=0)
+	GANG34(default=40,min=-360,max=360,disp=0)
+	GANG35(default=40,min=-360,max=360,disp=0)
+	GANG36(default=40,min=-360,max=360,disp=0)
+	GANG4(default=40,min=-360,max=360,disp=0)
+	GANG5(default=40,min=-360,max=360,disp=0)
+	GANG6(default=40,min=-360,max=360,disp=0)
+	GANG7(default=40,min=-360,max=360,disp=0)
+	GANG8(default=40,min=-360,max=360,disp=0)
+	GANG9(default=40,min=-360,max=360,disp=0)
+	GP1(default=0,max=10000000000,step=10000000000,disp=0)
+	GP10(default=0,max=10000000000,step=10000000000,disp=0)
+	GP11(default=0,max=10000000000,step=10000000000,disp=0)
+	GP12(default=0,max=10000000000,step=10000000000,disp=0)
+	GP13(default=0,max=10000000000,step=10000000000,disp=0)
+	GP14(default=0,max=10000000000,step=10000000000,disp=0)
+	GP15(default=0,max=10000000000,step=10000000000,disp=0)
+	GP16(default=0,max=10000000000,step=10000000000,disp=0)
+	GP17(default=0,max=10000000000,step=10000000000,disp=0)
+	GP18(default=0,max=10000000000,step=10000000000,disp=0)
+	GP19(default=0,max=10000000000,step=10000000000,disp=0)
+	GP2(default=0,max=10000000000,step=10000000000,disp=0)
+	GP20(default=0,max=10000000000,step=10000000000,disp=0)
+	GP21(default=0,max=10000000000,step=10000000000,disp=0)
+	GP22(default=0,max=10000000000,step=10000000000,disp=0)
+	GP23(default=0,max=10000000000,step=10000000000,disp=0)
+	GP24(default=0,max=10000000000,step=10000000000,disp=0)
+	GP25(default=0,max=10000000000,step=10000000000,disp=0)
+	GP26(default=0,max=10000000000,step=10000000000,disp=0)
+	GP27(default=0,max=10000000000,step=10000000000,disp=0)
+	GP28(default=0,max=10000000000,step=10000000000,disp=0)
+	GP29(default=0,max=10000000000,step=10000000000,disp=0)
+	GP3(default=0,max=10000000000,step=10000000000,disp=0)
+	GP30(default=0,max=10000000000,step=10000000000,disp=0)
+	GP31(default=0,max=10000000000,step=10000000000,disp=0)
+	GP32(default=0,max=10000000000,step=10000000000,disp=0)
+	GP33(default=0,max=10000000000,step=10000000000,disp=0)
+	GP34(default=0,max=10000000000,step=10000000000,disp=0)
+	GP35(default=0,max=10000000000,step=10000000000,disp=0)
+	GP36(default=0,max=10000000000,step=10000000000,disp=0)
+	GP4(default=0,max=10000000000,step=10000000000,disp=0)
+	GP5(default=0,max=10000000000,step=10000000000,disp=0)
+	GP6(default=0,max=10000000000,step=10000000000,disp=0)
+	GP7(default=0,max=10000000000,step=10000000000,disp=0)
+	GP8(default=0,max=10000000000,step=10000000000,disp=0)
+	GP9(default=0,max=10000000000,step=10000000000,disp=0)
+}
+Key{
+	0:A(step=-2)
+	1:A(step=2)
+	2:B(step=2)
+	3:B(step=-2)
+}
+Body{
+	Core(){
+		S:Weight(angle=A){
+			S:Trim(angle=B){
+				N:Weight(angle=90){
+					N:Weight(angle=90,option=0){
+						W:Weight(angle=45,option=0){
+							N:Weight(angle=-80,option=0){
+								N:Weight(angle=-10,option=0){
+									N:Weight(option=0){}
+								}
+							}
+						}
+						E:Weight(angle=45,option=0){
+							N:Weight(angle=-80,option=0){
+								N:Weight(angle=-10,option=0){
+									N:Weight(option=0){}
+								}
+							}
+						}
+					}
+				}
+				N:Weight(angle=-90){
+					N:Weight(angle=-90,option=0){
+						W:Weight(angle=-45,option=0){
+							N:Weight(angle=80,option=0){
+								N:Weight(angle=10,option=0){
+									N:Weight(option=0){}
+								}
+							}
+						}
+						E:Weight(angle=-45,option=0){
+							N:Weight(angle=80,option=0){
+								N:Weight(angle=10,option=0){
+									N:Weight(option=0){}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		S:Weight(angle=20,option=3){
+			S:Weight(angle=160,option=3){
+				E:Weight(angle=180){
+					S:Chip(angle=GANG1){
+						S:Arm(option=445000,power=GP1,angle=-GANG1){}
+					}
+					S:Chip(angle=GANG2){
+						S:Arm(option=445000,power=GP2,angle=-GANG2){}
+					}
+					S:Chip(angle=GANG3){
+						S:Arm(option=445000,power=GP3,angle=-GANG3){}
+					}
+					S:Chip(angle=GANG4){
+						S:Arm(option=445000,power=GP4,angle=-GANG4){}
+					}
+					S:Chip(angle=GANG5){
+						S:Arm(option=445000,power=GP5,angle=-GANG5){}
+					}
+					S:Chip(angle=GANG6){
+						S:Arm(option=445000,power=GP6,angle=-GANG6){}
+					}
+					S:Chip(angle=GANG7){
+						S:Arm(option=445000,power=GP7,angle=-GANG7){}
+					}
+					S:Chip(angle=GANG8){
+						S:Arm(option=445000,power=GP8,angle=-GANG8){}
+					}
+					S:Chip(angle=GANG9){
+						S:Arm(option=445000,power=GP9,angle=-GANG9){}
+					}
+					S:Chip(angle=GANG10){
+						S:Arm(option=445000,power=GP10,angle=-GANG10){}
+					}
+				}
+				W:Weight(angle=180){
+					S:Chip(angle=GANG11){
+						S:Arm(option=445000,power=GP11,angle=-GANG11){}
+					}
+					S:Chip(angle=GANG12){
+						S:Arm(option=445000,power=GP12,angle=-GANG12){}
+					}
+					S:Chip(angle=GANG13){
+						S:Arm(option=445000,power=GP13,angle=-GANG13){}
+					}
+					S:Chip(angle=GANG14){
+						S:Arm(option=445000,power=GP14,angle=-GANG14){}
+					}
+					S:Chip(angle=GANG15){
+						S:Arm(option=445000,power=GP15,angle=-GANG15){}
+					}
+					S:Chip(angle=GANG16){
+						S:Arm(option=445000,power=GP16,angle=-GANG16){}
+					}
+					S:Chip(angle=GANG17){
+						S:Arm(option=445000,power=GP17,angle=-GANG17){}
+					}
+					S:Chip(angle=GANG18){
+						S:Arm(option=445000,power=GP18,angle=-GANG18){}
+					}
+					S:Chip(angle=GANG19){
+						S:Arm(option=445000,power=GP19,angle=-GANG19){}
+					}
+					S:Chip(angle=GANG20){
+						S:Arm(option=445000,power=GP20,angle=-GANG20){}
+					}
+				}
+				W:Weight(angle=180){
+					S:Chip(angle=GANG21){
+						S:Arm(option=445000,power=GP21,angle=-GANG21){}
+					}
+					S:Chip(angle=GANG22){
+						S:Arm(option=445000,power=GP22,angle=-GANG22){}
+					}
+					S:Chip(angle=GANG23){
+						S:Arm(option=445000,power=GP23,angle=-GANG23){}
+					}
+					S:Chip(angle=GANG24){
+						S:Arm(option=445000,power=GP24,angle=-GANG24){}
+					}
+					S:Chip(angle=GANG25){
+						S:Arm(option=445000,power=GP25,angle=-GANG25){}
+					}
+					S:Chip(angle=GANG26){
+						S:Arm(option=445000,power=GP26,angle=-GANG26){}
+					}
+					S:Chip(angle=GANG27){
+						S:Arm(option=445000,power=GP27,angle=-GANG27){}
+					}
+					S:Chip(angle=GANG28){
+						S:Arm(option=445000,power=GP28,angle=-GANG28){}
+					}
+					S:Chip(angle=GANG29){
+						S:Arm(option=445000,power=GP29,angle=-GANG29){}
+					}
+					S:Chip(angle=GANG30){
+						S:Arm(option=445000,power=GP30,angle=-GANG30){}
+					}
+				}
+			}
+		}
+	}
+}
+Lua{
+
+require("wakaru/wakaru_eye.lua")
+
+KEY_UP=0;
+KEY_DOWN=1;
+KEY_LEFT=2;
+KEY_RIGHT=3;
+KEY_Z=4;
+KEY_X=5;
+KEY_C=6;
+KEY_A=7;
+KEY_S=8;
+KEY_D=9;
+KEY_V=10;
+KEY_B=11;
+KEY_F=12;
+KEY_G=13;
+KEY_Q=14;
+KEY_W=15;
+KEY_E=16;
+
+initflag=false;
+
+function ang(m,n,v)
+	if m-n<v and m-n>-v then m=n
+	elseif m<n then m=m+v
+	elseif m>n then m=m-v
+	end
+	return m
+end
+
+function rgb(r,g,b)
+	return math.floor(math.min(r,255)) * 65536 + math.floor(math.min(g,255)) * 256 + math.floor(math.min(b,255))
+end
+
+function spcl(d,c,b,a)
+	return math.floor(math.min(a,15)) + math.floor(math.min(b,15)) * 16 + math.floor(math.min(c,15)) * 256 + math.floor(math.min(d,15)) * 4096
+end
+
+function m_input2(free1,free2)
+	if free1==nil then free1=0 end
+	if free2==nil or free2==0 then free2=1 end
+	
+	local mx=((math.min(math.max(_MX(),0),_WIDTH()))/_WIDTH()-0.5)*(2+free1*2)
+	local my=((math.min(math.max(_MY(),0),_HEIGHT()))/_HEIGHT()-0.5)*(2+free1*2)
+	
+	if math.abs(mx)<=free1 then mx=0
+	else mx=mx-free1*(mx/math.abs(mx)) end
+	
+	if math.abs(my)<=free1 then my=0
+	else my=my-free1*(my/math.abs(my)) end
+	
+	mx=math.min(math.max(mx,-free2),free2)/(free2)
+	my=-math.min(math.max(my,-free2),free2)/(free2)
+	
+	_SETCOLOR(65281)
+	
+	if _WIDTH()>_HEIGHT() then 
+		_MOVE2D((free2+free1)*_WIDTH()/_HEIGHT(),0)
+		_LINE2D((-free2-free1)*_WIDTH()/_HEIGHT(),0)
+		_MOVE2D(0,free2+free1)
+		_LINE2D(0,-free2-free1)
+	else
+		_MOVE2D(free2+free1,0)
+		_LINE2D(-free2-free1,0)
+		_MOVE2D(0,(free2+free1)*_HEIGHT()/_WIDTH())
+		_LINE2D(0,(-free2-free1)*_HEIGHT()/_WIDTH())
+	end
+	
+	return mx,my
+end
+
+function graph(val,min,max,wake,mode)
+	local o=""
+	local tmp2=max-min
+	local tmp=val-min+tmp2/wake/2
+	
+	if mode==0 then
+		for i=1,wake do
+			if tmp>=tmp2/wake then o=o.."Å°"
+			else o=o.."Å†" end
+			tmp=tmp-tmp2/wake
+		end
+	elseif mode==1 then
+		o="Å°"
+		j=0
+		wake=wake-1
+		for i=1,wake do
+			if tmp<=tmp2/wake then break
+			else
+				o="Å†"..o
+				tmp=tmp-tmp2/wake
+				j=i
+			end
+		end
+		for i=1,wake-j do
+			o=o.."Å†"
+		end
+	end
+	
+	return o
+end
+
+gtime=1
+gtime2=0
+gtime3=0
+gmax=30
+ga={}
+mov=20
+function gun(kin)
+	if kin==1 or math.mod(gtime,3)~=1 then
+	--if kin==1 then
+	
+		for i=1,gmax do
+			ga[i]=_G["GANG"..i]
+			--out(i+5,ga[i])
+		end
+		
+		if math.mod(gtime,3)==0 then
+			tmp=gtime/3+1
+			ga[tmp]=ga[tmp]+mov
+			
+			tmp=tmp+1
+	
+			if tmp>gmax then tmp=tmp-gmax end
+			ga[tmp]=ga[tmp]-mov
+			
+			
+			
+			
+		elseif math.mod(gtime,3)==1 then
+			tmp=(gtime-1)/3+2
+			if tmp>gmax then tmp=tmp-gmax end
+			_G["GP"..tmp]=10000000
+		else
+			tmp=(gtime+1)/3+1
+			if tmp>gmax then tmp=tmp-gmax end
+			
+			ga[tmp]=ga[tmp]+mov
+			
+			tmp=tmp+1
+	
+			if tmp>gmax then tmp=tmp-gmax end
+			ga[tmp]=ga[tmp]-mov
+			
+		end
+		
+		
+		
+		for i=1,gmax do
+			_G["GANG"..i]=ga[i]
+			--out(i+5,ga[i])
+		end
+		
+		gtime=math.mod(gtime+1,gmax*3)
+	end
+end
+
+function init()
+	initflag=true;
+	eye=Wakaru_Eye.new(0, 1200);
+	target=0;
+	useFCS=false;
+end
+
+function main()
+
+	if not initflag then init() end
+	--
+	out(0, _FPS());
+	if _KEYDOWN(KEY_S)==1 then
+		useFCS=not useFCS;
+	end
+	if useFCS then
+		eye:tick();
+		fcs();
+	end
+	--
+
+	mx,my=m_input2(0.05,0.7)
+	
+	out(2,mx,"   ",my)
+	
+	if _MR()==1 then
+		A=A-my*4
+		B=B-mx*4
+	end
+	
+	if _ML()==1 then
+		--gun(1)
+	else
+		gun(_KEY(4))
+	end
+	
+	d=_ZOOM(70)
+	
+	
+	
+	out(0,string.format("  FPS : %2.1f  Chips : %d  Weight : %.1f    %3.1f km/h",_FPS(),_CHIPS(),_WEIGHT(),-(_VZ(0)*3.6))) 
+
+end
+
+function fcs()
+	armSpd=getSpdVec(0);
+	
+	if _PLAYERS()~=0 then
+		if _KEYDOWN(KEY_D)==1 then target=target+1; end
+		if _KEYDOWN(KEY_A)==1 then target=target-1; end
+		if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+		out(1, "TARGET (A) ".._PLAYERNAME(target).." (D) ");
+		targetPos=eye:getFuturePos2(_PLAYERID(target), Vector:getPosVec(0), armSpd);
+	else
+		out(1, "OffLine");
+	end
+	
+	aimVecV=(targetPos-Vector:getPosVec(0)):getLVec(0):getNormal();
+	aimVecV.x=0;
+	aimVecV=aimVecV:getNormal();
+	
+	rotV=math.deg(math.acos(Vector.new(0, 0, -1)^aimVecV));
+	if 0<aimVecV.y then else rotV=-rotV; end
+	
+	rotV=math.max(math.min(rotV, 10), -10);
+	A=A-rotV;
+	
+	aimVecH=(targetPos-Vector:getPosVec(0)):getLVec(0):getNormal();
+	aimVecH.y=0;
+	aimVecH=aimVecH:getNormal();
+	
+	rotH=math.deg(math.acos(Vector.new(0, 0, -1)^aimVecH));
+	if 0<aimVecH.x then else rotH=-rotH; end
+	
+	rotH=math.max(math.min(rotH, 10), -10);
+	B=B+rotH;
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Vector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Vector.new(0, 0, 0);
+	local posVec=Vector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function getSpdVec2(chipName)
+	return (Vector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+end
+}

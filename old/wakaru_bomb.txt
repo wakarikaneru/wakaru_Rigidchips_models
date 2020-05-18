@@ -1,0 +1,46 @@
+// [RCD] 
+Val
+{
+	HIDRO(default=0, max=50000, step=5000)
+	TRIG(default=0, max=1600000)
+}
+Key
+{
+	0:HIDRO(step=5000)
+	5:TRIG(step=1600000)
+}
+Body
+{
+	Core() {
+		S:Jet() {
+			N:Trim(angle=90) {
+				S:Arm(power=TRIG,option=1600000,angle=-30) { }
+				S:Arm(power=TRIG,option=1600000,angle=-15) { }
+				S:Arm(power=TRIG,option=1600000,angle=0) { }
+				S:Arm(power=TRIG,option=1600000,angle=15) { }
+				S:Arm(power=TRIG,option=1600000,angle=30) { }
+			}
+			S:Trim(angle=90) {
+				N:Arm(power=TRIG,option=1600000,angle=-30) { }
+				N:Arm(power=TRIG,option=1600000,angle=-15) { }
+				N:Arm(power=TRIG,option=1600000,angle=0) { }
+				N:Arm(power=TRIG,option=1600000,angle=15) { }
+				N:Arm(power=TRIG,option=1600000,angle=30) { }
+			}
+			E:Trim(angle=90) {
+				W:Arm(power=TRIG,option=1600000,angle=-30) { }
+				W:Arm(power=TRIG,option=1600000,angle=-15) { }
+				W:Arm(power=TRIG,option=1600000,angle=0) { }
+				W:Arm(power=TRIG,option=1600000,angle=15) { }
+				W:Arm(power=TRIG,option=1600000,angle=30) { }
+			}
+			W:Trim(angle=90) {
+				E:Arm(power=TRIG,option=1600000,angle=-30) { }
+				E:Arm(power=TRIG,option=1600000,angle=-15) { }
+				E:Arm(power=TRIG,option=1600000,angle=0) { }
+				E:Arm(power=TRIG,option=1600000,angle=15) { }
+				E:Arm(power=TRIG,option=1600000,angle=30) { }
+			}
+		}
+	}
+}

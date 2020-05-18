@@ -1,0 +1,841 @@
+// [RCD] 
+Val
+{
+	ANGLE_1(default=45, min=-180, max=90, disp=0)
+	ANGLE_2(default=45, min=-180, max=90, disp=0)
+	ANGLE_3(default=45, min=-180, max=90, disp=0)
+	ANGLE_4(default=45, min=-180, max=90, disp=0)
+	ANGLE_A(default=0, min=-180, max=90, disp=0)
+	ANGLE_ARM(default=0, min=-180, max=90, disp=0)
+	ANGLE_ARM_1(default=-180, min=-180, max=90, disp=0)
+	ANGLE_ARM_2(default=-180, min=-180, max=90, disp=0)
+	ANGLE_ARM_3(default=-180, min=-180, max=90, disp=0)
+	ANGLE_B_1(default=45, min=-360, max=180, disp=0)
+	ANGLE_B_2(default=45, min=-360, max=180, disp=0)
+	ANGLE_C(default=-180, min=-180, max=180, disp=0)
+	ANGLE_D(default=180, min=-180, max=180, disp=0)
+	ANGLE_EE(default=180, min=-180, max=180, disp=0)
+	BRAKE(default=15, min=15, max=100, disp=0)
+	BRAKE_1(default=15, min=15, max=100, disp=0)
+	BRAKE_2(default=15, min=15, max=100, disp=0)
+	BRAKE_3(default=15, min=15, max=100, disp=0)
+	BRAKE_4(default=15, min=15, max=100, disp=0)
+	COL_TEAM(default=#253551, disp=1)
+	COL_L(default=#92B4A6, step=16777215, disp=1)
+	COL_C(default=#586D65, step=16777215, disp=1)
+	COL_R(default=#92B4A6, step=16777215, disp=1)
+	DIRECTION(default=1, min=-1, max=1, disp=1)
+	MODE(default=0, max=3, disp=1)
+	ARM(default=0, max=2, disp=1)
+	POWER(default=0, min=-2500, max=2500, step=2500, disp=0)
+	POWER_1(default=0, min=-2500, max=2500, step=2500, disp=1)
+	POWER_2(default=0, min=-2500, max=2500, step=2500, disp=1)
+	POWER_3(default=0, min=-2500, max=2500, step=2500, disp=1)
+	POWER_4(default=0, min=-2500, max=2500, step=2500, disp=1)
+	POWER_L(default=0, min=-2500, max=2500, step=2500, disp=0)
+	POWER_R(default=0, min=-2500, max=2500, step=2500, disp=0)
+	TRIG(default=0, max=400000, step=400000, disp=0)
+	TRIG_1(default=0, max=400000, step=400000, disp=1)
+	TRIG_2(default=0, max=400000, step=400000, disp=1)
+	TRIG_3(default=0, max=400000, step=400000, disp=1)
+	_ANGLE_1(default=45, min=-180, max=90, disp=0)
+	_ANGLE_2(default=45, min=-180, max=90, disp=0)
+	_ANGLE_3(default=45, min=-180, max=90, disp=0)
+	_ANGLE_4(default=45, min=-180, max=90, disp=0)
+	_ANGLE_A(default=0, min=-180, max=90, disp=0)
+	_ANGLE_ARM_1(default=-180, min=-180, max=90, disp=0)
+	_ANGLE_ARM_2(default=-180, min=-180, max=90, disp=0)
+	_ANGLE_ARM_3(default=-180, min=-180, max=90, disp=0)
+	_ANGLE_B_1(default=45, min=-360, max=180, disp=0)
+	_ANGLE_B_2(default=45, min=-360, max=180, disp=0)
+	_ANGLE_C(default=-180, min=-180, max=180, disp=0)
+	_ANGLE_D(default=180, min=-180, max=180, disp=0)
+	_ANGLE_EE(default=180, min=-180, max=180, disp=0)
+}
+Key
+{
+}
+Body
+{
+	Core(color=COL_TEAM, name=CORE, user2=101) {
+		E:JET(angle=ANGLE_A, color=COL_R) {
+			N:Wheel(brake=15, angle=ANGLE_B_1, color=COL_R, name=TIRE_12) { }
+			S:Wheel(power=POWER_3, brake=BRAKE_3, angle=ANGLE_3, color=COL_TEAM, name=TIRE_3) { }
+			N:Wheel(power=POWER_1, brake=BRAKE_1, angle=ANGLE_1, color=COL_R, name=TIRE_1) { }
+		}
+		W:JET(angle=ANGLE_A, color=COL_L) {
+			N:Wheel(brake=15, angle=ANGLE_B_2, color=COL_L, name=TIRE_22) { }
+			N:Wheel(power=POWER_2, brake=BRAKE_2, angle=ANGLE_2, color=COL_L, name=TIRE_2) { }
+			S:Wheel(power=POWER_4, brake=BRAKE_4, angle=ANGLE_4, color=COL_TEAM, name=TIRE_4) { }
+		}
+		N:Arm(angle=ANGLE_ARM_1, power=TRIG_1, option=400000, color=COL_C, damper=1, name=ARM_1) { }
+		N:Arm(angle=ANGLE_ARM_2, power=TRIG_2, option=400000, color=COL_C, damper=1, name=ARM_2) { }
+		N:Arm(angle=ANGLE_ARM_3, power=TRIG_3, option=400000, color=COL_C, damper=1, name=ARM_3) {
+			N:Jet(angle=ANGLE_EE, color=COL_C, user2=1040, name=EE) { }
+		}
+		N:Wheel(brake=100, angle=ANGLE_C, color=COL_C) { }
+		N:Wheel(brake=100, angle=ANGLE_D, color=COL_C) { }
+	}
+}
+Lua
+{
+--[[
+
+15point 戦闘第２期レギュレーション用試作戦車
+
+作った人: wakaru
+兵科：戦車
+
+15PB一回もやったことないのに適当に作るっていうね
+
+操作方法
+
+基本
+
+[V] 走行モードに切り替える
+[D] 戦闘モードに切り替える
+[F] 砲撃モードに切り替える
+[B] 光学迷彩ON/OFF
+[A] 復帰
+
+走行モード時
+
+[↑][↓] 前進、後退
+[←][→] 左右旋回
+[Z] 伏せる 回避率とか旋回性があがるかも
+[X] ブレーキ
+[C] 進行方向自動切換え 今進んでる方向が自動的に前になる
+
+戦闘モード時
+
+[↑] 走行モードに切り替える
+[↓] ブレーキ
+[←][→] 砲の向きに対して左右に移動
+[X] 射撃
+[Z][C] 左右旋回
+[S] グレネード呼び出し
+
+砲撃モード時
+
+[↑][↓][←][→] 砲の操作
+[X] 射撃
+[Z][C] 押してる間、砲の操作速度を変更する
+[S] グレネード呼び出し
+
+
+特徴
+
+・進行方向に対して直角に取り付けられているため、横に移動しながらの戦闘が可能
+	敵と向かい合ったとき、敵の射線に対して左右に動けるために有利なはず
+・3つの形態を状況に応じて使い分けることによって持つことによって、あらゆる状況に応じて行動することが可能(予定)
+	走行モードでは、アーマーを格納し、重心を安定させることによって走行性能を高める
+	戦闘モードでは、近距離から中距離の戦闘に対応するためアーマーを展開し、移動しながら攻撃を行う
+	砲撃モードでは、足を止めての狙撃戦のため、角度の補正や砲の操作を行う
+・それぞれの形態に応じて、それぞれ操作を割り当てることによって、それぞれ都合がいいはず
+	変形するためのキーを除くと、カーソルキー+4ボタンだけですべての操作を行うことができる
+
+
+がんばったところ
+
+・わりと命中精度がいいと思う
+・戦闘モードでは、コアの移動速度に応じて照準を補正することにより、
+	操縦者の偏差射撃を支援する機能を実現した(弾の慣性を考慮する必要がなくなる)
+・砲撃モードでは、砲撃する角度を指定して、その方角に向けて補正するという形式を採用したことにより、
+	連射しても自動的に目標を捕らえ続けられるようなエイミングを実現した
+・戦闘時に平べったくなることによって被弾率を下げる(予定)
+・7回転んでも8回起き上れる(たまに失敗する)
+・前後問わず走れ、進行方向をすばやく切り替えることができる
+
+
+だめなところ
+
+・紙装甲、上からの攻撃によわい、ダメージコントロールがなされていないため車輪が弱点
+・3つの形態についてそれぞれ操作が異なるため意味昆布
+・加速性能がよわい
+・旋回性能がひどい
+・タイヤを１輪でも無くすとろくに走れない
+・砲が向いている方向に動くことができない
+・よくこける
+・重心の位置が高い(低いほうがつよそう)
+・というより走行性能全般がすでに死んでいた
+・Luaがぐっちゃぐっちゃでコメントもろくにつけてない
+
+]]--
+
+	--キー番号を分かりやすくするやつ
+	UP=0
+	DOWN=1
+	LEFT=2
+	RIGHT=3
+	Z=4
+	X=5
+	C=6
+	A=7
+	S=8
+	D=9
+	V=10
+	B=11
+	F=12
+	G=13
+	Q=14
+	W=15
+	E=16
+
+	--いろいろと定義
+	MODE_RUN=0
+	MODE_FIGHT=1
+	MODE_FIRE=2
+	MODE_CHIP=3
+	ANGLESPD=15
+	AIM_YAW=0
+	AIM_PITCH=0
+	COOLTIME=0
+	VY=0
+	VP=0
+	ARM=0
+	bx=_X(CORE)
+	by=_Y(CORE)
+	bz=_Z(CORE)
+	HOWTO=0
+	SETEE=0
+	OPT=0
+
+--処理
+	--メインループ
+	function main()
+		if(_KEY(Q)==1)then
+			HOWTO=1
+		else
+			HOWTO=0
+		end
+
+		if(HOWTO==1)then
+			disp()
+		else
+			out(0,"FPS ",_FPS(),"  CHIPS ",_CHIPS(),"  WEIGHT ",_WEIGHT())
+			out(1,"[Q: 操作説明]")
+		end
+
+		if(MODE==MODE_RUN)then
+			run()
+			setAngle()
+		elseif(MODE==MODE_FIGHT)then
+			fight()
+		elseif(MODE==MODE_FIRE)then
+			fire()
+		elseif(MODE==MODE_CHIP)then
+			chip()
+			setAngle()
+		end
+
+		if(_KEY(A)==1)then
+			changeChipMode()
+		elseif(_KEY(D)==1)then
+			changeFightMode()
+		elseif(_KEY(F)==1)then
+			changeFireMode()
+		elseif(_KEY(V)==1)then
+			changeRunMode()
+		elseif(_KEYDOWN(B)==1)then
+			if(OPT==0)then
+				OPT=1
+			else
+				OPT=0
+			end
+		end
+	end
+
+	--いろいろ表示する関数
+	function disp()
+		out(0,"FPS ",_FPS(),"  CHIPS ",_CHIPS(),"  WEIGHT ",_WEIGHT())
+		if(MODE==MODE_RUN)then
+			out(1,"[走行モード]")
+			out(2,"[A: ちびっこモード] ","[S: ] ","[D: 戦闘モード] ","[F: 砲撃モード]")
+			out(3,"[Z: 伏せる] ","[X: 減速] ","[C: 自動方向切りかえ] ","[V: -----]","[B: 光学迷彩]")
+			out(4,"[←: 左に旋回] ","[↑: 前進] ","[↓: 後退] ","[→: 右に旋回]")
+		elseif(MODE==MODE_FIGHT)then
+			out(1,"[戦闘モード]")
+			out(2,"[A: ちびっこモード] ","[S: 砲塔変更] ","[D: -----] ","[F: 砲撃モード]")
+			out(3,"[Z: 左に旋回] ","[X: 射撃] ","[C: 右に旋回] ","[V: 走行モード]","[B: 光学迷彩]")
+			out(4,"[←: 左に加速] ","[↑: 走行モード] ","[↓: 減速] ","[→: 右に加速]")
+		elseif(MODE==MODE_FIRE)then
+			out(1,"[砲撃モード]")
+			out(2,"[A: ちびっこモード] ","[S: 砲塔変更] ","[D: 戦闘モード] ","[F: -----]")
+			out(3,"[Z: 高速旋回] ","[X: 射撃] ","[C: 低速旋回] ","[V: 走行モード]","[B: 光学迷彩]")
+			out(4,"[←: 左に旋回] ","[↑: 上に向ける] ","[↓: 下に向ける] ","[→: 右に旋回]")
+		elseif(MODE==MODE_CHIP)then
+			out(1,"[ちびっこモード]")
+			out(3,"[Z: 復帰]")
+		end
+	end
+
+	--走行形態のときの処理
+	function setRunMode()
+		_ZOOM(30)
+		_ANGLE_1=45
+		_ANGLE_2=45
+		_ANGLE_3=45
+		_ANGLE_4=45
+		_ANGLE_A=0
+		_ANGLE_B_1=-40
+		_ANGLE_B_2=-40
+		_ANGLE_C=-180
+		_ANGLE_D=180
+		_ANGLE_ARM_1=-180
+		_ANGLE_ARM_2=-180
+		_ANGLE_ARM_3=-180
+		_ANGLE_EE=180
+		BRAKE_1=15
+		BRAKE_2=15
+		BRAKE_3=15
+		BRAKE_4=15
+		if(1<=_VX(CORE))then
+			DIRECTION=-1
+		else
+			DIRECTION=1
+		end
+	end
+
+	function run()
+		if(_KEY(UP)==1 or _KEY(C)==1)then
+			POWER=2500*DIRECTION
+		elseif(_KEY(DOWN)==1)then
+			POWER=-2500*DIRECTION
+		end
+
+		if(_KEY(LEFT)==1)then
+			POWER_L=-5000
+			POWER_R=5000
+		elseif(_KEY(RIGHT)==1)then
+			POWER_L=5000
+			POWER_R=-5000
+		end
+
+		if(_KEY(Z)==1)then
+			_ZOOM(10)
+			_ANGLE_1=15
+			_ANGLE_2=15
+			_ANGLE_3=15
+			_ANGLE_4=15
+			_ANGLE_B_1=10
+			_ANGLE_B_2=10
+		else
+			_ZOOM(30)
+			local vx=math.abs(_VX(CORE))
+			_ANGLE_1=45+vx*2
+			_ANGLE_2=45+vx*2
+			_ANGLE_3=45+vx*2
+			_ANGLE_4=45+vx*2
+			_ANGLE_B_1=40+vx*2
+			_ANGLE_B_2=40+vx*2
+		end
+
+		if(_KEY(X)==1)then
+			BRAKE_1=80
+			BRAKE_2=80
+			BRAKE_3=80
+			BRAKE_4=80
+		else
+			BRAKE_1=15
+			BRAKE_2=15
+			BRAKE_3=15
+			BRAKE_4=15
+		end
+
+		if(_KEY(C)==1)then
+			if(0<=_VX(CORE))then
+				DIRECTION=-1
+			else
+				DIRECTION=1
+			end
+		end
+
+		POWER_1=-(POWER+POWER_L)
+		POWER_2=-(POWER+POWER_L)
+		POWER_3=POWER+POWER_R
+		POWER_4=POWER+POWER_R
+		TCS()
+		ABS()
+		optical()
+		drawLine(CORE,1)
+	end
+
+	--戦闘形態のときの処理
+	function setFightMode()
+		_ZOOM(30)
+		_ANGLE_1=40
+		_ANGLE_2=40
+		_ANGLE_3=10
+		_ANGLE_4=10
+		_ANGLE_A=0
+		_ANGLE_B_1=35
+		_ANGLE_B_2=35
+		_ANGLE_C=-165
+		_ANGLE_D=165
+		BRAKE_1=15
+		BRAKE_2=15
+		BRAKE_3=15
+		BRAKE_4=15
+	end
+
+	function fight()
+		if(_KEY(LEFT)==1)then
+			POWER=-2500
+		elseif(_KEY(RIGHT)==1)then
+			POWER=2500
+		end
+
+		if(_KEY(Z)==1)then
+			POWER_L=-5000
+			POWER_R=5000
+		elseif(_KEY(C)==1)then
+			POWER_L=5000
+			POWER_R=-5000
+		end
+
+		if(_KEY(DOWN)==1)then
+			BRAKE_1=80
+			BRAKE_2=80
+			BRAKE_3=80
+			BRAKE_4=80
+		else
+			BRAKE_1=15
+			BRAKE_2=15
+			BRAKE_3=15
+			BRAKE_4=15
+		end
+		
+		ANGLE_ARM=-0.15+_AX(CORE)*180/math.pi
+		POWER_1=-(POWER+POWER_L)
+		POWER_2=-(POWER+POWER_L)
+		POWER_3=POWER+POWER_R
+		POWER_4=POWER+POWER_R
+
+		FCS()
+		setAngle()
+
+		if(_KEY(X)==1)then
+			shot()
+		end
+		if(_KEY(S)==1)then
+			reload()
+		end
+
+		if(_KEY(UP)==1)then
+			changeRunMode()
+		end
+
+		TCS()
+		ABS()
+		optical()
+	end
+
+	--砲撃したいときの処理
+	function setFireMode()
+		_ZOOM(30)
+		_ANGLE_1=40
+		_ANGLE_2=40
+		_ANGLE_3=10
+		_ANGLE_4=10
+		_ANGLE_A=10
+		_ANGLE_B_1=35
+		_ANGLE_B_2=35
+		_ANGLE_C=-165
+		_ANGLE_D=165
+		BRAKE_1=15
+		BRAKE_2=15
+		BRAKE_3=15
+		BRAKE_4=15
+		AIM_YAW=_AY(CORE)*180/math.pi
+		AIM_PITCH=-0.15
+	end
+
+	function fire()
+		BRAKE_1=15
+		BRAKE_2=15
+		BRAKE_3=15
+		BRAKE_4=15
+
+		if(_KEY(Z)==1)then
+			SPD=2
+		elseif(_KEY(C)==1)then
+			SPD=0.05
+		else
+			SPD=0.2
+		end
+
+		if(_KEY(UP)==1)then
+			AIM_PITCH=AIM_PITCH-SPD
+		elseif(_KEY(DOWN)==1)then
+			AIM_PITCH=AIM_PITCH+SPD
+		end
+
+		if(45<AIM_PITCH)then
+			AIM_PITCH=45
+		end
+
+		if(_KEY(LEFT)==1)then
+			AIM_YAW=AIM_YAW-SPD
+		elseif(_KEY(RIGHT)==1)then
+			AIM_YAW=AIM_YAW+SPD
+		end
+
+		if(_MR()==1)then
+			local mvx=(_MX()-MX)/10
+			local mvy=(_MY()-MY)/10
+			AIM_YAW=AIM_YAW+mvx
+			AIM_PITCH=AIM_PITCH+mvy
+		end
+		MX=_MX()
+		MY=_MY()
+
+		ANGLE_ARM=AIM_PITCH+_AX(CORE)*180/math.pi
+		
+		if(180<=AIM_YAW)then
+			AIM_YAW=AIM_YAW-360
+		end
+		if(AIM_YAW<=-180)then
+			AIM_YAW=AIM_YAW+360
+		end
+
+		dy=-(AIM_YAW-_AY(CORE)*180/math.pi)
+
+		if(180<=dy)then
+			dy=dy-360
+		end
+		if(dy<=-180)then
+			dy=dy+360
+		end
+		
+		if(5<=COOLTIME)then
+			BRAKE_1=80
+			BRAKE_2=80
+			BRAKE_3=80
+			BRAKE_4=80
+		end
+
+		local vr=_WY(CORE)*180/math.pi
+
+		POWER_1=dy*1000+vr*100
+		POWER_2=dy*1000+vr*100
+		POWER_3=dy*1000+vr*100
+		POWER_4=dy*1000+vr*100
+
+		COOLTIME=COOLTIME-1
+
+		FCS()
+		setAngle()
+
+		if((_KEY(X)==1 or (_MR()==1 and _ML()==1)) and COOLTIME<0)then
+			if(shot()==1)then
+				COOLTIME=15
+			end
+		end
+		if(_KEY(S)==1)then
+			reload()
+		end
+
+		ABS()
+		optical()
+	end
+
+	--秘密兵器
+	function setChipMode()
+		_ZOOM(45)
+		_ANGLE_1=-180
+		_ANGLE_2=-180
+		_ANGLE_3=-180
+		_ANGLE_4=-180
+		_ANGLE_A=-180
+		_ANGLE_B_1=-180
+		_ANGLE_B_2=-180
+		_ANGLE_C=-180
+		_ANGLE_D=180
+		_ANGLE_ARM=-180
+		_ANGLE_ARM_1=-180
+		_ANGLE_ARM_2=-180
+		_ANGLE_ARM_3=-180
+		_ANGLE_EE=180
+		BRAKE_1=100
+		BRAKE_2=100
+		BRAKE_3=100
+		BRAKE_4=100
+		flag=0
+	end
+
+	function chip()
+		if(ANGLE_A==-180)then
+			flag=1
+		end
+		if(_KEY(Z)==1 and flag==1)then
+			flag=2
+			_ANGLE_A=0
+		end
+		if(ANGLE_A==0 and flag==2)then
+			flag=3
+			_ANGLE_1=0
+			_ANGLE_2=0
+		end
+		if((ANGLE_1==0 or ANGLE_2==0) and flag==3)then
+			changeRunMode()
+		end
+	end
+
+
+
+--いろんな関数
+	function changeRunMode()
+		MODE=MODE_RUN
+		setRunMode()
+	end
+
+	function changeFightMode()
+		MODE=MODE_FIGHT
+		setFightMode()
+	end
+
+	function changeFireMode()
+		MODE=MODE_FIRE
+		setFireMode()
+	end
+
+	function changeChipMode()
+		MODE=MODE_CHIP
+		setChipMode()
+	end
+
+	--滑らかに変形させるための関数
+	function setAngle()
+		ANGLE_1=changeAngle(ANGLE_1, _ANGLE_1)
+		ANGLE_2=changeAngle(ANGLE_2, _ANGLE_2)
+		ANGLE_3=changeAngle(ANGLE_3, _ANGLE_3)
+		ANGLE_4=changeAngle(ANGLE_4, _ANGLE_4)
+		ANGLE_A=changeAngle(ANGLE_A, _ANGLE_A)
+		ANGLE_B_1=changeAngle(ANGLE_B_1, _ANGLE_B_1)
+		ANGLE_B_2=changeAngle(ANGLE_B_2, _ANGLE_B_2)
+		ANGLE_C=changeAngle(ANGLE_C, _ANGLE_C)
+		ANGLE_D=changeAngle(ANGLE_D, _ANGLE_D)
+		ANGLE_ARM_1=changeAngle(ANGLE_ARM_1, _ANGLE_ARM_1)
+		ANGLE_ARM_2=changeAngle(ANGLE_ARM_2, _ANGLE_ARM_2)
+		ANGLE_ARM_3=changeAngle(ANGLE_ARM_3, _ANGLE_ARM_3)
+		ANGLE_EE=changeAngle(ANGLE_EE, _ANGLE_EE)
+	end
+
+	function changeAngle(prm1,prm2)
+		DA=prm2-prm1
+		ABSDA=math.abs(DA)
+		if(ANGLESPD<ABSDA)then
+			return prm1+ANGLESPD*(DA/ABSDA)
+		else
+			return prm2
+		end
+		return
+	end
+
+	--武装に関する関数
+	function shot()
+		if(ARM==0 and ANGLE_ARM==ANGLE_ARM_1 and _E(ARM_1)==400000)then
+			TRIG_1=400000
+			ARM=1
+			return 1
+		elseif(ARM==1 and ANGLE_ARM==ANGLE_ARM_2 and _E(ARM_2)==400000)then
+			TRIG_2=400000
+			ARM=2
+			return 1
+		elseif(ARM==2 and ANGLE_ARM==ANGLE_ARM_3 and _E(ARM_3)==400000)then
+			TRIG_3=400000
+			ARM=0
+			return 1
+		end
+		return 0
+	end
+
+	function reload()
+		if(0<=_T(EE))then
+			if(ANGLE_ARM==ANGLE_ARM_3)then
+				SETEE=0
+				ARM=0
+			elseif(ANGLE_ARM==ANGLE_ARM_1 or ANGLE_ARM==ANGLE_ARM_2)then
+				SETEE=1
+				ARM=2
+			end
+		else
+			if(ANGLE_ARM==ANGLE_ARM_1)then
+				ARM=1
+			elseif(ANGLE_ARM==ANGLE_ARM_2)then
+				ARM=2
+			elseif(ANGLE_ARM==ANGLE_ARM_3)then
+				ARM=0
+			end
+		end
+	end
+
+	function FCS()
+		if(ARM==0)then
+			if(0<=_T(ARM_1))then
+				_ANGLE_ARM_1=ANGLE_ARM
+				_ANGLE_ARM_2=-180
+				_ANGLE_ARM_3=-180
+				drawLine(ARM_1,1000)
+				_ANGLE_EE=180
+			else
+				ARM=1
+			end
+		elseif(ARM==1)then
+			if(0<=_T(ARM_2))then
+				_ANGLE_ARM_1=-180
+				_ANGLE_ARM_2=ANGLE_ARM
+				_ANGLE_ARM_3=-180
+				drawLine(ARM_2,1000)
+				_ANGLE_EE=180
+			else
+				ARM=2
+			end
+		elseif(ARM==2)then
+			if(0<=_T(ARM_3) and (SETEE==1 or _T(EE)<0))then
+				_ANGLE_ARM_1=-180
+				_ANGLE_ARM_2=-180
+				_ANGLE_ARM_3=ANGLE_ARM
+				drawLine(ARM_3,1000)
+				_ANGLE_EE=0
+			else
+				ARM=0
+			end
+		end
+	end
+
+	--照準を描画する関数
+	function drawLine(num,length)
+		--弾の速度は20m/fらしい
+		--コアの速度*length/20を足せばおｋのはず
+		local x=_X(CORE)
+		local y=_Y(CORE)
+		local z=_Z(CORE)
+
+		if(num==CORE)then
+			_SETCOLOR(tonumber("FF00FF", 16))
+		elseif(_E(num)==400000)then
+			_SETCOLOR(tonumber("FF0000", 16))
+		else
+			_SETCOLOR(tonumber("FFFF00", 16))
+		end
+
+ 		_MOVE3D(_X(num),_Y(num),_Z(num))
+ 		_LINE3D(_X(num)+_ZX(num)*-length+(x-bx)*length/20,_Y(num)+_ZY(num)*-length+(y-by)*length/20,_Z(num)+_ZZ(num)*-length+(z-bz)*length/20)
+		bx=x
+		by=y
+		bz=z
+	end
+
+	--光学迷彩
+	function optical()
+		if(OPT==1)then
+			a=_CCD(63, 0)
+			COL_L= ( math.mod(math.floor(a/1024), 32) * 65536 + math.mod(math.floor(a/32), 32) * 256 + math.mod(a, 32) ) * 8
+
+			a=_CCD(63, 31)
+			COL_C= ( math.mod(math.floor(a/1024), 32) * 65536 + math.mod(math.floor(a/32), 32) * 256 + math.mod(a, 32) ) * 8
+
+			a=_CCD(63,63)
+			COL_R= ( math.mod(math.floor(a/1024), 32) * 65536 + math.mod(math.floor(a/32), 32) * 256 + math.mod(a, 32) ) * 8
+		end
+	end
+
+	--スリップを防ぐための関数
+	function ABS()
+		vx=_VX(TIRE_1-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_1)/vx
+		if(-3.3<ratio and ratio<3.3)then
+			BRAKE_1=15
+		end
+		vx=_VX(TIRE_2-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_2)/vx
+		if(-3.3<ratio and ratio<3.3)then
+			BRAKE_2=15
+		end
+		vx=_VX(TIRE_3-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_3)/vx
+		if(-3.3<ratio and ratio<3.3)then
+			BRAKE_3=15
+		end
+		vx=_VX(TIRE_4-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_4)/vx
+		if(-3.3<ratio and ratio<3.3)then
+			BRAKE_4=15
+		end
+	end
+
+	function TCS()
+		vx=_VX(TIRE_1-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_1)/vx
+		if(-3.4<ratio and ratio<3.4)then
+		else
+			POWER_1=POWER_1*0.75
+			BRAKE_1=BRAKE_1+1
+		end
+		vx=_VX(TIRE_2-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_2)/vx
+		if(-3.4<ratio and ratio<3.4)then
+		else
+			POWER_2=POWER_2*0.75
+			BRAKE_2=BRAKE_2+1
+		end
+		vx=_VX(TIRE_3-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_3)/vx
+		if(-3.4<ratio and ratio<3.4)then
+		else
+			POWER_3=POWER_3*0.75
+			BRAKE_3=BRAKE_3+1
+		end
+		vx=_VX(TIRE_4-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_4)/vx
+		if(-3.4<ratio and ratio<3.4)then
+		else
+			POWER_4=POWER_4*0.75
+			BRAKE_4=BRAKE_4+1
+		end
+	end
+
+
+
+}

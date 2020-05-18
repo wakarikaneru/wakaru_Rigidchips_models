@@ -1,0 +1,266 @@
+// [RCD] 
+Val
+{
+	H(default=0, min=-30, max=30)
+	POW(default=0, max=720000)
+	R(default=90, max=180)
+	TRIG(default=0, max=1600000)
+	V(default=0, min=-30, max=30)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Jet(name=CORE, power=POW, effect=1) {
+			W:Arm(name=ARM_1, angle=-90, option=1600000, power=TRIG, damper=1, spring=1) {
+				E:Chip(angle=-H, damper=1, spring=1) { }
+				E:Trim(angle=90) { }
+			}
+			N:Arm(name=ARM_2, angle=-90, option=1600000, power=TRIG, damper=1, spring=1) {
+				S:Chip(angle=V, damper=1, spring=1) { }
+				S:Trim(angle=90) { }
+			}
+			S:Arm(name=ARM_3, angle=-90, option=1600000, power=TRIG, damper=1, spring=1) {
+				N:Chip(angle=-V, damper=1, spring=1) { }
+				N:Trim(angle=90) { }
+			}
+			E:Arm(name=ARM_4, angle=-90, option=1600000, power=TRIG, damper=1, spring=1) {
+				W:Chip(angle=H, damper=1, spring=1) { }
+				W:Trim(angle=90) { }
+			}
+		}
+	}
+}
+Lua
+{
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+	
+function init()
+	initflag=true;
+	eye=Wakaru_Eye.new(CORE, 1200);
+	mono=Wakaru_Mono.new();
+	
+	dummy=_SPLIT(CORE);
+	
+	VECY=Wector.new(0, 1, 0);
+	
+	mode=0;
+	
+	target=0;
+	targetPos=Wector.new(0, 0, 0);
+	
+	t=0;
+	
+	aimVec=targetPos-Wector:getPosVec(CORE);
+	aimVecV=aimVec;
+	aimVecH=aimVec;
+	
+	m="misairu";
+end
+
+function main()
+	if not initflag then init() end
+	eye:tick();
+	
+	math.randomseed((_WX(0)+_WY(0)+_WZ(0)+_TICKS())*123456789);
+	
+	bodySpdW=getSpdVec(CORE);
+	bodySpdL=bodySpdW:getLVec(CORE);
+	
+	armPos=(Wector:getPosVec(ARM_1)+Wector:getPosVec(ARM_2)+Wector:getPosVec(ARM_3)+Wector:getPosVec(ARM_4))/4;
+	armSpdW=(getSpdVec2(ARM_1)+getSpdVec2(ARM_2)+getSpdVec2(ARM_3)+getSpdVec2(ARM_4))/4;
+
+	if mode==0 then
+	
+		m="select target";
+		if _PLAYERS()~=0 then
+			if _KEYDOWN(KEY_DOWN)==1 then target=target+1; end
+			if _KEYDOWN(KEY_UP)==1 then target=target-1; end
+			if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+			out(1, "TARGET (È) ".._PLAYERNAME(target).." (É) ");
+		else
+			out(1, "OffLine");
+		end
+		if _KEYDOWN(KEY_Z)==1 then mode=1 end
+		
+	elseif mode==1 then
+	
+		m="fire!";
+		POW=720000;
+		
+		s=limit(1/bodySpdL.y, 0, 0.1);
+		
+		aimVec=VECY:getLVec(CORE):getNormal();
+		
+		aimVecV=Wector.new(0, aimVec.y, aimVec.z):getNormal();
+		aimVecH=Wector.new(aimVec.x, aimVec.y, 0):getNormal();
+		
+		rotV=math.deg(math.acos(aimVecV^VECY));
+		rotH=math.deg(math.acos(aimVecH^VECY));
+
+		if aimVecV.z<0 then
+			rotV=-rotV;
+		end
+		if aimVecH.x<0 then
+			rotH=-rotH;
+		end
+		
+		V=limit(step2(V, PID("V", rotV, 0, 10, 10, 10, -10, 10, 1.0)*s, 45), -45, 45);
+		H=limit(step2(H, PID("H", rotH, 0, 10, 10, 10, -10, 10, 1.0)*s, 45), -45, 45);
+		
+		t=t+1;
+		if 10*_BASE()<t then
+			mode=2;
+			dis=(eye:getPos(_PLAYERID(target))-armPos):getLength();
+		end
+		
+	elseif mode==2 then
+	
+		POW=720000;
+		
+		s=limit(1/bodySpdL.y, 0, 0.1);
+		
+		readTime=eye:getReadTime2(_PLAYERID(target), armPos, armSpdW);
+		targetPos=eye:getFuturePos2(_PLAYERID(target), armPos, armSpdW)-armSpdW;
+
+		_SETCOLOR(tonumber("FF0000", 16));
+		_MOVE3D(Wector:getPosVec(CORE).x, Wector:getPosVec(CORE).y, Wector:getPosVec(CORE).z);
+		_LINE3D(targetPos.x, targetPos.y, targetPos.z);
+		drawPoint(targetPos);
+		
+		mono:tick(targetPos);
+		aimVec=(mono:getPos()-armPos):getLVec(CORE):getNormal();
+		
+		aimVecV=Wector.new(0, aimVec.y, aimVec.z):getNormal();
+		aimVecH=Wector.new(aimVec.x, aimVec.y, 0):getNormal();
+		
+		rotV=math.deg(math.acos(aimVecV^VECY));
+		rotH=math.deg(math.acos(aimVecH^VECY));
+
+		if aimVecV.z<0 then
+			rotV=-rotV;
+		end
+		if aimVecH.x<0 then
+			rotH=-rotH;
+		end
+		
+		V=limit(step2(V, PID("V", rotV, 0, 10, 10, 10, -10, 10, 1.0)*s, 45), -45, 45);
+		H=limit(step2(H, PID("H", rotH, 0, 10, 10, 10, -10, 10, 1.0)*s, 45), -45, 45);
+		
+		m="terminal guidance";
+		
+		--‹N”š§Œä
+		TRIG=0;
+		
+		targetPos=eye:getFuturePos2(_PLAYERID(target), armPos, armSpdW);
+		aimVec=(targetPos-armPos):getLVec(CORE):getNormal();
+		--dis=(eye:getPos(_PLAYERID(target))-armPos):getLength();
+		dis=(targetPos-armPos):getLength();
+		radius=math.tan(math.acos(aimVec^VECY))*dis;
+		if readTime<=5 and radius<0.3 then
+			TRIG=1600000;
+			mode=3;
+			m="hit ";
+		end
+				
+	elseif mode==3 then
+		POW=0;
+		V=limit(step2(V, 0, 45), -45, 45);
+		H=limit(step2(H, 0, 45), -45, 45);
+		TRIG=0;
+	end
+	
+	out(0, m);
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+	
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function getSpdVec2(chipName)
+	return (Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+end
+
+function drawPoint(self)
+		_MOVE3D(self.x-1, self.y, self.z);
+		_LINE3D(self.x+1, self.y, self.z);
+		_MOVE3D(self.x, self.y-1, self.z);
+		_LINE3D(self.x, self.y+1, self.z);
+		_MOVE3D(self.x, self.y, self.z-1);
+		_LINE3D(self.x, self.y, self.z+1);
+end
+}

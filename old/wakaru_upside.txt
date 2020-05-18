@@ -1,0 +1,354 @@
+// [RCD] 
+Val
+{
+	MODE(default=0, max=1)
+	PR(default=0, min=-5000000, max=5000000)
+	PX1(default=0, min=-5000000, max=5000000)
+	PX2(default=0, min=-5000000, max=5000000)
+	PY1(default=0, min=-5000000, max=5000000)
+	PY2(default=0, min=-5000000, max=5000000)
+	PY3(default=0, min=-5000000, max=5000000)
+	PY4(default=0, min=-5000000, max=5000000)
+	PZ1(default=0, min=-5000000, max=5000000)
+	PZ2(default=0, min=-5000000, max=5000000)
+	R(default=50, min=-100000)
+	TDIS(default=0, min=-2000000, max=2000000)
+	TRIG1(default=9998, max=10000, step=100000)
+	TRIG2(default=9996, max=10000, step=100000)
+	TRIG3(default=9994, max=10000, step=100000)
+	TX(default=0, min=-2000000, max=2000000)
+	TY(default=0, min=-2000000, max=2000000)
+	TZ(default=0, min=-2000000, max=2000000)
+	Y(default=50, min=-100000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Jet(power=PY1, name=JETY1) {
+			N:Arm(power=trig1, angle=90, option=10000, name=ARM_E2) { }
+			E:Arm(power=trig3, angle=90, option=10000, name=ARM_D2) { }
+			W:Arm(angle=90, power=trig2, option=10000, name=ARM_F2) { }
+		}
+		E:Jet(power=PY2, name=JETY2) {
+			N:Arm(power=trig1, angle=90, option=10000, name=ARM_A1) { }
+			S:Arm(power=trig3, angle=90, option=10000, name=ARM_B1) { }
+			E:Arm(angle=90, power=trig2, option=10000, name=ARM_C1) { }
+		}
+		S:Jet(power=PY3, name=JETY3) {
+			S:Arm(power=trig1, angle=90, option=10000, name=ARM_E2) { }
+			E:Arm(power=trig3, angle=90, option=10000, name=ARM_D2) { }
+			W:Arm(angle=90, power=trig2, option=10000, name=ARM_F2) { }
+		}
+		W:Jet(power=PY4, name=JETY4) {
+			N:Arm(power=trig1, angle=90, option=10000, name=ARM_E2) { }
+			S:Arm(power=trig3, angle=90, option=10000, name=ARM_D2) { }
+			W:Arm(angle=90, power=trig2, option=10000, name=ARM_F2) { }
+		}
+		N:TrimF(angle=90) {
+			N:Jet(power=-PX1, name=JETX1, angle=180) { }
+		}
+		E:TrimF(angle=90) {
+			E:Jet(power=-PZ1, name=JETZ1, angle=180) { }
+		}
+		W:TrimF(angle=90) {
+			W:Jet(power=-PZ2, name=JETZ2, angle=180) { }
+		}
+		S:TrimF(angle=90) {
+			S:Jet(power=-PX2, name=JETX2, angle=180) { }
+		}
+	}
+}
+Lua
+{
+	--ƒL[”Ô†‚ð•ª‚©‚è‚â‚·‚­‚·‚é‚â‚Â
+	UP=0
+	DOWN=1
+	LEFT=2
+	RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+
+	AUTO=0
+
+	X=0
+	Z=0
+	P_SEL=0
+	P_LIST={}
+	P_DIS={}
+	P_ARM={}
+	TX=0
+	TY=0
+	TZ=0
+	RY=0
+	HX=TX
+	HY=TY
+	HZ=TZ
+	TDIS=0
+	dir=1
+	mvy=0
+
+function OnInit()
+	R=_AY(0)*180/math.pi
+	Y=_Y(0)
+end
+function OnReset()
+	OnInit()
+end
+
+	function players()
+		for i=0,_PLAYERS()-1 do
+			P_LIST[i]=_PLAYERNAME(i)
+		end
+	end
+
+	function disp()
+		out(0,"FPS ",_FPS(),"  CHIPS ",_CHIPS(),"  WEIGHT ",_WEIGHT())
+
+		out(1,"[SELECT TARGET]")
+
+		for i=0,_PLAYERS()-1 do
+			if(P_SEL==i)then
+				out(i+2,">",P_LIST[i])
+			else
+				out(i+2,"-",P_LIST[i])
+			end
+		end
+	end
+
+
+function main()
+		players()
+		disp()
+		purge()
+
+		if(_KEYDOWN(KEY_G)==1)then
+			P_SEL=P_SEL-1
+		elseif(_KEYDOWN(KEY_B)==1)then
+			P_SEL=P_SEL+1
+		end
+
+		if(_KEYDOWN(KEY_A)==1)then
+			if(AUTO==0)then
+				AUTO=1
+			else
+				AUTO=0
+			end
+		end
+
+		if(P_SEL<0)then
+			P_SEL=P_SEL+_PLAYERS()
+		elseif(_PLAYERS()<=P_SEL)then
+			P_SEL=P_SEL-_PLAYERS()
+		end
+
+	if(AUTO==1)then
+		fight()
+	end
+
+	if(_KEY(KEY_X)==1)then
+		TRIG1=TRIG1+1
+		TRIG2=TRIG2+1
+		TRIG3=TRIG3+1
+	end
+
+	j1=_Y(JETY1)
+	j2=_Y(JETY2)
+	j3=_Y(JETY3)
+	j4=_Y(JETY4)
+
+	if(_KEY(KEY_F)==1)then
+		Y=Y+1
+	elseif(_KEY(KEY_V)==1)then
+		Y=Y-1
+	end
+
+	if(0<_H(0) and _H(0)<1.0)then
+		Y=_Y(0)+(1.1-_H(0))
+	end
+
+	if(_KEY(KEY_Z)==1)then
+		R=R-5
+	elseif(_KEY(KEY_C)==1)then
+		R=R+5
+	end
+
+	j=Y-j1
+	k=_Y(0)-j1
+	PY1=j*100000+k*100000-_VY(JETY1)*25000
+	j=Y-j2
+	k=_Y(0)-j2
+	PY2=j*100000+k*100000-_VY(JETY2)*25000
+	j=Y-j3
+	k=_Y(0)-j3
+	PY3=j*100000+k*100000-_VY(JETY3)*25000
+	j=Y-j4
+	k=_Y(0)-j4
+	PY4=j*100000+k*100000-_VY(JETY4)*25000
+
+	if(180<R)then
+		R=R-360
+	elseif(R<-180)then
+		R=R+360
+	end
+
+	r=_AY(CORE)*180/math.pi
+	j=R-r
+	if(180<j)then
+		j=j-360
+	elseif(j<-180)then
+		j=j+360
+	end
+	vr=_WY(CORE)*180/math.pi
+	PR=j*4000-vr*200
+
+	PX1=PR
+	PX2=PR
+	PZ1=PR
+	PZ2=PR
+
+	if(_KEY(UP)==1)then
+		PZ1=PR-50000
+		PZ2=PR+50000
+	end
+	if(_KEY(DOWN)==1)then
+		PZ1=PR+50000
+		PZ2=PR-50000
+	end
+	if(_KEY(LEFT)==1)then
+		PX1=PR-50000
+		PX2=PR+50000
+	end
+	if(_KEY(RIGHT)==1)then
+		PX1=PR+50000
+		PX2=PR-50000
+	end
+
+	if(AUTO==1)then
+		PZ1=PR-50000
+		PZ2=PR+50000
+	end
+
+	vx=_VX(CORE)
+	vz=_VZ(CORE)
+	PX1=PX1+_VY(JETX1)*1000
+	PX2=PX2+_VY(JETX2)*1000
+	PZ1=PZ1+_VY(JETZ1)*1000
+	PZ2=PZ2+_VY(JETZ2)*1000
+end
+
+function fight()
+	ay=_VY(0)-mvy
+	if(5<math.abs(ay))then
+		TRIG1=9998
+		TRIG2=9996
+		TRIG3=9994
+	else
+		TRIG1=TRIG1+1
+		TRIG2=TRIG2+1
+		TRIG3=TRIG3+1
+	end
+	mvy=_VY(0)
+
+	TX=0
+	TY=0
+	TZ=0
+
+	for j=1,1000 do
+		TX=TX+_PLAYERX(P_SEL)
+		TY=TY+_PLAYERY(P_SEL)
+		TZ=TZ+_PLAYERZ(P_SEL)
+	end
+
+	TX=TX/1000
+	TY=TY/1000
+	TZ=TZ/1000
+
+	tvx=TX-HX
+	tvy=TY-HY
+	tvz=TZ-HZ
+		
+	mvx=_X(0)-X
+	mvz=_Z(0)-Z
+	X=_X(0)
+	Z=_Z(0)
+
+	disx=TX-_X(0)
+	disz=TZ-_Z(0)
+
+	HX=TX
+	HY=TY
+	HZ=TZ
+
+	TDIS=math.sqrt(disx*disx+disz*disz)
+
+	TX=TX+(tvx*2-mvx)*TDIS/20*2
+	TZ=TZ+(tvz*2-mvz)*TDIS/20*2
+
+	R=getYaw()
+
+	if(math.random()*30<1)then
+		RY=math.random()*2-1
+	end
+
+	TY=TY+200
+	
+	if(math.abs(Y-TY)<4)then
+		Y=Y
+	else
+		if(Y<TY)then
+			Y=Y+2
+		elseif(TY<Y)then
+			Y=Y-2
+		end
+	end
+
+	if(0<_H(0) and _H(0)<1.0)then
+		Y=_Y(0)+(1.1-_H(0))
+	end
+
+	if(math.random()*30*15<1)then
+		dir=dir*-1
+	end
+end
+
+function getYaw()
+	local subX=TX-_X(0)
+	local subZ=TZ-_Z(0)
+	local rad=math.atan2(subX,subZ)
+	return rad*180/math.pi+180
+end
+function purge()
+	if(_T(ARM_A1)==-1 or _T(ARM_A2)==-1 or _T(ARM_D1)==-1 or _T(ARM_D2)==-1)then
+		T = _BYE(ARM_A1)
+		T = _BYE(ARM_A2)
+		T = _BYE(ARM_D1)
+		T = _BYE(ARM_D2)
+	end
+	if(_T(ARM_B1)==-1 or _T(ARM_B2)==-1 or _T(ARM_E1)==-1 or _T(ARM_E2)==-1)then
+		T = _BYE(ARM_B1)
+		T = _BYE(ARM_B2)
+		T = _BYE(ARM_E1)
+		T = _BYE(ARM_E2)
+	end
+	if(_T(ARM_C1)==-1 or _T(ARM_C2)==-1 or _T(ARM_F1)==-1 or _T(ARM_F2)==-1)then
+		T = _BYE(ARM_C1)
+		T = _BYE(ARM_C2)
+		T = _BYE(ARM_F1)
+		T = _BYE(ARM_F2)
+	end
+end
+}

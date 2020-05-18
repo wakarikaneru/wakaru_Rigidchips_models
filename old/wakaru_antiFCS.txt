@@ -1,0 +1,32 @@
+// [RCD] 
+Val
+{
+	TRIM(default=0, min=-2147483648, max=2147483647)
+	TRIM2(default=90, min=-2147483648, max=2147483647)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		S:Chip(angle=-90) {
+			N:Trim(angle=TRIM) {
+				N:Weight(angle=80, option=8) { }
+				N:Weight(angle=-80, option=8) { }
+			}
+			N:Trim(angle=TRIM2) {
+				N:Weight(angle=-80, option=8) { }
+				N:Weight(angle=80, option=8) { }
+			}
+		}
+		S:Chip() { }
+	}
+}
+Lua
+{
+function main()
+	TRIM=TRIM+20;
+	TRIM2=TRIM+90;
+end
+}

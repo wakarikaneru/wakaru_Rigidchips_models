@@ -1,0 +1,160 @@
+// A,Z　スロットル
+// ←→ エルロン
+// ↑↓ エレベータ
+// ラダーは自動でやってくれるテスト
+Val
+{
+	AILERON(default=0, min=-20, max=20, step=1)
+	BRAKE(default=100, max=100, step=1)
+	ELEVATOR(default=180, min=170, max=190, step=1)
+	GEAR(default=180, min=85, max=180, step=10)
+	POWER(default=0, max=300000)
+	REAR(default=0, max=25, step=1)
+	ROT(default=0, min=-20, max=20, step=1)
+	RUDDER(default=0, min=-45, max=45, step=1)
+	TRIG(default=49999, max=50000, step=1)
+}
+Key
+{
+	0:elevator(step=-1)
+	1:elevator(step=1)
+	2:AILERON(step=-1)
+	3:AILERON(step=1)
+	4:POWER(step=-5000)
+	5:RUDDER(step=-1)
+	6:RUDDER(step=1)
+	7:POWER(step=5000)
+	8:TRIG(step=1)
+}
+Body
+{
+	Core() {
+		S:TrimF(angle=90, option=1) { }
+		S:TrimF(angle=90, option=1) {
+			W:Chip() {
+				N:Trim(angle=90) {
+					S:Trim() { }
+				}
+				N:Trim() {
+					N:Trim() {
+						W:Chip(angle=85) {
+							W:Chip(angle=15) {
+								W:Chip() {
+									W:Chip() {
+										W:Chip() {
+											S:Chip(angle=aileron) { }
+											W:Chip() {
+												S:Chip(angle=aileron) { }
+												W:Chip() {
+													S:Chip(angle=aileron) { }
+												}
+											}
+										}
+										S:Chip(angle=0) {
+											S:Chip() { }
+										}
+									}
+									S:Chip() {
+										S:Chip(angle=0) { }
+									}
+								}
+								S:Chip() {
+									S:Chip(angle=0) { }
+									W:Chip(angle=-90) {
+										N:Arm(angle=-0.5, power=TRIG, option=50000, name=ARMR) { }
+									}
+								}
+							}
+							S:Chip() {
+								S:Chip(angle=0) { }
+							}
+							W:Wheel(angle=-75, brake=brake, option=0) { }
+						}
+						W:Chip(angle=-85) {
+							W:Chip(angle=-15) {
+								W:Chip() {
+									W:Chip() {
+										W:Chip() {
+											S:Chip(angle=aileron) { }
+											W:Chip() {
+												S:Chip(angle=aileron) { }
+												W:Chip() {
+													S:Chip(angle=aileron) { }
+												}
+											}
+										}
+										S:Chip(angle=0) {
+											S:Chip() { }
+										}
+									}
+									S:Chip() {
+										S:Chip(angle=0) { }
+									}
+								}
+								S:Chip() {
+									S:Chip(angle=0) { }
+									W:Chip(angle=90) {
+										N:Arm(angle=0.5, power=TRIG, option=50000, name=ARML) { }
+									}
+								}
+							}
+							S:Chip() {
+								S:Chip(angle=0) { }
+							}
+							W:Wheel(angle=75, brake=brake, option=0) { }
+						}
+						N:Weight() {
+							N:Frame(angle=30, option=1) {
+								N:RLW(angle=-120, power=POWER) {
+									S:Trim(angle=68) { }
+									N:Trim(angle=68) { }
+								}
+							}
+							N:Frame(angle=-30, option=1) {
+								N:RLW(angle=120, power=POWER) {
+									S:Trim(angle=-68) { }
+									N:Trim(angle=-68) { }
+								}
+							}
+						}
+					}
+					N:Trim(angle=90) {
+						N:Weight(option=2) { }
+					}
+				}
+				S:Trim(angle=0) {
+					S:Trim() {
+						S:RudderF(angle=rear, option=0) {
+							S:Wheel(angle=ROT, brake=brake) { }
+						}
+						S:Trim() {
+							S:Chip(angle=RUDDER) { }
+							S:Trim() {
+								E:Frame(angle=90) {
+									N:Chip(angle=elevator) {
+										E:Chip() { }
+									}
+								}
+								E:Frame(angle=-90) {
+									N:Chip(angle=-elevator) {
+										E:Chip() { }
+									}
+								}
+							}
+							E:Trim(name=TAIL) {
+								S:Chip(angle=RUDDER) { }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua
+{
+
+function main()
+	RUDDER=-_VY(TAIL)*5
+end
+}

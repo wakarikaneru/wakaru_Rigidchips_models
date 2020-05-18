@@ -1,0 +1,62 @@
+// [RCD] 
+Val
+{
+	JET_X(default=0, min=-1000000, max=1000000)
+	JET_Y(default=0, min=-1000000, max=1000000)
+	JET_Z(default=0, min=-1000000, max=1000000)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		E:TrimF(angle=-90, option=1) {
+			W:Jet(power=-JET_Z) { }
+		}
+		N:TrimF(angle=90, option=1) {
+			S:Jet(power=-JET_X) { }
+		}
+		S:TrimF(angle=-90, option=1) {
+			N:Jet(power=-JET_X) { }
+		}
+		W:TrimF(angle=90, option=1) {
+			E:Jet(power=-JET_Z) { }
+		}
+		E:Jet(angle=180, power=-JET_Y) { }
+		W:Jet(angle=180, power=-JET_Y) { }
+	}
+}
+
+lua{
+	KEY_UP=0
+	KEY_DOWN=1
+	KEY_LEFT=2
+	KEY_RIGHT=3
+
+	X=_X(CORE)
+	Y=_Y(CORE)
+	Z=_Z(CORE)
+function main()
+	if _KEY(KEY_UP)==1 then Z=Z+1 end
+	if _KEY(KEY_DOWN)==1 then Z=Z-1 end
+	if _KEY(KEY_LEFT)==1 then X=X-1 end
+	if _KEY(KEY_RIGHT)==1 then X=X+1 end
+
+	local XPOW=(X-_X(CORE))*25000
+	local YPOW=(Y-_Y(CORE))*25000
+	local ZPOW=(Z-_Z(CORE))*25000
+
+	local JX,JY,JZ=getlvec(XPOW,YPOW,ZPOW,CORE)
+	JET_X=JX-_VX(CORE)*25000
+	JET_Y=JY-_VY(CORE)*25000
+	JET_Z=JZ-_VZ(CORE)*25000
+end
+-- ワールドベクトル→ローカルベクトル変換 -------------------------------------
+function getlvec(wx,wy,wz,cn)
+	local lx=_XX(cn)*wx+_XY(cn)*wy+_XZ(cn)*wz
+	local ly=_YX(cn)*wx+_YY(cn)*wy+_YZ(cn)*wz
+	local lz=_ZX(cn)*wx+_ZY(cn)*wy+_ZZ(cn)*wz
+	return lx,ly,lz
+end
+}

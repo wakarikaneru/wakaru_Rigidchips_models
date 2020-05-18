@@ -1,0 +1,148 @@
+// [RCD] 
+Val
+{
+	JET_X1(default=0, min=-1000000, max=1000000)
+	JET_X2(default=0, min=-1000000, max=1000000)
+	JET_Y1(default=0, min=-1000000, max=1000000)
+	JET_Y2(default=0, min=-1000000, max=1000000)
+	JET_Z1(default=0, min=-1000000, max=1000000)
+	JET_Z2(default=0, min=-1000000, max=1000000)
+	TRIG(default=0, min=0, max=5000000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=TARGET) { }
+	Core(name=CORE) {
+		S:Arm(power=TRIG, option=50000) { }
+		S:Jet(angle=180, power=-JET_Y1) { }
+		N:Frame(angle=150) {
+			N:Jet(angle=120, power=JET_Z1) { }
+		}
+		N:TrimF(angle=-90) {
+			S:Jet(power=JET_X1) { }
+		}
+		N:Frame(name=F1) {
+			N:Arm(power=TRIG, option=50000) { }
+			S:TrimF(angle=90) {
+				N:Jet(power=JET_X2) { }
+			}
+			N:Frame(angle=150) {
+				N:Jet(angle=120, power=JET_Z2) { }
+			}
+			S:Jet(angle=180, power=-JET_Y2) { }
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0
+	KEY_DOWN=1
+	KEY_LEFT=2
+	KEY_RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+
+	X=_X(CORE)
+	Y=_Y(CORE)
+	Z=_Z(CORE)
+	tx=0
+	ty=0
+	tz=0
+	bx1=X
+	by1=Y
+	bz1=Z
+	bx2=X
+	by2=Y
+	bz2=Z-0.6
+
+function main()
+	if(_KEY(KEY_X)==1)then
+		TRIG=50000
+	else
+		TRIG=0
+	end
+	if _KEY(KEY_E)==1 then Z=Z-1 end
+	if _KEY(KEY_D)==1 then Z=Z+1 end
+	if _KEY(KEY_S)==1 then X=X+1 end
+	if _KEY(KEY_F)==1 then X=X-1 end
+	if _KEY(KEY_G)==1 then Y=Y+1 end
+	if _KEY(KEY_V)==1 then Y=Y-1 end
+
+	tx=_X(TARGET)
+	ty=_Y(TARGET)
+	tz=_Z(TARGET)
+
+	vecx=(tx-_X(CORE))/getDis(CORE,tx,ty,tz)
+	vecy=(ty-_Y(CORE))/getDis(CORE,tx,ty,tz)
+	vecz=(tz-_Z(CORE))/getDis(CORE,tx,ty,tz)
+
+	vx1=_X(CORE)-bx1
+	vy1=_Y(CORE)-by1
+	vz1=_Z(CORE)-bz1
+	vx2=_X(F1)-bx2
+	vy2=_Y(F1)-by2
+	vz2=_Z(F1)-bz2
+	bx1=_X(CORE)
+	by1=_Y(CORE)
+	bz1=_Z(CORE)
+	bx2=_X(F1)
+	by2=_Y(F1)
+	bz2=_Z(F1)
+
+	local XPOW=(X-_X(CORE))*250000-vx1*500000
+	local YPOW=(Y-_Y(CORE))*250000-vy1*500000
+	local ZPOW=(Z-_Z(CORE))*250000-vz1*500000
+
+	local JX,JY,JZ=getlvec(XPOW,YPOW,ZPOW,CORE)
+	JET_X1=JX
+	JET_Y1=JY
+	JET_Z1=JZ
+
+	local XPOW=((X+vecx*0.6)-_X(F1))*250000-vx2*500000
+	local YPOW=((Y+vecy*0.6)-_Y(F1))*250000-vy2*500000
+	local ZPOW=((Z+vecz*0.6)-_Z(F1))*250000-vz2*500000
+
+	local JX,JY,JZ=getlvec(XPOW,YPOW,ZPOW,F1)
+	JET_X2=JX
+	JET_Y2=JY
+	JET_Z2=JZ
+end
+
+function getDis(ChipName,x,y,z)
+	local xdis=_X(ChipName)-x
+	local ydis=_Y(ChipName)-y
+	local zdis=_Z(ChipName)-z
+	return math.sqrt(xdis^2+ydis^2+zdis^2)
+end
+
+-- ローカルベクトル→ワールドベクトル変換 -------------------------------------
+function getwvec(lx,ly,lz,cn)
+	local wx=_XX(cn)*lx+_YX(cn)*ly+_ZX(cn)*lz
+	local wy=_XY(cn)*lx+_YY(cn)*ly+_ZY(cn)*lz
+	local wz=_XZ(cn)*lx+_YZ(cn)*ly+_ZZ(cn)*lz
+	return wx,wy,wz
+end
+
+-- ワールドベクトル→ローカルベクトル変換 -------------------------------------
+function getlvec(wx,wy,wz,cn)
+	local lx=_XX(cn)*wx+_XY(cn)*wy+_XZ(cn)*wz
+	local ly=_YX(cn)*wx+_YY(cn)*wy+_YZ(cn)*wz
+	local lz=_ZX(cn)*wx+_ZY(cn)*wy+_ZZ(cn)*wz
+	return lx,ly,lz
+end
+
+}

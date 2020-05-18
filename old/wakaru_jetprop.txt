@@ -1,0 +1,31 @@
+// [RCD] 
+Val
+{
+	PITCH(default=45, min=0, max=90)
+}
+Key
+{
+	0:PITCH(step=1)
+	1:PITCH(step=-1)
+}
+Body
+{
+	Core() {
+		E:TrimF(angle=90) {
+			W:Jet(angle=180, power=50000) { }
+		}
+		N:TrimF(angle=90) {
+			S:Jet(angle=180, power=50000) { }
+		}
+		W:TrimF(angle=90) {
+			E:Jet(angle=180, power=50000) { }
+		}
+		S:TrimF(angle=90) {
+			N:Jet(angle=180, power=50000) { }
+		}
+		S:Trim(angle=PITCH) { }
+		E:Trim(angle=PITCH) { }
+		N:Trim(angle=PITCH) { }
+		W:Trim(angle=PITCH) { }
+	}
+}

@@ -1,0 +1,266 @@
+Val
+{
+	JET_1X(default=0, min=-2147483648, max=2147483648)
+	JET_1Z(default=0, min=-2147483648, max=2147483648)
+	JET_2X(default=0, min=-2147483648, max=2147483648)
+	JET_2Z(default=0, min=-2147483648, max=2147483648)
+	JET_Y(default=0, min=-2147483648, max=2147483648)
+	TRIG1(default=0, max=1600000)
+	TRIG2(default=0, max=1600000)
+	WHEEL(default=0, min=-100000, max=100000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		S:Jet(angle=180, power=-JET_Y) { }
+		N:Jet(angle=90, power=-JET_2Z) {
+			S:Arm(name=ARM_1, power=TRIG1, option=1600000) { }
+		}
+		W:Jet(angle=90, power=JET_2X) {
+			E:Arm(power=TRIG1, option=1600000) { }
+		}
+		E:Jet(angle=-90, power=JET_1X) {
+			W:Arm(power=TRIG2, option=1600000) { }
+		}
+		S:Jet(angle=-90, power=-JET_1Z) {
+			N:Arm(name=ARM_2, power=TRIG2, option=1600000) { }
+		}
+		N:RLW(angle=180, power=WHEEL, brake=2147483648) { }
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	function analog(i)
+		if _ANALOG(i)==0 then
+			return 0;
+		else
+			return (_ANALOG(i)/1000)^2*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+	
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+	require("cel/Science/BasePhysic.lua");
+	
+	function init()
+		initflag=true;
+		
+		ticks=0;
+		
+		corePhys=BasePhysic.new(CORE);
+	
+		eye=Wakaru_Eye.new();
+		Wakaru_Eye:setMode(1);
+		
+		VECX=Wector.new(1, 0, 0);
+		VECY=Wector.new(0, 1, 0);
+		VECZ=Wector.new(0, 0, 1);
+		
+		spdLimit=500/108;
+		
+		aimPos=Wector.new(0, 0, 0);
+		
+		attack=false;
+		targetSelect=0;
+		
+		targetName=nil;
+		targetID=nil;
+		
+		useBackGun=false;
+		
+		sight=180;
+		sightBfr=sight;
+	end
+
+	function main()
+		if not initflag then init(); end
+		ticks=ticks+1;
+		
+		--
+		eye:tick();
+		
+		corePhys:Renew();
+		corePos=Wector:getPosVec(CORE);
+		coreSpdW=getSpdVec(CORE);
+		coreSpdL=coreSpdW:getLVec(CORE);
+		--
+		
+		--ëÄçÏ
+		if _PLAYERS()~=0 then
+			if _KEYDOWN(KEY_RIGHT)==1 then targetSelect=targetSelect+1; end
+			if _KEYDOWN(KEY_LEFT)==1 then targetSelect=targetSelect-1; end
+			if targetSelect<0 then targetSelect=_PLAYERS()-1 elseif _PLAYERS()<=targetSelect then targetSelect=0 end
+			out(0, "SELECT [<] ".._PLAYERNAME(targetSelect).." [>] ");
+
+			if not (_PLAYERMYID()==_PLAYERID(targetSelect)) then
+				if _KEYDOWN(KEY_Z)==1 then
+					if targetID==_PLAYERID(targetSelect) then
+						targetID=nil;
+						targetName=nil;
+					else
+						targetID=_PLAYERID(targetSelect);
+						targetName=_PLAYERNAME(targetSelect);
+					end
+				end
+			end
+			
+			if not (targetID==nil) then
+				out(2, "TARGET [Z] "..targetName);
+			else
+				out(2, "TARGET [Z] NOTARGET");
+			end
+		else
+			out(0, "OFFLINE");
+		end
+	
+		if _KEYDOWN(KEY_X)==1 then
+			attack=not attack;
+		end
+		
+		if attack then
+			out(3, "ATTACK [X] ON");
+		else
+			out(3, "ATTACK [X] OFF");
+		end
+		
+		e=eye:getFuturePos(targetID, 0)+VECY*0.6-corePos;
+		if spdLimit<e:getLength() then
+			e=e:getNormal()*spdLimit;
+		end
+		
+		powX=PID("POWERX", coreSpdW.x, e.x, 250000, 250000, 250000, -250000, 250000, 1.00);
+		powY=PID("POWERY", coreSpdW.y, e.y, 250000, 250000, 250000, -250000, 250000, 1.00);
+		powZ=PID("POWERZ", coreSpdW.z, e.z, 250000, 250000, 250000, -250000, 250000, 1.00);
+		
+		pow=Wector.new(powX, powY, powZ);
+		pow=pow:getLVec(CORE);
+		
+		--è∆èÄÇ∑ÇÈ
+		aimVec=-VECY:getLVec(CORE);
+			
+		--ÉPÉcÇÃèeÇ≈Ç‡ë_Ç§
+		if _E(ARM_1)<_E(ARM_2) then
+			aimVec=-aimVec;
+			useBackGun=true;
+		else
+			useBackGun=false;
+		end
+			
+		vecX=Wector.new(aimVec.x, aimVec.y, 0):getNormal();
+		rotX=math.deg(math.acos(vecX^VECY));
+		if aimVec.x<0 then
+			rotX=-rotX;
+		end
+			
+		vecZ=Wector.new(0, aimVec.y, aimVec.z):getNormal();
+		rotZ=math.deg(math.acos(vecZ^VECY));
+		if aimVec.z<0 then
+			rotZ=-rotZ;
+		end
+			
+		aimX=PID("AIMX", rotX, 0, 10000, 10000, 10000, -10000, 10000, 1.00);
+		aimZ=PID("AIMZ", rotZ, 0, 10000, 10000, 10000, -10000, 10000, 1.00);
+			
+		JET_1X=pow.x-aimX;
+		JET_2X=pow.x+aimX;
+		JET_Y=pow.y*2;
+		JET_1Z=pow.z-aimZ;
+		JET_2Z=pow.z+aimZ;
+			
+		WHEEL=-PID("ROLL", corePhys.wy, 0, 10000, 10000, 0, -10000, 10000, 1.00);	--Yé≤ÇÃâÒì]Çó}êßÇ∑ÇÈ
+			
+		if not (targetID==nil) then
+			--è∆èÄÇÃìxçáÇ¢Ç
+			sightBfr=sight;
+			sight=math.deg(math.acos(aimVec^VECY));
+			dsight=sight-sightBfr;
+			
+			--çUåÇÇ∑ÇÈ
+			TRIG1=0;
+			TRIG2=0;
+			if attack then
+				if (eye:getPos(targetID)-corePos):getLength()<10 and sight<1 then
+					if useBackGun then
+						if _OPTION(ARM_2)<=_E(ARM_2) then
+							TRIG2=1600000;
+						end
+					else
+						if _OPTION(ARM_1)<=_E(ARM_1) then
+							TRIG1=1600000;
+						end
+					end
+				end
+			end
+		end
+	end
+	
+	function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+		local p,i,d;
+		
+		local dis=target-val;
+		if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+		if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+		p=dis*kp;
+
+		_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+		_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+		i=_G["PID_I_"..id];
+
+		d=(dis-_G["PID_D_"..id])*kd;
+		_G["PID_D_"..id]=dis;
+
+		if debug~=nil then
+			out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+		end
+
+		return p+i+d
+	end
+
+	function limit(val,min,max)
+		return math.max(min,math.min(max,val));
+	end
+	
+	function getSpdVec(chipName)
+		if not _G["getSpdVec_init"..chipName] then
+			_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+			_G["getSpdVec_init"..chipName]=true;
+		end
+
+		local spdVec=Wector.new(0, 0, 0);
+		local posVec=Wector:getPosVec(chipName);
+		spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+		
+		_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+		return spdVec;
+	end
+	
+	function getSpdVec2(chipName)
+		spdVec=Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_FPS();
+
+		return spdVec;
+	end
+}

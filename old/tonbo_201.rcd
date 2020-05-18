@@ -1,0 +1,101 @@
+// [RCD] 
+Val{
+	AILERON(default=0,min=-15,max=15)
+	ELEVATOR(default=0,min=-15,max=15)
+	INPUT_PITCH(default=0,min=-1,max=1,step=0.2)
+	INPUT_ROLL(default=0,min=-1,max=1,step=0.2)
+	INPUT_YAW(default=0,min=-1,max=1,step=0.2)
+	J(default=0,min=-5000000,max=5000000)
+	RUDDER(default=0,min=-15,max=15)
+}
+Key{
+	0:INPUT_PITCH(step=0.2)
+	1:INPUT_PITCH(step=-0.2)
+	2:INPUT_ROLL(step=0.2)
+	3:INPUT_ROLL(step=-0.2)
+	4:INPUT_YAW(step=0.2)
+	6:INPUT_YAW(step=-0.2)
+}
+Body{
+	Core(){
+		S:Trim(angle=90){
+			S:Chip(){
+				N:Jet(angle=90,power=J){}
+				N:Jet(angle=-90,power=-J){}
+				S:TrimF(){
+					S:Chip(){
+						S:Trim(angle=-90){
+							E:Trim(angle=elevator){}
+							W:Trim(angle=-elevator){}
+							N:Chip(){}
+						}
+						S:Chip(angle=-rudder){
+							N:Chip(angle=180){}
+						}
+					}
+				}
+			}
+		}
+		S:TrimF(name=CC){
+			W:Frame(){
+				W:Chip(name=WING_L){
+					W:Trim(angle=aileron){}
+				}
+			}
+			E:Frame(){
+				E:Chip(name=WING_R){
+					E:Trim(angle=aileron){}
+				}
+			}
+		}
+		N:Frame(option=1){}
+	}
+}
+Lua{
+
+em=0
+pwr=0
+function main()
+	
+	--エンジン--------------------------
+	
+	--エンジン入力制御   ～ 0で一時停止編 ～
+	if( _KEY(5)==0 and _KEY(8)==0 )then em=1 end
+	if( pwr==0 )then --エンジンが0のとき
+		if( em==2 )then em=0 end
+	end
+	
+	--エンジンが0以外のとき
+	if( _KEY(5)==1 and em>=1 and pwr<=98 )then
+		pwr=pwr+2
+		em=2
+	end
+	if( _KEY(8)==1 and em>=1 and pwr>=-38 )then
+		pwr=pwr-2
+		em=2
+	end --エンジン入力制御終わり
+	
+	
+	J=pwr*550
+
+	--角速度の計算
+	--速度差を用いることで結構正確な値を得るが、単位は不明。
+	--動けばおｋなのでこれでおｋ
+	wx=_VY(0)-_VY(CC)
+	wy=_VX(0)-_VX(CC)
+	wz=_VY(WING_L)-_VY(WING_R)
+	
+	
+	out(3,wx)
+	out(4,wy)
+	out(5,wz)
+	
+	ELEVATOR=wx*2.5+INPUT_PITCH*10
+	AILERON=wz*1.5+INPUT_ROLL*20
+	RUDDER=wy*1.5+INPUT_YAW*20
+	
+	
+	
+end
+
+}

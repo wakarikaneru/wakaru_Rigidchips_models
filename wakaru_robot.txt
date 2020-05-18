@@ -1,0 +1,1016 @@
+// [RCD] 
+Val
+{
+	CANNON_ANGLE_0(default=0, max=180)
+	CANNON_ANGLE_1(default=180, max=180)
+	CANNON_ANGLE_2(default=180, max=180)
+	CANNON_ANGLE_3(default=180, max=180)
+	CANNON_TRIG_0(default=0, max=1600000)
+	CANNON_TRIG_1(default=0, max=1600000)
+	CANNON_TRIG_2(default=0, max=1600000)
+	CANNON_TRIG_3(default=0, max=1600000)
+	COLOR0(default=#FFF080)
+	COLOR1(default=#719910)
+	COLOR2(default=#527ECC)
+	COLOR3(default=#808080)
+	JET_HIP_X(default=0, min=-6400000, max=6400000)
+	JET_HIP_Y(default=0, min=-12800000, max=12800000)
+	JET_HIP_Z(default=0, min=-12800000, max=12800000)
+	JOINT_NECK(default=150, min=120, max=165)
+	JOINT_ARM_L(default=180, min=90, max=210)
+	JOINT_ARM_R(default=180, min=90, max=210)
+	JOINT_ELBOW_L(default=0, min=-45, max=75)
+	JOINT_ELBOW_R(default=0, min=-75, max=45)
+	JOINT_HEEL_L(default=105, max=180)
+	JOINT_HEEL_R(default=105, max=180)
+	JOINT_HIP_0_L(default=105, max=180)
+	JOINT_HIP_0_R(default=105, max=180)
+	JOINT_HIP_1_L(default=15, min=-90, max=90)
+	JOINT_HIP_1_R(default=15, min=-90, max=90)
+	JOINT_KNEE_L(default=30, max=180)
+	JOINT_KNEE_R(default=30, max=180)
+	JOINT_SHOULDER_L(default=60, min=-60, max=60)
+	JOINT_SHOULDER_R(default=60, min=-60, max=60)
+	MINIGUN_MOTOR(default=0, max=720000)
+	MINIGUN_TRIG_0(default=0, max=1600000)
+	MINIGUN_TRIG_1(default=0, max=1600000)
+	MINIGUN_TRIG_2(default=0, max=1600000)
+	MINIGUN_TRIG_3(default=0, max=1600000)
+	RLW_HIP_X(default=0, min=-2147483648, max=2147483648)
+	RLW_HIP_Y(default=0, min=-2147483648, max=2147483648)
+	RLW_HIP_Z(default=0, min=-2147483648, max=2147483648)
+}
+Key
+{
+}
+Body
+{
+	Core(color=COLOR0, name=CORE) {
+		S:Weight(angle=JOINT_NECK, color=COLOR3) {
+			S:Weight(angle=-150, color=COLOR1, name=BODY) {
+				E:Weight(angle=-90, color=COLOR1) { }
+				W:Weight(angle=-90, color=COLOR1) { }
+				S:Weight(angle=120, color=COLOR2) {
+					S:Weight(color=COLOR2) {
+						S:Weight(angle=-120, color=COLOR1, name=HIP, option=2) {
+							E:Weight(angle=-JOINT_HIP_0_R, color=COLOR2) {
+								W:Rudder(angle=-JOINT_HIP_1_R, color=COLOR0) {
+									W:Rudder(angle=JOINT_KNEE_R, color=COLOR0) {
+										W:Rudder(angle=-JOINT_HEEL_R, color=COLOR1) {
+											N:Weight(angle=-JOINT_HIP_0_R, color=COLOR3) {
+												E:Weight(color=COLOR3) { }
+											}
+											N:Weight(angle=165, color=COLOR1) { }
+										}
+									}
+								}
+								W:Weight(angle=30, color=COLOR1) {
+									N:Weight(angle=-60, color=COLOR1) { }
+								}
+							}
+							W:Weight(angle=-JOINT_HIP_0_L, color=COLOR2) {
+								E:Rudder(angle=JOINT_HIP_1_L, color=COLOR0) {
+									E:Rudder(angle=-JOINT_KNEE_L, color=COLOR0) {
+										E:Rudder(angle=JOINT_HEEL_L, color=COLOR1) {
+											N:Weight(angle=-JOINT_HIP_0_L, color=COLOR3) {
+												W:Weight(color=COLOR3) { }
+											}
+											N:Weight(angle=165, color=COLOR1) { }
+										}
+									}
+								}
+								E:Weight(angle=30, color=COLOR1) {
+									N:Weight(angle=-60, color=COLOR1) { }
+								}
+							}
+							S:Jet(angle=-90, power=JET_HIP_Z, color=COLOR1, name=HIP_Z) {
+								N:RLW(angle=180, power=RLW_HIP_Z, color=COLOR1, brake=2147483648) { }
+							}
+							E:Jet(angle=-90, power=-JET_HIP_X, color=COLOR2, name=HIP_X_R) {
+								S:RLW(angle=180, power=-RLW_HIP_X, color=COLOR2, brake=2147483648) { }
+							}
+							W:Jet(angle=-90, power=JET_HIP_X, color=COLOR2, name=HIP_X_L) {
+								S:RLW(angle=180, power=RLW_HIP_X, color=COLOR2, brake=2147483648) { }
+							}
+							N:Jet(angle=180, power=-JET_HIP_Y, color=COLOR1, name=HIP_Y) {
+								S:RLW(angle=180, power=RLW_HIP_Y, color=COLOR1, brake=2147483648) { }
+							}
+							S:Weight(angle=60, color=COLOR1) {
+								W:Weight(angle=90, color=COLOR1) { }
+								E:Weight(angle=90, color=COLOR1) { }
+							}
+						}
+						S:Weight(color=COLOR1) { }
+					}
+				}
+				E:Weight(angle=JOINT_SHOULDER_R, color=COLOR0, name=ARM_MOUNT_R) {
+					W:Weight(angle=-150, color=COLOR1) { }
+					E:Rudder(angle=JOINT_ELBOW_R, color=COLOR0) {
+						N:Weight(angle=JOINT_ARM_R, color=COLOR0, name=ARM_R) {
+							S:RLW(angle=90, power=-MINIGUN_MOTOR, option=1, color=COLOR3, effect=10, name=MINIGUN) {
+								N:Arm(angle=-90, power=MINIGUN_TRIG_0, option=50000, color=COLOR3, name=MINIGUN_ARM_0) { }
+								W:Arm(angle=-90, power=MINIGUN_TRIG_1, option=50000, color=COLOR3, name=MINIGUN_ARM_1) { }
+								S:Arm(angle=-90, power=MINIGUN_TRIG_2, option=50000, color=COLOR3, name=MINIGUN_ARM_2) { }
+								E:Arm(angle=-90, power=MINIGUN_TRIG_3, option=50000, color=COLOR3, name=MINIGUN_ARM_3) { }
+							}
+						}
+					}
+				}
+				W:Weight(angle=JOINT_SHOULDER_L, color=COLOR0, name=ARM_MOUNT_L) {
+					E:Weight(angle=-150, color=COLOR1) { }
+					W:Rudder(angle=JOINT_ELBOW_L, color=COLOR0) {
+						N:Weight(angle=JOINT_ARM_L, color=COLOR0, name=ARM_L) {
+							S:Arm(angle=CANNON_ANGLE_0, power=CANNON_TRIG_0, option=1600000, color=COLOR3, name=CANNON_ARM_0) { }
+							S:Arm(angle=CANNON_ANGLE_1, power=CANNON_TRIG_1, option=1600000, color=COLOR3, name=CANNON_ARM_1) { }
+							S:Arm(angle=CANNON_ANGLE_2, power=CANNON_TRIG_2, option=1600000, color=COLOR3, name=CANNON_ARM_2) { }
+							S:Arm(angle=CANNON_ANGLE_3, power=CANNON_TRIG_3, option=1600000, color=COLOR3, name=CANNON_ARM_3) { }
+						}
+					}
+				}
+				N:Weight(angle=75, color=COLOR1) { }
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+		
+	function analog(i)
+		if _ANALOG(i)==0 then
+			return 0;
+		else
+			return (_ANALOG(i)/1000)^2*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+	
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+
+function init()
+	initflag=true;
+	
+	eye=Wakaru_Eye.new();
+	
+	VECX=Wector.new(1, 0, 0);
+	VECY=Wector.new(0, 1, 0);
+	VECZ=Wector.new(0, 0, 1);
+	VEC0=Wector.new(0, 0, 0);
+	
+	tick=0;
+	
+	bodySpdW=getSpdVec(BODY);
+	bodySpdL=bodySpdW:getLVec(BODY);
+	bodyPos=Wector:getPosVec(BODY);
+	
+	hipSpdW=getSpdVec(HIP);
+	hipSpdL=bodySpdW:getLVec(HIP);
+	hipPos=Wector:getPosVec(HIP);
+	
+	gp=(Wector.new(_GX(CORE), _GY(CORE), _GZ(CORE))-hipSpdW):getLVec(HIP);
+	gpBfr=gp;
+	gpSpd=gp-gpBfr;
+	
+	--カメラについての変数
+	FPSMode=false;
+	mouseLock=false;
+	cameraVec=Wector.new(0, 0, -1);
+	cameraPos=Wector.new(_X(BODY), _Y(BODY),  _Z(BODY));
+	cameraAim=Wector.new(_X(BODY), _Y(BODY),  _Z(BODY)-1200);
+	cameraUp=Wector.new(0, 1, 0);
+	
+	zeroIn=0;	--斜線と照準が交差する距離 0以下だと無限遠点
+	zeroInType=3;
+	
+	--機体全体についての変数
+	aimVec=Wector.new(0, 0, -1);
+	bodyRotH=0;
+	bodyWeight=_WEIGHT();
+	
+	
+	--武装についての変数
+	canFire=false;
+	useLeftWeapon=false;
+	useRightWeapon=false;
+	useLock=true;
+	lockedTarget=nil;
+	lockLine=math.cos(math.rad(15));
+	
+	--足についての変数
+	moveFlag=false;
+	
+	legLength=math.cos(math.rad(30))*0.3*2;	--足の基本の高さ
+	
+	point=Wector.new(0, 0, 0);
+	
+	legL0=0;	--左右
+	legL1=0;	--前後
+	legL2=0;	--長さ
+	legR0=0;	--左右
+	legR1=0;	--前後
+	legR2=0;	--長さ
+	
+	--ブーストに関する変数
+	
+	boostMax=10*30;	--10秒間連続使用が可能
+	boost=boostMax;
+	boostCoolTimeMax=1*30; --使用後1秒間ブーストが回復しない
+	boostCoolTime=boostCoolTimeMax;
+	boostRecharge=150/30;	--ブーストの回復速度
+end
+
+function main()
+	if not initflag then init() end
+	
+	if useLock then
+		eye:tick();
+	end
+	
+	--乱数の初期化
+	math.randomseed((_WX(0)+_WY(0)+_WZ(0)+_TICKS())*123456789);	--おてがる乱数生成
+	
+	--機体の情報を取得
+	bodySpdW=getSpdVec(BODY);
+	bodySpdL=bodySpdW:getLVec(BODY);
+	bodyPos=Wector:getPosVec(BODY);
+	
+	hipSpdW=getSpdVec(HIP);
+	hipSpdL=bodySpdW:getLVec(HIP);
+	hipPos=Wector:getPosVec(HIP);
+	
+	--重心を取得
+	gp=Wector.new(_GX(CORE), _GY(CORE), _GZ(CORE));
+	gpSpd=gp-gpBfr;
+	gpBfr=gp;
+	
+	controlCamera();
+	
+	controlArm();
+	
+	controlBody();
+	
+	controlBoost();
+	
+	controlLeg();
+	
+	disp();
+end
+
+function disp()
+	--FPS
+	out(0, string.format("[FPS] %02d", _FPS()));
+	--座標
+	out(1, string.format("[X] %+05d [Z] %+05d", math.floor(_X(BODY)+0.5), math.floor(_Z(BODY)+0.5)));
+
+	--武装の状態
+	if zeroInType==0 then
+		if 0<zeroIn then
+			out(21, string.format("[ZEROIN] [Z] [C] [AUTO %04d[m]]", zeroIn));
+		else
+			out(21, string.format("[ZEROIN] [Z] [C] [AUTO INFINITY]", zeroIn));
+		end
+	else
+		if 0<zeroIn then
+			out(21, string.format("[ZEROIN] [Z] [C] [%04d[m]]", zeroIn));
+		else
+			out(21, string.format("[ZEROIN] [Z] [C] [INFINITY]", zeroIn));
+		end
+	end
+	
+	if useLock then
+		out(22, "[WAKARU/EYE] [F] [ENABLE]");
+		out(23, string.format("[FCS_MODE] [G] [%01d]", Wakaru_Eye.mode))
+	else
+		out(22, "[WAKARU/EYE] [F] [DISABLE]");
+	end
+	
+	if canFire then
+		out(24, "[ML/MR] [ARM] [Q] [CAN FIRE]");
+	else
+		out(24, "[ML/MR] [ARM] [Q] [SAFETY]");
+	end
+	
+	--ブーストゲージ
+	local s="[BOOST] [";
+	for i=0, 29 do
+		if i/30<boost/boostMax then
+			s=s.."|";
+		else
+			s=s.." ";
+		end
+	end
+	s=s.."]";
+	out(20, s);
+	
+	--ARM情報を表示
+	drawArmInfo(Wector.new(-0.9, -0.8, 0), 0.2, 10);
+	
+	--射撃精度を表示
+	drawStability(Wector.new(-0.6, -0.8, 0), 0.2, 10);
+end
+
+function controlCamera()
+
+	if _KEYDOWN(KEY_B)==1 then
+		mouseLock=not mouseLock;
+	end
+	
+	if _KEYDOWN(KEY_X)==1 then
+		FPSMode=not FPSMode;
+	end
+
+	if mouseLock then
+		mouseX=0;
+		mouseY=0;
+	else
+		mouseX=limit(-(_WIDTH()/2-_MX())*2/_HEIGHT()+0.1, -1, 1);
+		mouseY=limit((_HEIGHT()/2-_MY())*2/_HEIGHT()+0.1, -1, 1);
+	end
+
+	--カメラの回転の処理　無駄の塊
+	if mouseX~=0 then
+		rotationX=limit(mouseX^2*(mouseX/math.abs(mouseX))*15*_GETVIEWZOOM()/100, -15, 15);
+	else
+		rotationX=0;
+	end
+	if mouseY~=0 then
+		rotationY=limit(mouseY^2*(mouseY/math.abs(mouseY))*15*_GETVIEWZOOM()/100, -15, 15);
+	else
+		rotationY=0;
+	end
+	cameraVec=cameraVec:rotation(0, math.rad(rotationX), 0);
+	cameraVecH=Wector.new(cameraVec.x, 0, cameraVec.z):getNormal();	--カメラベクトルの水平成分
+	cameraRot=math.acos(cameraVecH^VECZ);
+	if cameraVecH.x<0 then cameraRot=-cameraRot; end
+	cameraVec=cameraVec:rotation(0, -cameraRot, 0):rotation(-math.rad(rotationY), 0, 0);
+	if math.acos(math.abs(cameraVec^VECY))<=math.rad(30)then
+		if 0<cameraVec.y then
+			cameraVec=cameraVec:rotation(math.rad(30)-math.acos(math.abs(cameraVec^VECY)), 0, 0);
+		else
+			cameraVec=cameraVec:rotation(-math.rad(30)+math.acos(math.abs(cameraVec^VECY)), 0, 0);
+		end
+	end
+	cameraVec=cameraVec:rotation(0, cameraRot, 0);	--ひどすぎる
+	
+	--カメラ座標の設定
+	if FPSMode then
+		cameraPos=Wector.new(_X(BODY)+cameraVec.x*0, _Y(BODY)+cameraVec.y*0,  _Z(BODY)+cameraVec.z*0);
+	else
+		cameraPos=step3(cameraPos, Wector.new(_X(BODY)-(cameraVec.x*2+cameraVec.z*2), _Y(BODY)-cameraVec.y*2+1,  _Z(BODY)-(cameraVec.z*2-cameraVec.x*2)), 2);
+	end
+	
+	cameraAim=Wector.new(cameraPos.x+cameraVec.x, cameraPos.y+cameraVec.y,  cameraPos.z+cameraVec.z);	--敵機の座標をぶち込めば追尾カメラにも
+	
+	_SETVIEW(cameraPos.x, cameraPos.y, cameraPos.z, cameraAim.x, cameraAim.y, cameraAim.z);
+	_SETVIEWUP(cameraUp.x, cameraUp.y, cameraUp.z);
+	
+	cameraVecZ=(cameraPos-cameraAim):getNormal();
+	cameraVecY=(cameraUp-cameraVecZ*(cameraUp^cameraVecZ)):getNormal();
+	cameraVecX=cameraVecZ:getOuter(cameraVecY);
+	
+	zoom=math.tan(math.rad(_GETVIEWZOOM()/2));
+	mouseAim=Wector.new(mouseX*zoom, mouseY*zoom, -1):getWVec2(cameraVecX, cameraVecY, cameraVecZ):getNormal();
+	
+	--ゼロイン(照準と斜線の交差距離)の調整
+	if _KEYDOWN(KEY_Z)==1 then
+		zeroInType=zeroInType-1;
+	end
+	if _KEYDOWN(KEY_C)==1 then
+		zeroInType=zeroInType+1;
+	end
+	if zeroInType<0 then
+		zeroInType=3;
+	elseif 3<zeroInType then
+		zeroInType=0;
+	end
+	
+	if zeroInType==0 then	--タイプ0=自動調整 重い
+		l=20;
+		p=cameraPos+mouseAim*l;
+		while _GETY(p.x, p.z)<p.y and l<1200 do
+			l=l+20;
+			p=cameraPos+mouseAim*l;
+		end
+		if l<1200 then
+			for i=0, 10 do	--モンテカルロ法(笑)
+				r=math.random()*l/10;
+				p=cameraPos+mouseAim*(l-r);
+				if p.y<_GETY(p.x, p.z) then
+					l=l-r;
+				end
+			end
+			zeroIn=step3(zeroIn, l, 2);	--ブルブルするので
+		else
+			zeroIn=0;
+		end
+	elseif zeroInType==1 then	--接近戦
+		zeroIn=20;
+	elseif zeroInType==2 then	--中距離
+		zeroIn=150;
+	else	--遠距離
+		zeroIn=0;
+	end
+	
+	--ズーム
+	if _MM()==1 then
+		_SETVIEWZOOM(step2(_GETVIEWZOOM(), 5, 5));
+	else
+		_SETVIEWZOOM(step2(_GETVIEWZOOM(), 100, 5));
+	end
+	
+	--首を動かす
+	JOINT_NECK=math.deg(math.acos(mouseAim^VECY))-90+150;
+	
+	--照準の描画
+	_SETCOLOR(tonumber("00FF00", 16));
+	_MOVE2D(mouseX+1/64, mouseY);
+	_LINE2D(mouseX, mouseY);
+	_MOVE2D(mouseX, mouseY);
+	_LINE2D(mouseX, mouseY-1/64);
+	
+	_MOVE2D(mouseX+1/16, mouseY);
+	for i=1, 24 do
+		_LINE2D(mouseX+math.cos(2*math.pi*i/32)*1/16, mouseY+math.sin(2*math.pi*i/32)*1/16);
+	end
+	for i=1, 4 do
+		_MOVE2D(mouseX+math.cos(2*math.pi*i/4)*1/24, mouseY+math.sin(2*math.pi*i/4)*1/24);
+		_LINE2D(mouseX+math.cos(2*math.pi*i/4)*1/12, mouseY+math.sin(2*math.pi*i/4)*1/12);
+	end
+end
+
+function controlArm()
+	lockedTarget=nil;
+	targetCos=lockLine;
+	
+	if useLock then
+		for i=0,_PLAYERS()-1 do
+			id=_PLAYERID(i);
+			if 0<_PLAYERARMS(i) and id~=_PLAYERMYID() and eye:getReadTime2(id, bodyPos, bodySpdW)<=1200 then
+				v=(eye:getPos(id)-cameraPos):getNormal();
+				if targetCos<mouseAim^v then
+					targetCos=mouseAim^v;
+					lockedTarget=id;
+				end
+				drawTarget(eye:getPos(id), 1/24);
+			end
+		end
+	end
+	
+	if lockedTarget~=nil then
+		drawTarget(eye:getPos(lockedTarget), 1/24, true);
+		drawTarget(eye:getFuturePos2(lockedTarget, bodyPos, bodySpdW), 1/32);
+	end
+	
+	if _KEYDOWN(KEY_F)==1 then
+		useLock=not useLock;
+	end
+	
+	if _KEYDOWN(KEY_G)==1 then
+		Wakaru_Eye:setMode(math.mod(Wakaru_Eye.mode+1, 3));
+	end
+	
+	if _KEYDOWN(KEY_Q)==1 then
+		canFire=not canFire;
+	end
+	
+	leftWeapon();
+	rightWeapon();
+end
+
+function leftWeapon()
+	local arm=_G["CANNON_ARM_"..cannonNum];
+	armLSpd=getSpdVec2(arm);
+	armLPos=Wector:getPosVec(arm);
+	if canFire then
+		if lockedTarget~=nil then
+			v=(eye:getFuturePos2(lockedTarget, armLPos, armLSpd)-armLPos):getNormal():getLVec(ARM_L);
+		else
+			if zeroIn<=0 then
+				tPos=mouseAim*Locus:getBulletSpd();
+			else
+				tPos=(cameraPos+mouseAim*zeroIn-armLPos):getNormal()*Locus:getBulletSpd();
+			end
+			v=(tPos-armLSpd):getNormal():getLVec(ARM_L);
+		end
+		vh=Wector.new(v.x, 0, v.z):getNormal();
+		vv=Wector.new(0, v.y, v.z):getNormal();
+		
+		elbow_l=math.deg(math.acos(vh^VECZ));
+		if vh.x<0 then
+		else
+			elbow_l=-elbow_l;
+		end
+		JOINT_ELBOW_L=step2(JOINT_ELBOW_L, JOINT_ELBOW_L-PID("ELBOW_L", elbow_l, 0, 1, 0, 0, -1, 1, 1.00), 15);
+		
+		arm_l=math.deg(math.acos(vv^VECZ));
+		if vv.y<0 then
+		else
+			arm_l=-arm_l;
+		end
+		JOINT_ARM_L=step2(JOINT_ARM_L, JOINT_ARM_L+PID("ARM_L", arm_l, 0, 1, 0, 0, -1, 1, 1.00), 15);
+		
+		if _MR()==1 then
+			if true then
+				cannon(true);
+			else
+				cannon(false);
+			end
+		else
+			cannon(false);
+		end
+	else
+		JOINT_ELBOW_L=step2(JOINT_ELBOW_L, -60, 15);
+		JOINT_ARM_L=step2(JOINT_ARM_L, 180, 15);
+		cannon(false);
+	end
+end
+
+cannonNum=0;
+cannonReady0=false;
+cannonReady1=false;
+cannonReady2=false;
+cannonReady3=false;
+function cannon(trig)
+	fire=false;
+	for i=0, 3 do
+		_G["CANNON_TRIG_"..i]=0;
+		if cannonNum==i then
+			if trig and _G["cannonReady"..i] and _G["CANNON_ANGLE_"..i]==0 and _OPTION(_G["CANNON_ARM_"..i])<=_E(_G["CANNON_ARM_"..i]) then
+				_G["CANNON_TRIG_"..i]=_OPTION(_G["CANNON_ARM_"..i]);
+				fire=true;
+			elseif _G["CANNON_ANGLE_"..i]==0 then
+				_G["cannonReady"..i]=true;
+			else
+				_G["CANNON_ANGLE_"..i]=step2(_G["CANNON_ANGLE_"..i], 0, 15);
+				_G["cannonReady"..i]=false;
+			end
+		else
+			_G["CANNON_ANGLE_"..i]=step2(_G["CANNON_ANGLE_"..i], 180, 15);
+			_G["cannonReady"..i]=false;
+		end
+	end
+	
+	if fire then	--ARMの交換
+		local n=0;
+		local m=0;
+		for i=0, 3 do
+			if cannonNum~=i and _TOP(_G["CANNON_ARM_"..i])==CORE then
+				if m<_E(_G["CANNON_ARM_"..i]) then
+					n=i;
+					m=_E(_G["CANNON_ARM_"..i]);
+				end
+			end
+		end
+		cannonNum=n;
+	end
+	
+end
+
+function rightWeapon()
+	local arm=ARM_R;
+	armRSpd=getSpdVec2(arm);
+	armRPos=Wector:getPosVec(arm);
+	if canFire then
+		MINIGUN_MOTOR=PID("MINIGUN_MOTOR", -_WY(MINIGUN)/_BASE(), 2*math.pi/4/3, 5000, 5000, 5000, -5000, 5000, 1.00);
+		motorSpd=Wector.new(0.3*(-_WY(MINIGUN)/_BASE()), 0, 0):getWVec(ARM_R);
+		armRSpd=armRSpd+motorSpd;
+		
+		if lockedTarget~=nil then
+			v=(eye:getFuturePos2(lockedTarget, armRPos, armRSpd)-armRPos):getNormal():getLVec(ARM_R);
+		else
+			if zeroIn<=0 then
+				tPos=mouseAim*Locus:getBulletSpd();
+			else
+				tPos=(cameraPos+mouseAim*zeroIn-armRPos):getNormal()*Locus:getBulletSpd();
+			end
+				v=(tPos-armRSpd):getNormal():getLVec(ARM_R);
+		end
+		vh=Wector.new(v.x, 0, v.z):getNormal();
+		vv=Wector.new(0, v.y, v.z):getNormal();
+		
+		elbow_r=math.deg(math.acos(vh^VECZ));
+		if vh.x<0 then
+		else
+			elbow_r=-elbow_r;
+		end
+		JOINT_ELBOW_R=step2(JOINT_ELBOW_R, JOINT_ELBOW_R-PID("ELBOW_R", elbow_r, 0, 1, 0, 0, -1, 1, 1.00), 15);
+		
+		arm_r=math.deg(math.acos(vv^VECZ));
+		if vv.y<0 then
+		else
+			arm_r=-arm_r;
+		end
+		JOINT_ARM_R=step2(JOINT_ARM_R, JOINT_ARM_R+PID("ARM_R", arm_r, 0, 1, 0, 0, -1, 1, 1.00), 15);
+		
+		if _ML()==1 then
+			minigun(true);
+		else
+			minigun(false);
+		end
+	else
+		MINIGUN_MOTOR=0;
+		JOINT_ELBOW_R=step2(JOINT_ELBOW_R, 60, 15);
+		JOINT_ARM_R=step2(JOINT_ARM_R, 180, 15);
+		minigun(false);
+	end
+end
+
+function minigun(trig)
+	mPos=Wector:getPosVec(MINIGUN-1);
+	for i=0, 3 do
+		_G["MINIGUN_TRIG_"..i]=0;
+	end
+
+	if trig then
+		for i=0, 3 do
+			arm=_G["MINIGUN_ARM_"..i];
+			aPos=Wector:getPosVec(arm);
+			rPos=(aPos-mPos):getLVec(MINIGUN-1);
+			if 0<rPos.z and rPos.x<=0 then
+				if _OPTION(arm)<=_E(arm) then
+					_G["MINIGUN_TRIG_"..i]=_OPTION(arm);
+				end
+			end
+		end
+	end
+end
+
+aimRot=0;
+function controlBody()
+	w=_WEIGHT()/bodyWeight;
+	
+	hipDir=Wector.new(0, 1, 0):getLVec(BODY);
+	
+	vecX=Wector.new(hipDir.x, hipDir.y, 0):getNormal();
+	rotX=math.deg(math.acos(vecX^VECY));
+	if vecX.x<0 then
+		rotX=-rotX;
+	end
+	RLW_HIP_Z=-PID("RLW_HIP_Z", rotX, 0, 50000, 5000, 50000, -50000, 50000, 1.00)*w;
+	
+	vecZ=Wector.new(0, hipDir.y, hipDir.z):getNormal();
+	rotZ=math.deg(math.acos(vecZ^VECY));
+	if vecZ.z<0 then
+		rotZ=-rotZ;
+	end
+	RLW_HIP_X=PID("RLW_HIP_X", rotZ, 0, 50000, 5000, 50000, -50000, 50000, 1.00)/2*w;
+	
+	aimH=Wector.new(mouseAim.x, 0, mouseAim.z):getLVec(BODY):getNormal();
+	--aimH=-Wector.new(cameraVecZ.x, 0, cameraVecZ.z):getLVec(BODY):getNormal();
+	bodyRotH=math.deg(math.acos(aimH^VECZ));
+	if 0<aimH.x then
+		bodyRotH=-bodyRotH
+	end
+	RLW_HIP_Y=PID("RLW_HIP_Y", bodyRotH, 0, 50000, 5000, 50000, -50000, 50000, 1.00)*w;
+end
+
+function controlLeg()
+	if true then
+		--足の長さを調節する
+		--ケツは水平である前提
+		temp=Wector.new(math.sin(math.rad(legL0)), math.cos(math.rad(legL0)), 0);
+		temp=Wector.new(temp.x, math.cos(math.rad(legL1))*temp.y-math.sin(math.rad(legL1))*temp.z, math.sin(math.rad(legL1))*temp.y+math.cos(math.rad(legL1))*temp.z);	--ベクトルの回転　めどい
+		landLengthL=legLength/(VECY^temp);
+		if -180<math.acos(landLengthL/0.6) and math.acos(landLengthL/0.6)<180 then
+			rotL=math.deg(math.acos(landLengthL/0.6));
+		else
+			rotL=0;
+		end
+		
+		temp=Wector.new(math.sin(math.rad(legR0)), math.cos(math.rad(legR0)), 0);
+		temp=Wector.new(temp.x, math.cos(math.rad(legR1))*temp.y-math.sin(math.rad(legR1))*temp.z, math.sin(math.rad(legR1))*temp.y+math.cos(math.rad(legR1))*temp.z);	--ベクトルの回転　めどい
+		landLengthR=legLength/(VECY^temp);
+		if -180<math.acos(landLengthR/0.6) and math.acos(landLengthR/0.6)<180 then
+			rotR=math.deg(math.acos(landLengthR/0.6));
+		else
+			rotR=0;
+		end
+		
+		if (0<_KEY(KEY_W)+_KEY(KEY_A)+_KEY(KEY_S)+_KEY(KEY_D) or 0.09<math.sqrt(analog(0)^2+analog(1)^2)) and 0<_H(HIP) and _H(HIP)<2 then
+			moveFlag=true;
+		else
+			moveFlag=false;
+		end
+		
+		v=Wector.new(_KEY(KEY_A)-_KEY(KEY_D)+analog(0), 0, _KEY(KEY_S)-_KEY(KEY_W)-analog(1)):getNormal();
+		
+		gp2=(gp-hipPos);
+		gp2=gp2:getLVec(HIP);
+		gp2.y=0;
+		gps=gpSpd:getLVec(HIP);
+		gps.y=0;
+		point=step3(point, gp2*1-gps*1-v*0.5, 1);	--着地位置(ローカル)
+		point.y=-legLength*2;
+		
+		pointH=Wector.new(point.x, point.y, 0);	--着地位置の左右
+		pointH=pointH:getNormal();
+		if 0<pointH.x then
+			rotH=math.acos(pointH^-VECY);
+		else
+			rotH=-math.acos(pointH^-VECY);
+		end
+		rotH=math.deg(rotH);
+		
+		pointV=Wector.new(0, point.y, point.z);	--着地位置の前後
+		pointV=pointV:getNormal();
+		if 0<pointV.z then
+			rotV=math.acos(pointV^-VECY);
+		else
+			rotV=-math.acos(pointV^-VECY);
+		end
+		rotV=math.deg(rotV);
+		
+		if _EXKEY(3)==1 then	--ジャンプ
+			legL2=step2(legL2, rotL-15, 30);
+			legR2=step2(legR2, rotR-15, 30);
+			
+			legL0=step2(legL0, 15, 5);
+			legR0=step2(legR0, 15, 5);
+			legL1=step2(legL1, 0, 5);
+			legR1=step2(legR1, 0, 5);
+		elseif 0.5<gps:getLength() then	--踏ん張る
+			tick=0;
+			--姿勢を低くする？
+			legL2=step2(legL2, rotL, 30);
+			legR2=step2(legR2, rotR, 30);
+			if 0.1<gps.x then	--右足で踏ん張る
+				legL0=step2(legL0, -rotH+15, 5);
+				legL1=step2(legL1, -rotV, 5);
+				legR0=step2(legR0, -rotH+15, 5);
+				legR1=step2(legR1, rotV, 5);
+			else	--左足で踏ん張る
+				legL0=step2(legL0, rotH+15, 5);
+				legL1=step2(legL1, rotV, 5);
+				legR0=step2(legR0, rotH+15, 5);
+				legR1=step2(legR1, -rotV, 5);
+			end
+		elseif moveFlag then
+			tick=tick+1;
+			if math.mod(math.floor(tick/10), 2)==0 then
+				--右足を上げる
+				legL2=step2(legL2, rotL, 15);
+				if legL2==rotL then
+					legR2=step2(legR2, rotR+15, 15);
+				end
+			else
+				--左足を上げる
+				legR2=step2(legR2, rotR, 15);
+				if legR2==rotR then
+					legL2=step2(legL2, rotL+15, 15);
+				end
+			end
+			
+			if rotL<legL2 then	--足を上げていたら
+				legL0=step2(legL0, -rotH+5, 5);
+				legL1=step2(legL1, -rotV, 5);
+			else
+				legL0=step2(legL0, rotH+5, 5);
+				legL1=step2(legL1, rotV, 5);
+			end
+			
+			if rotR<legR2 then	--足を上げていたら
+				legR0=step2(legR0, rotH+5, 5);
+				legR1=step2(legR1, -rotV, 5);
+			else
+				legR0=step2(legR0, -rotH+5, 5);
+				legR1=step2(legR1, rotV, 5);
+			end
+		
+		else
+			tick=0;
+			--まっすぐ立つ
+			legL2=step2(legL2, rotL, 5);
+			legR2=step2(legR2, rotR, 5);
+			
+			legL0=step2(legL0, rotH+15, 5);
+			legR0=step2(legR0, -rotH+15, 5);
+			legL1=step2(legL1, rotV, 5);
+			legR1=step2(legR1, rotV, 5);
+		end
+
+		legL0=limit(legL0, -30, 30);
+		legR0=limit(legR0, -30, 30);
+		legL1=limit(legL1, -30, 30);
+		legR1=limit(legR1, -30, 30);
+		
+		JOINT_HIP_0_L=step2(JOINT_HIP_0_L, legL0+90, 15);
+		JOINT_HIP_0_R=step2(JOINT_HIP_0_R, legR0+90, 15);
+		
+		JOINT_HIP_1_L=step2(JOINT_HIP_1_L, legL1+legL2, 15);
+		JOINT_HIP_1_R=step2(JOINT_HIP_1_R, legR1+legR2, 15);
+		JOINT_KNEE_L=step2(JOINT_KNEE_L, legL2*2, 30);
+		JOINT_KNEE_R=step2(JOINT_KNEE_R, legR2*2, 30);
+		JOINT_HEEL_L=step2(JOINT_HEEL_L, -legL1+legL2+90, 30);
+		JOINT_HEEL_R=step2(JOINT_HEEL_R, -legR1+legR2+90, 30);
+	end
+end
+
+boostSpd=100*(1000/30/60/60);
+jumpSpd=100*(1000/30/60/60);
+function controlBoost()
+	v=Wector.new(_KEY(KEY_A)-_KEY(KEY_D)+analog(0), 0, _KEY(KEY_S)-_KEY(KEY_W)-analog(1)):getNormal();
+	if 0<boost then
+		if _EXKEY(3)==1 then	--ジャンプ
+			boost=boost-1;
+			boostCoolTime=boostCoolTimeMax;
+			JET_HIP_X=PID("JET_HIP_X", hipSpdL.x, -v.x*jumpSpd/2, 5000000, 500000, 5000000, -500000, 500000, 1.00)/2;
+			JET_HIP_Y=PID("JET_HIP_Y", hipSpdL.y, jumpSpd, 5000000, 500000, 5000000, -500000, 500000, 1.00);
+			JET_HIP_Z=PID("JET_HIP_Z", hipSpdL.z, -v.z*jumpSpd/2, 5000000, 500000, 5000000, -500000, 500000, 1.00);
+		elseif _EXKEY(1)==1 and 0<_KEY(KEY_W)+_KEY(KEY_A)+_KEY(KEY_S)+_KEY(KEY_D) then	--ダッシュ
+			boost=boost-1;
+			boostCoolTime=boostCoolTimeMax;
+			JET_HIP_X=PID("JET_HIP_X", hipSpdL.x, -v.x*boostSpd, 5000000, 500000, 5000000, -500000, 500000, 1.00)/2;
+			JET_HIP_Z=PID("JET_HIP_Z", hipSpdL.z, -v.z*boostSpd, 5000000, 500000, 5000000, -500000, 500000, 1.00);
+			if 0<_H(HIP) and _H(HIP)<2.0 then
+				JET_HIP_Y=PID("JET_HIP_Y", _H(HIP), 2.0, 5000000, 500000, 5000000, -500000, 500000, 1.00);
+			else
+				JET_HIP_Y=PID("JET_HIP_Y", hipSpdL.y, 0, 5000000, 500000, 5000000, -500000, 500000, 1.00);
+			end
+		else
+			JET_HIP_X=0;
+			JET_HIP_Y=0;
+			JET_HIP_Z=0;
+		end
+	else
+		JET_HIP_X=0;
+		JET_HIP_Y=0;
+		JET_HIP_Z=0;
+	end
+	
+	if boostCoolTime<=0 then
+		boost=limit(boost+boostRecharge, 0, boostMax);
+	else
+		boostCoolTime=boostCoolTime-1;
+	end
+end
+
+function drawTarget(pos, size, lock)
+	v=(pos-cameraPos):getLVec2(cameraVecX, cameraVecY, cameraVecZ);
+	if v.z<0 then
+		zoom=math.tan(math.rad(_GETVIEWZOOM()/2));
+		v=-v/v.z/zoom;
+		
+		_SETCOLOR(tonumber("00FF00", 16));
+		if lock~=nil then
+			_MOVE2D(v.x+size*1.5, v.y);
+			_LINE2D(v.x+size*0.5, v.y);
+			_MOVE2D(v.x-size*1.5, v.y);
+			_LINE2D(v.x-size*0.5, v.y);
+			_MOVE2D(v.x, v.y+size*1.5);
+			_LINE2D(v.x, v.y+size*0.5);
+			_MOVE2D(v.x, v.y-size*1.5);
+			_LINE2D(v.x, v.y-size*0.5);
+		else
+			_MOVE2D(v.x+size, v.y-size);
+			_LINE2D(v.x+size, v.y+size);
+			_LINE2D(v.x-size, v.y+size);
+			_LINE2D(v.x-size, v.y-size);
+			_LINE2D(v.x+size, v.y-size);
+		end
+	end
+end
+
+bwx=0;
+bwy=0;
+bwz=0;
+function drawStability(pos, size, mul)
+	local nx=function(i) return pos.x+i*size/2 end
+	local ny=function(i) return pos.y+i*size/2 end
+	
+	local ax=_WX(BODY)/_BASE()-bwx;
+	local ay=_WY(BODY)/_BASE()-bwy;
+	local az=_WZ(BODY)/_BASE()-bwz;
+	
+	bwx=_WX(BODY)/_BASE();
+	bwy=_WY(BODY)/_BASE();
+	bwz=_WZ(BODY)/_BASE();
+	
+	local x=limit(math.abs(ax)*mul, 0.01, 1);
+	local y=limit(math.abs(ay)*mul, 0.01, 1);
+	local z=limit(math.abs(az)*mul, 0.01, 1);
+	
+	_SETCOLOR(tonumber("000000", 16));
+	_MOVE2D(nx(-1), ny(0));
+	_LINE2D(nx(0), ny(-1));
+	_LINE2D(nx(1), ny(0));
+	_LINE2D(nx(0), ny(1));
+	_LINE2D(nx(-1), ny(0));
+	_MOVE2D(nx(-0.5), ny(0));
+	_LINE2D(nx(0), ny(-0.5));
+	_LINE2D(nx(0.5), ny(0));
+	_LINE2D(nx(0), ny(0.5));
+	_LINE2D(nx(-0.5), ny(0));
+	
+	if x<=0.5 and y<=0.5 then
+		_SETCOLOR(tonumber("00FF00", 16));
+	else
+		_SETCOLOR(tonumber("FFFF00", 16));
+	end
+	_MOVE2D(nx(-y), ny(0));
+	_LINE2D(nx(0), ny(-x));
+	_LINE2D(nx(y), ny(0));
+	_LINE2D(nx(0), ny(x));
+	_LINE2D(nx(-y), ny(0));
+end
+
+function drawArmInfo(pos, size, mul)
+	local nx=function(i) return pos.x+i*size/2 end
+	local ny=function(i) return pos.y+i*size/2 end
+	
+	local line=function(x, y, s, c)
+		if 1<=c then
+			_SETCOLOR(tonumber("00FF00", 16));
+		else
+			_SETCOLOR(tonumber("FFFF00", 16));
+		end
+		_MOVE2D(nx(x-s), ny(y));
+		_LINE2D(nx(x-s+s*c*2), ny(y));
+		_SETCOLOR(tonumber("000000", 16));
+		_LINE2D(nx(x+s), ny(y));
+	end
+	
+	for i=0, 3 do
+		line(0, 1-i/3*2, 1, _E(_G["CANNON_ARM_"..i])/_OPTION(_G["CANNON_ARM_"..i]));
+	end
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function step3(val, target, ratio)
+	return val+(target-val)/ratio;
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+	
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val, min, max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function getSpdVec2(chipName)
+	return (Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+end
+}

@@ -1,0 +1,57 @@
+// [RCD] 
+Val
+{
+	BREAK(default=0, min=1, max=100, step=100)
+	CROT(default=0, min=-90, max=90)
+	FIRE(default=0, max=100000, step=100000)
+	POWER(default=0, min=-5000, max=5000, step=500)
+	POWL(default=0, min=-10000, max=10000)
+	POWR(default=0, min=-10000, max=10000)
+	ROT(default=0, min=-20, max=20, step=1)
+}
+Key
+{
+	0:powER(step=500)
+	1:pOWER(step=-500)
+	2:rot(step=-1)
+	3:rot(step=1)
+	4:crot(step=-4)
+	5:fire(step=100000), break(step=100)
+	6:crot(step=4)
+}
+Body
+{
+	Core() {
+		S:RudderF(angle=-crot) {
+			S:Frame(angle=30) {
+				S:Chip(angle=150) {
+					S:Chip() {
+						S:Chip() {
+							W:Chip() {
+								W:Wheel(angle=-90, brake=break, effect=2) { }
+							}
+							E:Chip() {
+								E:Wheel(angle=-90, brake=break, effect=2) { }
+							}
+						}
+					}
+					E:Chip() {
+						E:Wheel(angle=-90, power=-powr, brake=break, effect=2) { }
+					}
+					W:Chip() {
+						W:Wheel(angle=-90, power=powl, brake=break, effect=2) { }
+					}
+				}
+			}
+		}
+		W:Frame(angle=20) {
+			N:Arm(angle=-1, power=fire, option=10000) { }
+		}
+		E:Frame(angle=20) {
+			N:Arm(angle=-1, power=fire, option=10000) { }
+		}
+	}
+}
+Script
+{powr=power-rot*100
+powl=power+rot*100}

@@ -1,0 +1,41 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() { }
+}
+Lua
+{
+
+loadlib("Spirytus.DLL", "rc_OpenSpirytus")();
+
+t=0;
+i=0;
+str="";
+
+	function main()
+
+		t=t+1;
+
+		if math.mod(t,15)==0 then
+			i=i+1;
+			math.randomseed(1519);
+			str=i..",".._PLAYERX(1)..",";
+			math.randomseed(1519);
+			str=str.._PLAYERY(1)..",";
+			math.randomseed(1519);
+			str=str.._PLAYERZ(1).."\n";
+			file=_EXFOPEN("_sinTest.txt", "a");
+			_EXFPUTS(file,str);
+			_EXFCLOSE(file);
+		end
+		
+		out(0,str);
+
+	end
+}

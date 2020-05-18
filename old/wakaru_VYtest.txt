@@ -1,0 +1,61 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+	}
+}
+Lua
+{
+	bx=_X(0)
+	by=_Y(0)
+	bz=_Z(0)
+
+	IX=0
+	IY=0
+	IZ=0
+	N=0
+
+function main()
+
+	x=_X(0)
+	y=_Y(0)
+	z=_Z(0)
+
+	vx=x-bx
+	vy=y-by
+	vz=z-bz
+	N=N+1
+
+	bx=x
+	by=y
+	bz=z
+
+	IX=IX+vx
+	IY=IY+vy
+	IZ=IZ+vz
+
+	if _KEY(0)==1 then
+		IX=vx
+		IY=vy
+		IZ=vz
+		N=1
+	end
+
+	out(0,"_VX(0)="..vx)
+	out(1,"_VY(0)="..vy)
+	out(2,"_VZ(0)="..vz)
+
+	
+	out(4,"VX_Ave="..IX/N)
+	out(5,"VY_Ave="..IY/N)
+	out(6,"VZ_Ave="..IZ/N)
+
+	out(8,"[↑]キーで平均リセット")
+end
+}

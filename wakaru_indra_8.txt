@@ -1,0 +1,1139 @@
+// [RCD] 
+// VALとBODYの書式固定しすぎてごめんね
+Val{
+	//ARMのpower -方向も使う(重要)
+	M1ARMP(default=0,min=-100000000000)
+	//JETのpower
+	M1JPA1(default=0,min=-100000000000)
+	M1JPA2(default=0,min=-100000000000)
+	M1JPB1(default=0,min=-100000000000)
+	M1JPB2(default=0,min=-100000000000)
+	M1JPS(default=0,min=-100000000000)
+	M1JY(default=0,min=-100000000000)
+	//ここまでで1機分
+	
+	M2ARMP(default=0,min=-100000000000)
+	M2JPA1(default=0,min=-100000000000)
+	M2JPA2(default=0,min=-100000000000)
+	M2JPB1(default=0,min=-100000000000)
+	M2JPB2(default=0,min=-100000000000)
+	M2JPS(default=0,min=-100000000000)
+	M2JY(default=0,min=-100000000000)
+	
+	M3ARMP(default=0,min=-100000000000)
+	M3JPA1(default=0,min=-100000000000)
+	M3JPA2(default=0,min=-100000000000)
+	M3JPB1(default=0,min=-100000000000)
+	M3JPB2(default=0,min=-100000000000)
+	M3JPS(default=0,min=-100000000000)
+	M3JY(default=0,min=-100000000000)
+	
+	M4ARMP(default=0,min=-100000000000)
+	M4JPA1(default=0,min=-100000000000)
+	M4JPA2(default=0,min=-100000000000)
+	M4JPB1(default=0,min=-100000000000)
+	M4JPB2(default=0,min=-100000000000)
+	M4JPS(default=0,min=-100000000000)
+	M4JY(default=0,min=-100000000000)
+	
+	M5ARMP(default=0,min=-100000000000)
+	M5JPA1(default=0,min=-100000000000)
+	M5JPA2(default=0,min=-100000000000)
+	M5JPB1(default=0,min=-100000000000)
+	M5JPB2(default=0,min=-100000000000)
+	M5JPS(default=0,min=-100000000000)
+	M5JY(default=0,min=-100000000000)
+	
+	M6ARMP(default=0,min=-100000000000)
+	M6JPA1(default=0,min=-100000000000)
+	M6JPA2(default=0,min=-100000000000)
+	M6JPB1(default=0,min=-100000000000)
+	M6JPB2(default=0,min=-100000000000)
+	M6JPS(default=0,min=-100000000000)
+	M6JY(default=0,min=-100000000000)
+	
+	M7ARMP(default=0,min=-100000000000)
+	M7JPA1(default=0,min=-100000000000)
+	M7JPA2(default=0,min=-100000000000)
+	M7JPB1(default=0,min=-100000000000)
+	M7JPB2(default=0,min=-100000000000)
+	M7JPS(default=0,min=-100000000000)
+	M7JY(default=0,min=-100000000000)
+	
+	M8ARMP(default=0,min=-100000000000)
+	M8JPA1(default=0,min=-100000000000)
+	M8JPA2(default=0,min=-100000000000)
+	M8JPB1(default=0,min=-100000000000)
+	M8JPB2(default=0,min=-100000000000)
+	M8JPS(default=0,min=-100000000000)
+	M8JY(default=0,min=-100000000000)
+	
+	
+}
+Key{
+
+}
+Body{
+	Core(name=CORE){
+		//1機めのcoreに当たるパーツ(JET) これにのみnameを使用する
+		S:Jet(angle=180,power=M1JPS,name=M1JS){
+			//JETBのUSER2の10の位は2
+			S:Jet(angle=90,power=M1JPB1,USER2=21){
+				S:Arm(power=-M1ARMP,option=1600000){}
+				W:Jet(angle=-45,power=M1JY){}
+			}
+			E:Jet(angle=90,power=M1JPB2,USER2=22){
+				E:Arm(power=-M1ARMP,option=1600000){}
+			}
+			//JETAは1
+			N:Jet(angle=-90,power=M1JPA1,USER2=11){
+				//裏面ARMの1つにUSER2=31を。
+				S:Arm(USER2=31,power=-M1ARMP,option=1600000){}
+				N:Arm(option=1600000,power=M1ARMP){}
+			}
+			W:Jet(angle=-90,power=M1JPA2,USER2=12){
+				E:Arm(power=-M1ARMP,option=1600000){}
+				W:Arm(option=1600000,power=M1ARMP){}
+			}
+			//ARMのOpは好きに設定してOK
+			//全機同じじゃなくてもOK
+			S:Arm(angle=-90,option=1600000,power=M1ARMP){}
+			E:Arm(angle=-90,option=1600000,power=M1ARMP){
+				N:Jet(angle=45,power=M1JY){}
+			}
+			//2機目を生やすのは1機目を全パーツ記述した後
+			S:Jet(angle=180,power=M2JPS,name=M2JS){
+				S:Jet(angle=90,power=M2JPB1,USER2=21){
+					S:Arm(power=-M2ARMP,option=1600000){}
+					W:Jet(angle=-45,power=M2JY){}
+				}
+				E:Jet(angle=90,power=M2JPB2,USER2=22){
+					E:Arm(power=-M2ARMP,option=1600000){}
+				}
+				N:Jet(angle=-90,power=M2JPA1,USER2=11){
+					S:Arm(USER2=31,power=-M2ARMP,option=1600000){}
+					N:Arm(option=1600000,power=M2ARMP){}
+				}
+				W:Jet(angle=-90,power=M2JPA2,USER2=12){
+					E:Arm(power=-M2ARMP,option=1600000){}
+					W:Arm(option=1600000,power=M2ARMP){}
+				}
+				S:Arm(angle=-90,option=1600000,power=M2ARMP){}
+				E:Arm(angle=-90,option=1600000,power=M2ARMP){
+					N:Jet(angle=45,power=M2JY){}
+				}
+				//3
+				S:Jet(angle=180,power=M3JPS,name=M3JS){
+					S:Jet(angle=90,power=M3JPB1,USER2=21){
+						S:Arm(power=-M3ARMP,option=1600000){}
+						W:Jet(angle=-45,power=M3JY){}
+					}
+					E:Jet(angle=90,power=M3JPB2,USER2=22){
+						E:Arm(power=-M3ARMP,option=1600000){}
+					}
+					N:Jet(angle=-90,power=M3JPA1,USER2=11){
+						S:Arm(USER2=31,power=-M3ARMP,option=1600000){}
+						N:Arm(option=1600000,power=M3ARMP){}
+					}
+					W:Jet(angle=-90,power=M3JPA2,USER2=12){
+						E:Arm(power=-M3ARMP,option=1600000){}
+						W:Arm(option=1600000,power=M3ARMP){}
+					}
+					S:Arm(angle=-90,option=1600000,power=M3ARMP){}
+					E:Arm(angle=-90,option=1600000,power=M3ARMP){
+						N:Jet(angle=45,power=M3JY){}
+					}
+					//4
+					S:Jet(angle=180,power=M4JPS,name=M4JS){
+						S:Jet(angle=90,power=M4JPB1,USER2=21){
+							S:Arm(power=-M4ARMP,option=1600000){}
+							W:Jet(angle=-45,power=M4JY){}
+						}
+						E:Jet(angle=90,power=M4JPB2,USER2=22){
+							E:Arm(power=-M4ARMP,option=1600000){}
+						}
+						N:Jet(angle=-90,power=M4JPA1,USER2=11){
+							S:Arm(USER2=31,power=-M4ARMP,option=1600000){}
+							N:Arm(option=1600000,power=M4ARMP){}
+						}
+						W:Jet(angle=-90,power=M4JPA2,USER2=12){
+							E:Arm(power=-M4ARMP,option=1600000){}
+							W:Arm(option=1600000,power=M4ARMP){}
+						}
+						S:Arm(angle=-90,option=1600000,power=M4ARMP){}
+						E:Arm(angle=-90,option=1600000,power=M4ARMP){
+							N:Jet(angle=45,power=M4JY){}
+						}
+						//5
+						S:Jet(angle=180,power=M5JPS,name=M5JS){
+							S:Jet(angle=90,power=M5JPB1,USER2=21){
+								S:Arm(power=-M5ARMP,option=1600000){}
+								W:Jet(angle=-45,power=M5JY){}
+							}
+							E:Jet(angle=90,power=M5JPB2,USER2=22){
+								E:Arm(power=-M5ARMP,option=1600000){}
+							}
+							N:Jet(angle=-90,power=M5JPA1,USER2=11){
+								S:Arm(USER2=31,power=-M5ARMP,option=1600000){}
+								N:Arm(option=1600000,power=M5ARMP){}
+							}
+							W:Jet(angle=-90,power=M5JPA2,USER2=12){
+								E:Arm(power=-M5ARMP,option=1600000){}
+								W:Arm(option=1600000,power=M5ARMP){}
+							}
+							S:Arm(angle=-90,option=1600000,power=M5ARMP){}
+							E:Arm(angle=-90,option=1600000,power=M5ARMP){
+								N:Jet(angle=45,power=M5JY){}
+							}
+							//6
+							S:Jet(angle=180,power=M6JPS,name=M6JS){
+								S:Jet(angle=90,power=M6JPB1,USER2=21){
+									S:Arm(power=-M6ARMP,option=1600000){}
+									W:Jet(angle=-45,power=M6JY){}
+								}
+								E:Jet(angle=90,power=M6JPB2,USER2=22){
+									E:Arm(power=-M6ARMP,option=1600000){}
+								}
+								N:Jet(angle=-90,power=M6JPA1,USER2=11){
+									S:Arm(USER2=31,power=-M6ARMP,option=1600000){}
+									N:Arm(option=1600000,power=M6ARMP){}
+								}
+								W:Jet(angle=-90,power=M6JPA2,USER2=12){
+									E:Arm(power=-M6ARMP,option=1600000){}
+									W:Arm(option=1600000,power=M6ARMP){}
+								}
+								S:Arm(angle=-90,option=1600000,power=M6ARMP){}
+								E:Arm(angle=-90,option=1600000,power=M6ARMP){
+									N:Jet(angle=45,power=M6JY){}
+								}
+								//7
+								S:Jet(angle=180,power=M7JPS,name=M7JS){
+									S:Jet(angle=90,power=M7JPB1,USER2=21){
+										S:Arm(power=-M7ARMP,option=1600000){}
+										W:Jet(angle=-45,power=M7JY){}
+									}
+									E:Jet(angle=90,power=M7JPB2,USER2=22){
+										E:Arm(power=-M7ARMP,option=1600000){}
+									}
+									N:Jet(angle=-90,power=M7JPA1,USER2=11){
+										S:Arm(USER2=31,power=-M7ARMP,option=1600000){}
+										N:Arm(option=1600000,power=M7ARMP){}
+									}
+									W:Jet(angle=-90,power=M7JPA2,USER2=12){
+										E:Arm(power=-M7ARMP,option=1600000){}
+										W:Arm(option=1600000,power=M7ARMP){}
+									}
+									S:Arm(angle=-90,option=1600000,power=M7ARMP){}
+									E:Arm(angle=-90,option=1600000,power=M7ARMP){
+										N:Jet(angle=45,power=M7JY){}
+									}
+									//8
+									S:Jet(angle=180,power=M8JPS,name=M8JS){
+										S:Jet(angle=90,power=M8JPB1,USER2=21){
+											S:Arm(power=-M8ARMP,option=1600000){}
+											W:Jet(angle=-45,power=M8JY){}
+										}
+										E:Jet(angle=90,power=M8JPB2,USER2=22){
+											E:Arm(power=-M8ARMP,option=1600000){}
+										}
+										N:Jet(angle=-90,power=M8JPA1,USER2=11){
+											S:Arm(USER2=31,power=-M8ARMP,option=1600000){}
+											N:Arm(option=1600000,power=M8ARMP){}
+										}
+										W:Jet(angle=-90,power=M8JPA2,USER2=12){
+											E:Arm(power=-M8ARMP,option=1600000){}
+											W:Arm(option=1600000,power=M8ARMP){}
+										}
+										S:Arm(angle=-90,option=1600000,power=M8ARMP){}
+										E:Arm(angle=-90,option=1600000,power=M8ARMP){
+											N:Jet(angle=45,power=M8JY){}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua{
+require("cel/Science/Vector.lua");
+require("cel/Science/BasePhysic.lua");
+require("nyori/stdlib.lua"); --実は動作に不要
+require("nyori/2DGraphic.lua"); --実は動作に不要
+require("hikeo/stdlib.lua");
+require("hikeo/2Dlinelib.lua"); --実は動作に不要
+require("hikeo/network.lua"); --実は動作に不要
+require("hikeo/indra.lua");
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+ind={}
+
+
+function main()
+	if spmj1 then --分離後
+		eye:tick();
+		
+		--一番最初に情報更新
+		for i=1,8 do
+			ind[i]:Renew();
+		end
+		
+		--次にいんどらに命令入力
+			
+		if _PLAYERS()~=0 then
+			if _KEYDOWN(KEY_C)==1 then target=target+1; end
+			if _KEYDOWN(KEY_Z)==1 then target=target-1; end
+			if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+			out(5, "TARGET (Z) ".._PLAYERNAME(target).." (C) ");
+		else
+			out(5, "OffLine");
+		end
+		
+		for i=1,8 do
+			ind[i]:SetFire(_KEY(KEY_X)==1);
+		end
+		
+		r=r+math.rad(15)/30/10;
+		for i=1,8 do
+			ind[i]:SetPos(math.cos(r+2*math.pi*i/8)*300, 500+math.cos(r+2*math.pi*i/8)*100, math.sin(r+2*math.pi*i/8)*300);
+		end
+		
+		for i=1,8 do
+			cn=ind[i].core;
+			pos=ind[i].MyPos;
+			--vel=getSpdVec(cn);
+			vel=-WakaruVec.new(_VX(cn), _VY(cn), _VZ(cn)):getWVec(cn)/_FPS();
+			tpos=eye:getFuturePos2(_PLAYERID(target), WakaruVec.new(pos.x, pos.y, pos.z), vel);
+			ind[i]:SetTarget(tpos.x, tpos.y, tpos.z);
+		end
+		
+		--最後に実行
+		for i=1,8 do
+			ind[i]:main();
+			
+			ind[i]:Line(); --おまけに線を引く
+		end
+		
+	else --分離前(最初の1Fのみ実行される)
+		eye=Wakaru_Eye.new(CORE, 1200);
+		target=0;
+		r=0;
+		for i=1,8 do
+			--切り離しもnewに統合すべき?
+			local d=_SPLIT(_G["M"..i.."JS"]);
+			ind[i]=Indra.new(i);
+			
+			
+			--パラメータ書き換え(少々強引だが動けば正義)
+			ind[i].pid={33,25,100};
+			ind[i].pidlim={-40,40};
+			ind[i].pidwz={20,0.05,6};
+			ind[i].pidwzlim={-11,11};
+			ind[i]:SetAcc(0);
+			--ind[i]:SetAcc(0.3);
+		end
+		
+		spmj1=true;
+		
+	end
+	
+	out(0,string.format("  FPS : %2.1f  Chips : %d  Weight : %.1f    %3.1f km/h",_FPS(),_CHIPS(),_WEIGHT(),-(_VZ(0)*3.6))) ;
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=WakaruVec:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=WakaruVec.new(0, 0, 0);
+	local posVec=WakaruVec:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+--おまじない　ちゃんと動かなかったらこの部分は消してください
+if type(loadlib)=="function" then
+	loadlib("Spirytus.DLL", "rc_OpenSpirytus")();
+end
+--
+
+--[[
+	■Wakaru_Eye var1.01
+	ネットワークプレイにて他プレイヤーの座標や速度、加速度などの情報を管理する
+	また、その情報から未来位置を予測し適切な偏差射撃を行えるように補助するライブラリのつもり
+	
+	なんかもう一応完成　勝手に煮るなり焼くなり適当に改造してください
+	水中のときとかの処理とかラグの処理とかしてなかったり、その他もろもろ
+	
+	■使い方
+	このファイルをしかるべき場所に置いた後に
+	require("wakaru/wakaru_eye.lua");　とかやれば使える気がする
+	分からなかったら全部コピペでモデルのLuaの中にはっつければ使えるはず
+	詳しい使い方は下のほうに
+
+	■注意
+	このライブラリを使っているときに2窓で同じプレイヤーとして同じサーバーに接続するとバグります
+	違う名前に設定して接続してください
+	
+	■中身で使ってるクラス(テーブル)名
+	他のなんかと被ってたら勝手に変更してね☆（ゝω・）vｷｬﾋﾟ
+	Wakaru_Eye
+	Radar
+	PlayerList
+	Player
+	Locus
+	Fifo
+	Vector
+	
+	■転載や改造、紹介について
+	転載や改造、紹介はご自由に行っていただいて大丈夫ですが、自己責任でお願いします
+
+	■免責事項
+	当プログラムの御利用につき、何らかのトラブルや損失・損害等につきましては一切責任を問わないものとします
+]]--
+
+--[[
+	■更新履歴
+	v1.01	FPSの変動に対応できるように修正
+	v1.00	公開
+]]--
+
+--[[
+	■はうつー使い方
+	最初に、下の文を一回だけ実行してください(インスタンス名をeyeとしたときの例)
+		eye=Wakaru_Eye.new(基準とするチップ番号, 有効範囲[m]);
+	その後、Onframeかmainメソッドの一番最初に、次の文を書いてください
+		eye:tick();
+	これで準備は完了です。その後以下の機能を使えるようになります
+		eye:dispOffset(行番号, 操作キー番号(数値を増やす), 操作キー番号(数値を減らす));
+			偏差射撃の際の遅延の補正を表示、設定できます
+		eye:getPos(対象プレイヤーのID)
+			対象プレイヤーの位置をVector型で返します
+		eye:getFuturePos(対象プレイヤーのID)
+			★基準としたチップからARM弾を発射した場合の予想命中位置をVector型で返します
+		eye:getFuturePos(対象プレイヤーのID, 時間[f])
+			対象プレイヤーの任意のフレーム後の予測位置をVector型で返します
+		eye:getFuturePos2(対象プレイヤーのID, ARMの座標ベクトル[m], ARMの速度ベクトル[m/f])
+			★弾を発射するARMの座標と速度を渡すことによって、より精度の高い予想命中位置をVector型で返します
+		eye:getReadTime(対象プレイヤーのID)
+			弾を発射した際、命中するまでのフレーム数を返します
+		eye:getReadTime2(対象プレイヤーのID, ARMの座標ベクトル[m], ARMの速度ベクトル[m/f])
+			ARMから弾を発射した際、命中するまでのより高精度なフレーム数を返します
+		eye:getInRange(対象プレイヤーのID)
+			対象プレイヤーが設定した距離内にいるかをブーリアン型で返します
+		
+	簡単なVector型の使い方
+		vec=Vector.new(X, Y, Z) ベクトルの生成
+		vec.x, vec.y, vec.z とすることによって各要素を取り出せます
+		足し算引き算とか内積とかの演算も出来るらしい
+
+	おとくなけいじばん
+		もうひとつの窓を開き、同じ名前でネットワークに接続してください
+		そして、その窓で付属の_marker.txtを読み込んでください
+		より高い精度で機能を提供することが出来ます。
+]]--
+
+----Wakaru_Eyeクラス
+--オンライン上の他プレイヤーに関する処理
+--主に外部インターフェース、RadarとPlayerList間のやりとりの役割
+Wakaru_Eye={
+	MYNAME="",	--マーカーを使ってノイズを除去するときに使う
+	noiseVec={x=0, y=0, z=0},	--仮のWakaruVec
+	timeOffset=4,	--ラグとかを補正したいときに使う デフォは4 ちょうどいいくらいに調整してくだし
+	getTimeOffset=function(self)
+		return self.timeOffset*_FPS()/30;
+	end,
+};
+for i=0,_PLAYERS()-1 do
+	if _PLAYERMYID()==_PLAYERID(i) then
+		Wakaru_Eye.MYNAME=_PLAYERNAME(i);
+	end
+end
+function Wakaru_Eye.new(chipName, range)
+	local obj={
+		list=PlayerList.new(),
+		rader=Radar.new(chipName, range),
+		select=0,
+
+		tick=function(self)
+			if _PLAYERS()~=0 then
+				self.list:putData(self.rader:scan(Wakaru_Eye.MYNAME));
+				self.list:tick();
+				self.list:setMarker(self.rader:getMarker(Wakaru_Eye.MYNAME));
+			end
+		end,
+		dispPlayer=function(self, line, enter, right, left)
+			if _PLAYERS()~=0 then
+				if _KEYDOWN(enter)==1 then self.list:setState(_PLAYERID(self.select)) end
+				if _KEYDOWN(right)==1 then self.select=self.select+1; end
+				if _KEYDOWN(left)==1 then self.select=self.select-1; end
+				if self.select<0 then self.select=_PLAYERS()-1 elseif _PLAYERS()<=self.select then self.select=0 end
+				out(line, "Wakaru/Eye:Player < ".._PLAYERNAME(math.mod(self.select+_PLAYERS()-1, _PLAYERS())).." [ ".._PLAYERNAME(self.select).." ] ".._PLAYERNAME(math.mod(self.select+1, _PLAYERS())).." > "..Player.STATE_TABLE[self.list:getState(_PLAYERID(self.select))]);
+			else
+				out(line, "Wakaru/Eye:Player OffLine");
+			end
+		end,
+		dispOffset=function(self, line, right, left)
+			if _KEYDOWN(right)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset+1; end
+			if _KEYDOWN(left)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset-1; end
+			if Wakaru_Eye.timeOffset<=0 then Wakaru_Eye.timeOffset=0; elseif 15<=Wakaru_Eye.timeOffset then Wakaru_Eye.timeOffset=15; end
+			out(line, "Wakaru/Eye:TimeOffset < "..Wakaru_Eye.timeOffset.." > "..math.floor(Wakaru_Eye.timeOffset*1000/30).."ms ");
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self, id)
+			return self.list:getPos(id);
+		end,
+		getNextPos=function(self, id)
+			return self.list:getNextPos(id);
+		end,
+		getFuturePos=function(self, id, t)
+			return self.list:getFuturePos(id, t);
+		end,
+		getFuturePos2=function(self, id, p, v)
+			return self.list:getFuturePos2(id, p, v);
+		end,
+		getVel=function(self, id)
+			return self.list:getVel(id);
+		end,
+		getAcc=function(self, id)
+			return self.list:getAcc(id);
+		end,
+		getDis=function(self, id)
+			return self.list:getDis(id);
+		end,
+		getFutureDis=function(self, id)
+			return self.list:getFutureDis(id);
+		end,
+		getReadTime=function(self, id)
+			return self.list:getReadTime(id);
+		end,
+		getReadTime2=function(self, id, p, v)
+			return self.list:getReadTime2(id, p, v);
+		end,
+		getChip=function(self, id)
+			return self.list:getChip(id);
+		end,
+		getState=function(self, id)
+			return self.list:getState(id);
+		end,
+		getInRange=function(self, id)
+			return self.list:getInRange(id);
+		end,
+	}
+	return obj;
+end
+
+----Radarクラス
+--実際に敵の座標や距離の取得を行う
+--マーカーの設定や2次ノイズの処理もここでしてしまうことにした
+Radar={};
+function Radar.new(chipName, setRange)
+	local obj={
+		chip=chipName,
+		range=setRange;
+
+		scan=function(self, myName)
+			--2次ノイズ除去用
+			Wakaru_Eye.noiseVec=WakaruVec.new(0, 0, 0);
+			if type(_NTICKS)=="function" then
+				local nt=_NTICKS();
+				local nx=(math.sin(nt/150)-math.sin(nt/350))/2;
+				local ny=(math.sin(nt/160)-math.sin(nt/360))/2;
+				local nz=(math.sin(nt/140)-math.sin(nt/340))/2;
+				Wakaru_Eye.noiseVec=WakaruVec.new(nx, ny, nz);
+			else
+				for i=0,_PLAYERS()-1 do
+					if myName==_PLAYERNAME(i) and  _PLAYERMYID()~=_PLAYERID(i) then
+						Wakaru_Eye.noiseVec=(self:getPos(i)-WakaruVec.new(100, 100, 100))/(_PLAYERCHIPS(i)^(1/3));
+						break;
+					end
+				end
+			end
+			
+			local arr={};
+			local pos=WakaruVec:getPosVec(self.chip);
+			for i=0,_PLAYERS()-1 do
+				arr[_PLAYERID(i)]={};
+				arr[_PLAYERID(i)].num=i;
+				if _PLAYERMYID()==_PLAYERID(i) then
+					arr[_PLAYERID(i)].pos=self:getPos(i);
+				else
+					arr[_PLAYERID(i)].pos=self:getPos(i)-Wakaru_Eye.noiseVec*(_PLAYERCHIPS(i)^(1/3));	--自機以外のデータからノイズ分を引く
+				end
+				arr[_PLAYERID(i)].dis=(arr[_PLAYERID(i)].pos-pos):getLength();
+				arr[_PLAYERID(i)].inRange=arr[_PLAYERID(i)].dis<=self.range;
+			end
+			return arr;
+		end,
+		getPos=function(self, playerNum)
+			math.randomseed(1519);	--魔法のおまじない
+			local x=_PLAYERX(playerNum);
+			math.randomseed(1519);
+			local y=_PLAYERY(playerNum);
+			math.randomseed(1519);
+			local z=_PLAYERZ(playerNum);
+			return WakaruVec.new(x, y, z);
+		end,
+		getMarker=function(self, myName)	--番号が最も若い自分と同じ名前のモデルをマーカーに設定する
+			if type(_NTICKS)=="function" then
+				return nil;
+			else
+				for i=0,_PLAYERS()-1 do
+					if myName==_PLAYERNAME(i) and _PLAYERMYID()~=_PLAYERID(i) then
+						return _PLAYERID(i);
+					end
+				end
+			end
+			return nil;
+		end,
+	}
+	return obj;
+end
+
+----PlayerListクラス
+--オンラインの他プレイヤーをリストにまとめ、管理を行う
+--PlayerIDをキーにしたテーブル
+PlayerList={};
+function PlayerList.new()
+	local obj={
+		list={},
+		
+		tick=function(self)
+			for key,value in self.list do
+				if self.list[key]:tick(self.noiseVec) then
+					self.list[key]=nil;
+				end
+			end
+		end,
+		putData=function(self, arr)
+			for key,value in arr do
+				if self.list[key]==nil then
+					self.list[key]={};
+					self.list[key]=Player.new(value);
+				else
+					self.list[key]:putData(value);
+				end
+			end
+		end,
+		setState=function(self, id)
+			return self.list[id]:setState();
+		end,
+		setMarker=function(self, id)
+			if id~=nil then
+				self.list[id]:setMarker();
+			end
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self, id)
+			return self.list[id]:getPos();
+		end,
+		getNextPos=function(self, id)
+			return self.list[id]:getNextPos();
+		end,
+		getFuturePos=function(self, id, t)
+			return self.list[id]:getFuturePos(t);
+		end,
+		getFuturePos2=function(self, id, p, v)
+			return self.list[id]:getFuturePos2(p, v);
+		end,
+		getVel=function(self, id)
+			return self.list[id]:getVel();
+		end,
+		getAcc=function(self, id)
+			return self.list[id]:getAcc();
+		end,
+		getDis=function(self, id)
+			return self.list[id]:getDis();
+		end,
+		getFutureDis=function(self, id)
+			return self.list[id]:getFutureDis();
+		end,
+		getReadTime=function(self, id)
+			return self.list[id]:getReadTime();
+		end,
+		getReadTime2=function(self, id, p, v)
+			return self.list[id]:getReadTime2(p, v);
+		end,
+		getChip=function(self, id)
+			return self.list[id]:getChip();
+		end,
+		getState=function(self, id)
+			return self.list[id]:getState();
+		end,
+		getInRange=function(self, id)
+			return self.list[id]:getInRange();
+		end,
+	}
+	return obj;
+end
+
+----Playerクラス
+--オンラインのプレイヤーの情報、属性、状態を持ち、管理を行う
+Player={
+	STATE_MYSELF=-2,	--自分
+	STATE_MARKER=-1,	--2次ノイズ除去に用いるマーカーのプレイヤー
+	STATE_NEWTRAL=0,	--ARMを装備していないプレイヤー
+	STATE_FRIEND=1,	--交戦中で無いプレイヤー
+	STATE_HOSTILE=2,	--交戦中のプレイヤー
+	STATE_TABLE={},
+};
+	Player.STATE_TABLE[Player.STATE_MYSELF]="MYSELF";
+	Player.STATE_TABLE[Player.STATE_MARKER]="MARKER";
+	Player.STATE_TABLE[Player.STATE_NEWTRAL]="NEWTRAL";
+	Player.STATE_TABLE[Player.STATE_FRIEND]="FRIEND";
+	Player.STATE_TABLE[Player.STATE_HOSTILE]="HOSTILE";
+function Player.new(initData)
+	local obj={
+		num=initData.num,	--何番目か
+		chip=_PLAYERCHIPS(initData.num),	--チップの枚数 ノイズ除去やモデルロード検出に
+		arm=_PLAYERARMS(initData.num),	--ARMの枚数
+		state=Player.STATE_NEWTRAL,	--識別
+		inRange=false;	--レーダーの範囲内かどうか
+		locus=Locus.new(initData),	--座標や距離のデータ
+		refresh=0;	--更新チェック 更新されなかったフレームの期間を記憶する
+		reset=_PLAYERRESETS(initData.num)+_PLAYERINITS(initData.num);	--リセットチェック リセットされたら一旦消去する
+		
+		tick=function(self)
+			if self:checkLost() or self:checkReset() or self:checkChange() then return true; else return false; end;
+		end,
+
+		setState=function(self)
+			if _PLAYERID(self.num)==_PLAYERMYID() then
+				self.state=Player.STATE_MYSELF;
+			elseif self.state==Player.STATE_MARKER then
+				self.state=Player.STATE_MARKER;
+			elseif self.arm==0 then
+				self.state=Player.STATE_NEWTRAL;
+			elseif self.state==Player.STATE_FRIEND then
+				self.state=Player.STATE_HOSTILE;
+			else
+				self.state=Player.STATE_FRIEND;
+			end
+		end,
+		setMarker=function(self)
+			self.state=Player.STATE_MARKER;
+		end,
+		putData=function(self, data)
+			self.refresh=0;
+			self.num=data.num;
+			self.inRange=data.inRange;
+			self.locus:putData(data);
+		end,
+		checkReset=function(self)
+			if self.reset==_PLAYERRESETS(self.num)+_PLAYERINITS(self.num) then
+				return false;
+			else
+				return true;
+			end;
+		end,
+		checkLost=function(self)
+			if self.refresh<60 then
+				self.refresh=self.refresh+1;
+				return false;
+			else
+				return true;
+			end
+		end,
+		checkChange=function(self)
+			if self.chip==_PLAYERCHIPS(self.num) and self.arm==_PLAYERARMS(self.num) then
+				return false;
+			else
+				return true;
+			end;
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self)
+			return self.locus:getPos();
+		end,
+		getNextPos=function(self)
+			return self.locus:getNextPos();
+		end,
+		getFuturePos=function(self, t)
+			return self.locus:getFuturePos(t);
+		end,
+		getFuturePos2=function(self, p, v)
+			return self.locus:getFuturePos2(p, v);
+		end,
+		getVel=function(self)
+			return self.locus:getVel();
+		end,
+		getAcc=function(self)
+			return self.locus:getAcc();
+		end,
+		getDis=function(self)
+			return self.locus:getDis();
+		end,
+		getFutureDis=function(self)
+			return self.locus:getFutureDis();
+		end,
+		getReadTime=function(self)
+			return self.locus:getReadTime();
+		end,
+		getReadTime2=function(self, p, v)
+			return self.locus:getReadTime2(p, v);
+		end,
+		getChip=function(self)
+			return self.chip;
+		end,
+		getState=function(self)
+			return self.state;
+		end,
+		getInRange=function(self, id)
+			return self.inRange;
+		end,
+	}
+	obj:setState();
+	return obj;
+end
+
+----Locusクラス
+--過去16フレーム分の座標データを持ち、座標、速度、加速度等の解析を行う
+--座標と距離を格納した配列　最小二乗法を用いた2次関数への近似
+
+Locus={
+	LS2={	{0.000005390719337588, 0.00016711229946524, 0.0008355614973262},
+				{0.00016711229946524, 0.005547050198378, 0.03158422459893},
+				{0.0008355614973262, 0.03158422459893, 0.24883021390374}},
+	getBulletSpd=function(self)
+		if 0<_FPS() then
+			return 600/_FPS();
+		else
+			return 600/_BASE();
+		end
+	end
+};
+function Locus.new(initData)
+	local obj={
+		logPos=Fifo.new(32, initData.pos);
+		pos=initData.pos;	--現在の位置
+		nextPos=initData.pos;	--次フレームの予測位置
+		futurePos=initData.pos;	--弾が当たる瞬間の予測位置
+		errorPos=WakaruVec.new(0, 0, 0);
+		
+		vel=WakaruVec.new(0, 0, 0);	--現在の速度
+		acc=WakaruVec.new(0, 0, 0);	--現在の加速度(正確には違う)
+		
+		logDis=Fifo.new(32, initData.dis);
+		dis=initData.dis;	--現在の距離
+		nextDis=initData.dis;	--次フレームの予測距離
+		futureDis=initData.dis;	--弾が当たる瞬間の予測距離
+		errorDis=0;
+		
+		readTime=math.floor(initData.dis/20)+Wakaru_Eye.timeOffset;
+		
+		putData=function(self, data)
+			self.errorPos=data.pos-self.nextPos;
+			self.errorDis=data.dis-self.nextDis;
+			self.logPos:put(data.pos);
+			self.logDis:put(data.dis);
+			self:analyze();
+		end,
+		analyze=function(self)
+			self:leastSquaresDis();
+			self:leastSquaresPos();
+		end,
+		leastSquaresDis=function(self)
+			--3次関数の解を求めるのは大変なので2次関数に近似する
+			local sum_y=0;
+			local sum_xy=0;
+			local sum_xxy=0;
+			local i=0;
+			for i=0, 31 do	--データ数は16個固定
+				sum_y=sum_y+self.logDis:get(i);
+				sum_xy=sum_xy+self.logDis:get(i)*(-i);	--インデックスが大きいほど過去なので
+				sum_xxy=sum_xxy+self.logDis:get(i)*(i^2);
+			end
+			local a=sum_xxy*Locus.LS2[1][1]+sum_xy*Locus.LS2[1][2]+sum_y*Locus.LS2[1][3];
+			local b=sum_xxy*Locus.LS2[2][1]+sum_xy*Locus.LS2[2][2]+sum_y*Locus.LS2[2][3];
+			local c=sum_xxy*Locus.LS2[3][1]+sum_xy*Locus.LS2[3][2]+sum_y*Locus.LS2[3][3];
+
+			self.dis=c;
+			self.nextDis=a+b+c;
+			
+			--着弾までの時間を求める
+			local v=b-Locus:getBulletSpd();	--接近速度から弾の速度を引く
+			if v<=0 then	--速度が弾の速度より速い→当たらない
+				if a~=0 then
+					local r=v^2-4*a*c;
+					if 0<=r then	--2次関数の解がない→当たらない
+						r=math.sqrt(r);
+						self.readTime=(-v-r)/(2*a);
+					else
+						self.readTime=c/20;
+					end
+				else
+					self.readTime=-c/v;
+				end
+			else
+				self.readTime=c/20;
+			end
+			self.readTime=math.floor(self.readTime+1);
+			self.futureDis=a*self.readTime^2+b*self.readTime+c;
+		end,
+		leastSquaresPos=function(self)
+			--本来3次関数で近似する予定だったがラグに対して過敏に反応してしまうため2次関数で近似
+			local sum_y=WakaruVec.new(0, 0, 0);
+			local sum_xy=WakaruVec.new(0, 0, 0);
+			local sum_xxy=WakaruVec.new(0, 0, 0);
+			local i=0;
+			for i=0, 31 do	--データ数は16個固定
+				sum_y=sum_y+self.logPos:get(i);
+				sum_xy=sum_xy+self.logPos:get(i)*(-i);	--インデックスが大きいほど過去なので
+				sum_xxy=sum_xxy+self.logPos:get(i)*((-i)^2);
+			end
+			local a=sum_xxy*Locus.LS2[1][1]+sum_xy*Locus.LS2[1][2]+sum_y*Locus.LS2[1][3];
+			local b=sum_xxy*Locus.LS2[2][1]+sum_xy*Locus.LS2[2][2]+sum_y*Locus.LS2[2][3];
+			local c=sum_xxy*Locus.LS2[3][1]+sum_xy*Locus.LS2[3][2]+sum_y*Locus.LS2[3][3];
+
+			self.acc=a;
+			self.vel=b;
+			self.pos=c;
+			
+			self.nextPos=a+b+c;
+			local t=self.readTime+Wakaru_Eye:getTimeOffset();
+			self.futurePos=a*t^2+b*t+c;
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self)
+			return self.pos;
+		end,
+		getNextPos=function(self)
+			return self.nextPos;
+		end,
+		getFuturePos=function(self, t)
+			if t==nil then
+				return self.futurePos;
+			else
+				t=t+Wakaru_Eye:getTimeOffset();
+				return self.acc*t^2+self.vel*t+self.pos;
+			end
+		end,
+		getFuturePos2=function(self, p, v)
+			--より高精度な未来位置予測(になってればいいな)
+			local t=self:getReadTime2(p, v);
+			local s=v*t;
+			t=t+Wakaru_Eye:getTimeOffset();
+			return self.acc*t^2+self.vel*t+self.pos-s;
+		end,
+		getVel=function(self)
+			return self.vel;
+		end,
+		getAcc=function(self)
+			return self.acc;
+		end,
+		getDis=function(self)
+			return self.dis;
+		end,
+		getFutureDis=function(self)
+			return self.futureDis;
+		end,
+		getReadTime=function(self)
+			return self.readTime;
+		end,
+		getReadTime2=function(self, p, v)
+			--高精度な着弾時間予測(のはず)
+			for f=1, 60 do
+				if (self.acc*f^2+(self.vel-v)*f+(self.pos-p)):getLength()<=f*Locus:getBulletSpd() then
+					return f;
+				end
+			end
+			return 61;
+		end,
+	}
+	return obj;
+end
+
+----Fifoクラス
+--FIFO型のリスト
+--配列を使ってそれっぽくしてみた
+Fifo={};
+function Fifo.new(length, init)
+	local obj={
+		arr={},
+		len=length,
+		head=-1,
+		
+		put=function(self, val)
+			self.head=math.mod(self.head+1, self.len);
+			self.arr[self.head]=val;
+		end,
+		get=function(self, key)
+			key=math.mod(key, self.len);
+			if key<=self.head then
+				return self.arr[math.mod(self.head-key, self.len)];
+			else
+				return self.arr[self.len+math.mod(self.head-key, self.len)];
+			end
+		end,
+		getLength=function(self)
+			return self.len;
+		end,
+	}
+	for i=0, obj.len do
+		obj.arr[i]=init;
+	end
+	return obj;
+end
+
+----WakaruVecクラス
+--このゲーム内の、空間上のベクトルを扱う
+WakaruVec={
+	getPosVec=function(self, chipName)
+		return WakaruVec.new(_X(chipName), _Y(chipName), _Z(chipName));
+	end,
+};
+function WakaruVec.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+
+		getWVec=function(self, chipName)
+			local t;
+			local lx; local ly; local lz;
+			local wx; local wy; local wz;
+			
+			lx=self.x;
+			ly=self.y;
+			lz=self.z;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx
+				lx=-lz;
+				lz=t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx
+				lx=lz;
+				lz=-t;
+			end
+			
+			wx=_XX(chipName)*lx+_YX(chipName)*ly+_ZX(chipName)*lz;
+			wy=_XY(chipName)*lx+_YY(chipName)*ly+_ZY(chipName)*lz;
+			wz=_XZ(chipName)*lx+_YZ(chipName)*ly+_ZZ(chipName)*lz;
+
+			return WakaruVec.new(wx, wy, wz);
+		end,
+
+		getLVec=function(self, chipName)
+			local t;
+			local wx; local wy; local wz;
+			local lx; local ly; local lz;
+			
+			wx=self.x;
+			wy=self.y;
+			wz=self.z;
+				
+			lx=_XX(chipName)*wx+_XY(chipName)*wy+_XZ(chipName)*wz;
+			ly=_YX(chipName)*wx+_YY(chipName)*wy+_YZ(chipName)*wz;
+			lz=_ZX(chipName)*wx+_ZY(chipName)*wy+_ZZ(chipName)*wz;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then--
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx;
+				lx=lz;
+				lz=-t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx;
+				lx=-lz;
+				lz=t;
+			end
+			
+			return WakaruVec.new(lx, ly, lz);
+		end,
+	}
+	local operation={
+		__metatable = "WakaruVec",
+
+		__add=function(vec1, vec2)
+			return WakaruVec.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return WakaruVec.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return WakaruVec.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return WakaruVec.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return WakaruVec.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+--[[
+		__lt=function(vec1,vec2)
+			return WakaruVec.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+]]--
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+			--return "x="..math.floor(self.x)..",y="..math.floor(self.y)..",z="..math.floor(self.z);
+		end,
+	}
+	setmetatable(obj, operation);
+	return obj;
+end
+
+}

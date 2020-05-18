@@ -1,0 +1,112 @@
+// [RCD] 
+Val
+{
+	JET_X(default=0, min=-1000000, max=1000000)
+	JET_Y(default=0, min=-1000000, max=1000000)
+	JET_Z(default=0, min=-1000000, max=1000000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		E:TrimF(angle=-90, option=1) {
+			W:Jet(power=-JET_Z) { }
+		}
+		N:TrimF(angle=90, option=1) {
+			S:Jet(power=-JET_X) { }
+		}
+		S:TrimF(angle=-90, option=1) {
+			N:Jet(power=-JET_X) { }
+		}
+		W:TrimF(angle=90, option=1) {
+			E:Jet(power=-JET_Z) { }
+		}
+		E:Jet(angle=180, power=-JET_Y) { }
+		W:Jet(angle=180, power=-JET_Y) { }
+	}
+}
+
+lua{
+	X=100
+	Y=100
+	Z=100
+function main()
+	out(0,"x= ".._X(0));
+	out(1,"y= ".._Y(0));
+	out(2,"z= ".._Z(0));
+	local XPOW=(X-_X(CORE))*10000
+	local YPOW=(Y-_Y(CORE))*10000+_WEIGHT()*9.8*6*0
+	local ZPOW=(Z-_Z(CORE))*10000
+
+	local pvec={x=XPOW, y=YPOW, z=ZPOW}
+	pvec=getLVec(pvec,CORE)
+
+	local svec=getLVec(getSpdVec(CORE),CORE)
+
+	JET_X=pvec.x-svec.x*100000
+	JET_Y=pvec.y-svec.y*100000
+	JET_Z=pvec.z-svec.z*100000
+end
+
+function getPosVec(chipName)
+	local posVec={};
+	posVec.x=_X(chipName)
+	posVec.y=_Y(chipName)
+	posVec.z=_Z(chipName)
+	return posVec;
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec={}; posVec=getPosVec(chipName);
+	spdVec=addVec(posVec, mulVec(_G["getSpdVec_prevSpdVec"..chipName], -1));
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function addVec(vec1, vec2)
+	local addVec={};
+	addVec.x=vec1.x+vec2.x;
+	addVec.y=vec1.y+vec2.y;
+	addVec.z=vec1.z+vec2.z;
+
+	return addVec;
+end
+
+function mulVec(vec, m)
+	local mulVec={};
+	mulVec.x=vec.x*m;
+	mulVec.y=vec.y*m;
+	mulVec.z=vec.z*m;
+
+	return mulVec;
+end
+
+function getWVec(lVec, chipName)
+	local wVec={};
+	
+	wVec.x=_XX(chipName)*lVec.x+_YX(chipName)*lVec.y+_ZX(chipName)*lVec.z;
+	wVec.y=_XY(chipName)*lVec.x+_YY(chipName)*lVec.y+_ZY(chipName)*lVec.z;
+	wVec.z=_XZ(chipName)*lVec.x+_YZ(chipName)*lVec.y+_ZZ(chipName)*lVec.z;
+
+	return wVec;
+end
+
+function getLVec(wVec, chipName)
+	local lVec={};
+
+	lVec.x=_XX(chipName)*wVec.x+_XY(chipName)*wVec.y+_XZ(chipName)*wVec.z;
+	lVec.y=_YX(chipName)*wVec.x+_YY(chipName)*wVec.y+_YZ(chipName)*wVec.z;
+	lVec.z=_ZX(chipName)*wVec.x+_ZY(chipName)*wVec.y+_ZZ(chipName)*wVec.z;
+
+	return lVec;
+end
+}

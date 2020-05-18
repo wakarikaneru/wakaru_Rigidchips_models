@@ -1,0 +1,86 @@
+// [RCD] plane
+Val
+{
+	GEAR_ANGLE(default=80, min=80, max=170)
+	GEAR_BRAKE(default=0, max=200)
+	JET(default=0, max=50000)
+	PITCH(default=0, min=-10, max=10, step=1)
+	ROLL(default=0, min=-10, max=10, step=1)
+	YAW(default=0, min=-10, max=10, step=1)
+}
+Key
+{
+	0:pitch(step=-1)
+	1:pitch(step=1)
+	2:roll(step=0.5)
+	3:roll(step=-0.5)
+	4:yaw(step=-1)
+	5:jet(step=50000)
+	6:yaw(step=1)
+	8:jet(step=-50000)
+}
+Body
+{
+	Core() {
+		N:Frame(angle=-20) {
+			N:Jet(angle=110, power=jet, effect=1) { }
+		}
+		S:Chip(angle=-pitch) {
+			S:Chip(angle=-pitch) {
+				S:Chip(angle=-pitch) {
+					W:Chip(angle=-90) {
+						S:Chip(angle=-yaw) { }
+					}
+					E:Chip(angle=-90) {
+						S:Chip(angle=yaw) { }
+					}
+					S:Chip(angle=-pitch) {
+						W:Trim(angle=pitch) { }
+						E:Trim(angle=-pitch) { }
+					}
+				}
+			}
+		}
+		W:Frame(angle=10) {
+			W:Wheel(angle=gear_angle, brake=gear_brake) { }
+		}
+		E:Frame(angle=10) {
+			E:Wheel(angle=gear_angle, brake=gear_brake) { }
+		}
+		E:Trim(angle=roll) {
+			E:Trim(angle=roll) {
+				E:Trim(angle=roll) { }
+			}
+		}
+		W:Trim(angle=roll) {
+			W:Trim(angle=roll) {
+				W:Trim(angle=roll) { }
+			}
+		}
+	}
+}
+Lua
+{
+
+function gear_updown()
+	if(_H(0)>=0) then
+		GEAR_ANGLE=GEAR_ANGLE-5	-- ギアダウン
+		GEAR_BRAKE=0
+	else
+		GEAR_ANGLE=GEAR_ANGLE+5	-- ギアアップ
+		GEAR_BRAKE=GEAR_BRAKE+10
+	end
+end
+
+function main()
+	gear_updown()
+
+	-- 表示
+	out(0,"Up/Down:Pitch, Left/Right:Roll, Z/C:Yaw, X:Jet-On, D:Jet-Off")
+	out(1,"x=",_X(0),", y=",_Y(0),", z=",_Z(0))
+	out(2,"ax=",math.deg(_AX(0)),", ay=",math.deg(_AY(0)),", ez=",math.deg(_EZ(0)))
+	out(3,"vx=",_VX(0),", vy=",_VY(0),", vz=",_VZ(0))
+	out(4,"wx=",_WX(0),", wy=",_WY(0),", wz=",_WZ(0))
+end
+
+}

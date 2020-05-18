@@ -1,0 +1,14 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Weight(option=8) { }
+		N:Arm(power=5000, option=0.00000000001) { }
+	}
+}

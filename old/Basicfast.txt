@@ -1,0 +1,132 @@
+// [RCD] BasicCar
+Val
+{
+	BRAKEL(default=0, max=80, step=80)
+	BRAKER(default=0, max=80, step=80)
+	ENGINEL(default=0, min=-25000, max=25000, step=500)
+	ENGINER(default=0, min=-25000, max=25000, step=500)
+	HANDLE(default=0, min=-20, max=20, step=0.5)
+	HBRAKEL(default=0, max=100, step=100)
+	HBRAKER(default=0, max=100, step=100)
+}
+Key
+{
+	0:EngineL(step=-500), EngineR(step=-500)
+	1:EngineL(step=500), EngineR(step=500)
+	2:Handle(step=-0.5)
+	3:Handle(step=0.5)
+	7:BrakeL(step=30), HBrakeL(step=20), BrakeR(step=30), HBrakeR(step=20)
+	8:HBrakeL(step=20), HBrakeR(step=20)
+}
+Body
+{
+	Core() {
+		N:Chip() {
+			N:Rudder(angle=Handle) {
+				W:Frame() {
+					W:Wheel(angle=90, brake=BrakeL, name=FL) { }
+					N:Chip(angle=-160) { }
+				}
+				E:Frame() {
+					E:Wheel(angle=90, brake=BrakeR, name=FR) { }
+					N:Chip(angle=-160) { }
+				}
+			}
+		}
+		S:Chip() {
+			W:Frame() {
+				W:Wheel(angle=90, power=EngineL, brake=HBrakeL, name=RL) { }
+				N:Chip(angle=-160) { }
+			}
+			E:Frame() {
+				E:Wheel(angle=90, power=-EngineR, brake=HBrakeR, name=RR) { }
+				N:Chip(angle=-160) { }
+			}
+		}
+		S:Trim(angle=90) { }
+		S:Trim(angle=90) { }
+		S:Trim(angle=90) { }
+		S:Trim(angle=90) { }
+	}
+}
+Script
+{
+}
+Lua
+{
+	function main()
+		TCS()
+	end
+
+	--ÉXÉäÉbÉvÇñhÇÆÇΩÇﬂÇÃä÷êî
+	function ABS()
+		vx=_VX(TIRE_1-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_1)/vx
+		if(-3.3<ratio and ratio<3.3)then
+			BRAKE_1=15
+		end
+		vx=_VX(TIRE_2-1)
+		if(0<=vx and vx<1)then
+			vx=1
+		elseif(-1<vx and vx<0)then
+			vx=-1
+		end
+		ratio=_WY(TIRE_2)/vx
+		if(-3.3<ratio and ratio<3.3)then
+			BRAKE_2=15
+		end
+	end
+
+	function TCS()
+		vz=_VZ(RL-1)
+		if(vz<0 and vz>-10) then
+			vz=-10
+		end
+		if(vz>=0 and vz<10) then
+			vz=10
+		end
+
+		ratio=_WY(RL)/vz
+		out(1,ratio)
+		if(ratio>3.4) then
+			ENGINEL=ENGINEL*0.95
+			HBRAKEL=HBRAKEL+1
+		end
+
+		if(ratio<0) then
+			ENGINEL=0
+		end
+
+		if(ratio<=3.4 and ratio>=0) then
+		end
+
+
+		vz=-_VZ(RR-1)
+		if(vz<0 and vz>-10) then
+			vz=-10
+		end
+		if(vz>=0 and vz<10) then
+			vz=10
+		end
+
+		ratio=_WY(RR)/vz
+		out(2,ratio)
+
+		if(ratio>3.33) then
+			ENGINER=ENGINER*0.95
+			HBRAKER=HBRAKER+1
+		end
+
+		if(ratio<0) then
+			ENGINER=0
+		end
+
+		if(ratio<=3.33 and ratio>=0) then
+		end
+	end
+}

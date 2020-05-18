@@ -1,0 +1,266 @@
+// [RCD] 
+Val
+{
+	FETHER(default=180, min=120, max=180, step=45)
+	POWER(default=0, min=-500000, max=500000, step=500)
+	POWERL(default=0, min=-500000, max=500000, step=500)
+	POWERR(default=0, min=-500000, max=500000, step=500)
+	WING(default=0, min=-30, max=30)
+}
+Key
+{
+	0:POWER(step=5000)
+}
+Body
+{
+	Core() {
+		E:Chip(angle=wing) {
+			S:Chip() {
+				S:Chip() {
+					E:Frame(damper=0.75,spring=0.75) {
+						N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+						E:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							E:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								E:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									E:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										E:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											E:Frame(damper=0.75,spring=0.75) {
+												N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+												E:Frame(damper=0.75,spring=0.75) {
+													N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					S:Chip() {
+						E:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							E:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								E:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									E:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										E:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											E:Frame(damper=0.75,spring=0.75) {
+												N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+												E:Frame(damper=0.75,spring=0.75) {
+													N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+													E:Frame(damper=0.75,spring=0.75) {
+														N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				E:Frame(damper=0.75,spring=0.75) {
+					N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+					E:Frame(damper=0.75,spring=0.75) {
+						N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+						E:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							E:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								E:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									E:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										E:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											E:Frame(damper=0.75,spring=0.75) {
+												N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			E:Frame(damper=0.75,spring=0.75) {
+				N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+				E:Frame(damper=0.75,spring=0.75) {
+					N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+					E:Frame(damper=0.75,spring=0.75) {
+						N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+						E:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							E:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								E:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									E:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										E:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		W:Chip(angle=wing) {
+			S:Chip() {
+				S:Chip() {
+					W:Frame(damper=0.75,spring=0.75) {
+						N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+						W:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							W:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								W:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									W:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										W:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											W:Frame(damper=0.75,spring=0.75) {
+												N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+												W:Frame(damper=0.75,spring=0.75) {
+													N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					S:Chip() {
+						W:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							W:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								W:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									W:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										W:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											W:Frame(damper=0.75,spring=0.75) {
+												N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+												W:Frame(damper=0.75,spring=0.75) {
+													N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+													W:Frame(damper=0.75,spring=0.75) {
+														N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				W:Frame(damper=0.75,spring=0.75) {
+					N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+					W:Frame(damper=0.75,spring=0.75) {
+						N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+						W:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							W:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								W:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									W:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										W:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											W:Frame(damper=0.75,spring=0.75) {
+												N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			W:Frame(damper=0.75,spring=0.75) {
+				N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+				W:Frame(damper=0.75,spring=0.75) {
+					N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+					W:Frame(damper=0.75,spring=0.75) {
+						N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+						W:Frame(damper=0.75,spring=0.75) {
+							N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+							W:Frame(damper=0.75,spring=0.75) {
+								N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+								W:Frame(damper=0.75,spring=0.75) {
+									N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+									W:Frame(damper=0.75,spring=0.75) {
+										N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										W:Frame(damper=0.75,spring=0.75) {
+											N:Chip(angle=FETHER) { } N:Chip(angle=FETHER) { }
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		W:Wheel(angle=60) { }
+		E:Wheel(angle=60) { }
+		S:Chip() {
+			S:Chip() {
+				S:Chip() {
+					S:Chip() {
+						W:Jet(power=POWERR,name=RIGHT) { }
+						E:Jet(power=POWERL,name=LEFT) { }
+					}
+				}
+			}
+		}
+	}
+}
+LUA
+{
+dir=0
+function main()
+	if(_KEY(5)==1)then
+		if(dir==0)then
+			WING=WING-15
+		else
+			WING=WING+15
+			FETHER=120
+		end
+		if(30<=WING)then
+			dir=0
+		end
+		if(WING<=-30)then
+			dir=1
+		end
+	else
+		WING=0
+	end
+
+	YR=_Y(0)-_Y(RIGHT)
+	YL=_Y(0)-_Y(LEFT)
+	POWERR=YR*500000
+	POWERL=YL*500000
+	out(1,YR,YL)
+end
+}

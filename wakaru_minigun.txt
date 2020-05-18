@@ -1,0 +1,167 @@
+// [RCD] 
+Val
+{
+	MOTOR(default=0, max=50000)
+	TRIG0(default=0, min=-2147483648, max=2147483647)
+	TRIG1(default=0, min=-2147483648, max=2147483647)
+	TRIG2(default=0, min=-2147483648, max=2147483647)
+	TRIG3(default=0, min=-2147483648, max=2147483647)
+	JET(default=0, min=-2147483648, max=2147483647)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:RLW(angle=-90, power=MOTOR, name=MINIGUN) {
+			S:Arm(angle=90, power=TRIG0, option=50000, name=ARM0) { }
+			E:Arm(angle=90, power=TRIG1, option=50000, name=ARM1) { }
+			N:Arm(angle=90, power=TRIG2, option=50000, name=ARM2) { }
+			W:Arm(angle=90, power=TRIG3, option=50000, name=ARM3) { }
+		}
+		N:Jet(angle=-90, power=-JET) { }
+		W:Weight(angle=30) { }
+		S:Weight(angle=30) { }
+		E:Weight(angle=30) { }
+		N:Weight(angle=30) { }
+	}
+}
+Lua
+{
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	initflag=false;
+	
+	require("cel/Science/BasePhysic.lua");
+	require("wakaru/wakaru_eye.lua");
+	
+function init()
+	initflag=true;
+	eye=Wakaru_Eye.new(CORE, 300);
+	
+	spd=Wector.new(0, 0, 0);
+	
+	minigun=BasePhysic.new(MINIGUN);
+	
+	option=_OPTION(ARM0);
+	chargeTime=math.ceil(option/(150000/_BASE())+1);
+	fireRatio=math.ceil(chargeTime/4);
+	
+	threshold=math.cos(math.rad(45))*0.3
+end
+
+function main()
+	if not initflag then init() end
+	
+	minigun:Renew();
+	
+	out(1, option);
+	out(2, chargeTime);
+	out(3, fireRatio);
+	
+	for i=0, 3 do
+		_G["TRIG"..i]=0;
+	end
+	
+	JET=0;
+	mPos=Wector:getPosVec(MINIGUN);
+	
+	if _KEYDOWN(KEY_Z)==1 then
+		MOTOR=5000;
+	end
+	
+	if _KEY(KEY_Z)==1 and 150<=_TICKS() then
+		--‰ñ“]”‚ð§Œä‚·‚é
+		MOTOR=PID("MOTOR", minigun.wy/_BASE(), 2*math.pi/4/fireRatio, 5000, 1000, 50000, 0, 50000, 1.00, 0);
+		for i=0, 3 do
+			arm=_G["ARM"..i];
+			aPos=Wector:getPosVec(arm);
+			rPos=(aPos-mPos):getLVec(MINIGUN-1);
+			
+			if threshold<rPos.x then
+				if _OPTION(arm)<=_E(arm) then
+					_G["TRIG"..i]=_OPTION(arm);
+					JET=_OPTION(arm);
+					
+					_SETCOLOR(tonumber("FF0000", 16));
+				end
+			end
+		end
+	else
+		MOTOR=0;
+	end
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+	
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+}

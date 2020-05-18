@@ -1,0 +1,115 @@
+// [RCD] 
+Val
+{
+	ANGLE(default=0, min=-90, max=90)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Chip(angle=ANGLE) { }
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	function analog(i)
+		if i==-1 then
+			mouseX=(_WIDTH()/2-_MX())*2/_HEIGHT();
+			return limit(mouseX, -1, 1)*_MR();
+		elseif _ANALOG(i)==0 then
+			return 0;
+		else
+			--return _ANALOG(i)/1000;
+			return (_ANALOG(i)/1000)^2.0*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+	
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+	require("cel/Science/BasePhysic.lua");
+	
+	function init()
+		initflag=true;
+		
+		d=0;
+	end
+
+	function main()
+		if not initflag then init(); end
+		
+		spd=getSpdVec(0);
+		if spd:getLength()==0 then
+			spd=Wector.new(0, spd.y, 0);
+		end
+		s=limit(spd:getLength()/1000*60*60*30, 0, 10)/10;
+		out(0, s);
+		
+		spdL=spd:getLVec(0);
+		spdLV=Wector.new(0, spdL.y, spdL.z);
+		spdLVN=spdLV:getNormal();
+		
+		out(5,spdLVN.x);
+		out(6,spdLVN.y);
+		out(7,spdLVN.z);
+		
+		r=math.atan2(spdLVN.z, spdLVN.y);
+		out(1, r);
+		d=step2(d, math.deg(r), 30);
+		out(2, d);
+		ANGLE=d;
+	end
+	
+	
+	function step2(val, target, step)
+		if math.abs(val-target)<=step then
+			val=target;
+		else
+			if target<val then
+				val=val-step;
+			else
+				val=val+step;
+			end
+		end
+		return val;
+	end
+	
+	function limit(val,min,max)
+		return math.max(min,math.min(max,val));
+	end
+
+	function getSpdVec(chipName)
+		if not _G["getSpdVec_init"..chipName] then
+			_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+			_G["getSpdVec_init"..chipName]=true;
+		end
+
+		local spdVec=Wector.new(0, 0, 0);
+		local posVec=Wector:getPosVec(chipName);
+		spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+		
+		_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+		return spdVec;
+	end
+}

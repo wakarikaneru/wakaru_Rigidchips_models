@@ -1,0 +1,548 @@
+// [RCD] 
+Val{
+	A(default=150,min=-3600000,max=3600000,disp=0)
+	AA1(default=150,min=-360,max=360)
+	AA10(default=165,min=-360,max=360)
+	AA11(default=165,min=-360,max=360)
+	AA12(default=165,min=-360,max=360)
+	AA13(default=165,min=-360,max=360)
+	AA14(default=165,min=-360,max=360)
+	AA15(default=165,min=-360,max=360)
+	AA16(default=165,min=-360,max=360)
+	AA17(default=165,min=-360,max=360)
+	AA18(default=165,min=-360,max=360)
+	AA19(default=165,min=-360,max=360)
+	AA2(default=165,min=-360,max=360)
+	AA20(default=165,min=-360,max=360)
+	AA21(default=165,min=-360,max=360)
+	AA3(default=165,min=-360,max=360)
+	AA4(default=165,min=-360,max=360)
+	AA5(default=165,min=-360,max=360)
+	AA6(default=165,min=-360,max=360)
+	AA7(default=165,min=-360,max=360)
+	AA8(default=165,min=-360,max=360)
+	AA9(default=165,min=-360,max=360)
+	AB1(default=0,min=-360,max=360)
+	AB10(default=-15,min=-360,max=360)
+	AB11(default=-15,min=-360,max=360)
+	AB12(default=-15,min=-360,max=360)
+	AB13(default=-15,min=-360,max=360)
+	AB14(default=-15,min=-360,max=360)
+	AB15(default=-15,min=-360,max=360)
+	AB16(default=-15,min=-360,max=360)
+	AB17(default=-15,min=-360,max=360)
+	AB18(default=-15,min=-360,max=360)
+	AB19(default=-15,min=-360,max=360)
+	AB2(default=-15,min=-360,max=360)
+	AB20(default=-15,min=-360,max=360)
+	AB21(default=-15,min=-360,max=360)
+	AB3(default=-15,min=-360,max=360)
+	AB4(default=-15,min=-360,max=360)
+	AB5(default=-15,min=-360,max=360)
+	AB6(default=-15,min=-360,max=360)
+	AB7(default=-15,min=-360,max=360)
+	AB8(default=-15,min=-360,max=360)
+	AB9(default=-15,min=-360,max=360)
+	AC(default=-60,min=-360)
+	B(default=0,min=-3600000,max=3600000,disp=0)
+	COL1(default=#FF4040)
+	COL2(default=#FFFFFF)
+	COL3(default=#FFFF00)
+	COLHAPPA(default=#008000)
+	P1(default=0,step=100000000,disp=0)
+	P10(default=0,step=100000000,disp=0)
+	P11(default=0,step=100000000,disp=0)
+	P12(default=0,step=100000000,disp=0)
+	P13(default=0,step=100000000,disp=0)
+	P14(default=0,step=100000000,disp=0)
+	P15(default=0,step=100000000,disp=0)
+	P16(default=0,step=100000000,disp=0)
+	P17(default=0,step=100000000,disp=0)
+	P18(default=0,step=100000000,disp=0)
+	P19(default=0,step=100000000,disp=0)
+	P2(default=0,step=100000000,disp=0)
+	P20(default=0,step=100000000,disp=0)
+	P21(default=0,step=100000000,disp=0)
+	P3(default=0,step=100000000,disp=0)
+	P4(default=0,step=100000000,disp=0)
+	P5(default=0,step=100000000,disp=0)
+	P6(default=0,step=100000000,disp=0)
+	P7(default=0,step=100000000,disp=0)
+	P8(default=0,step=100000000,disp=0)
+	P9(default=0,step=100000000,disp=0)
+}
+Key{
+	0:A(step=-2)
+	1:A(step=2)
+	2:B(step=2)
+	3:B(step=-2)
+}
+Body{
+	Core(){
+		S:Weight(option=8,color=COLHAPPA,angle=A){
+			S:Weight(angle=-60,option=8,color=COLHAPPA){
+				W:Weight(angle=-120,option=8,color=COLHAPPA){}
+				E:Weight(angle=-120,option=8,color=COLHAPPA){
+					E:Weight(angle=-b,option=8,color=COLHAPPA){
+						W:Weight(angle=120,option=8,color=COLHAPPA){
+							W:Weight(angle=110,option=8,color=COLHAPPA){
+								N:Weight(angle=85,option=8,color=COLHAPPA){}
+							}
+							W:Weight(angle=-110,option=8,color=COLHAPPA){
+								N:Weight(angle=-85,option=8,color=COLHAPPA){}
+								S:Weight(angle=90,option=8,color=COLHAPPA){
+									S:Weight(option=8,color=COLHAPPA){
+										S:Weight(angle=-2,option=8,color=COLHAPPA){
+											S:Weight(option=8,color=COLHAPPA){}
+										}
+									}
+									E:Weight(option=8,color=COLHAPPA){}
+									W:Weight(option=8,color=COLHAPPA){}
+								}
+							}
+						}
+						W:Weight(angle=-120,option=8,color=COLHAPPA){
+							W:Weight(angle=110,option=8,color=COLHAPPA){
+								N:Weight(angle=85,option=8,color=COLHAPPA){}
+							}
+							W:Weight(angle=-110,option=8,color=COLHAPPA){
+								N:Weight(angle=-85,option=8,color=COLHAPPA){}
+							}
+						}
+						E:Weight(angle=180,option=8,color=COLHAPPA){
+							W:Weight(angle=110,option=8,color=COLHAPPA){
+								N:Weight(angle=85,option=8,color=COLHAPPA){}
+								S:Weight(angle=-90,option=8,color=COLHAPPA){
+									S:Weight(option=8,color=COLHAPPA){
+										S:Weight(angle=2,option=8,color=COLHAPPA){
+											S:Weight(option=8,color=COLHAPPA){}
+										}
+									}
+									W:Weight(option=8,color=COLHAPPA){}
+									E:Weight(option=8,color=COLHAPPA){}
+								}
+							}
+							W:Weight(angle=-110,option=8,color=COLHAPPA){
+								N:Weight(angle=-85,option=8,color=COLHAPPA){}
+							}
+							E:Weight(angle=60,option=8,color=COLHAPPA){
+								E:Weight(angle=110,option=8,color=COLHAPPA){
+									N:Weight(angle=85,option=8,color=COLHAPPA){}
+									S:Weight(angle=-90,option=8,color=COLHAPPA){
+										S:Weight(option=8,color=COLHAPPA){
+											S:Weight(angle=2,option=8,color=COLHAPPA){
+												S:Weight(option=8,color=COLHAPPA){}
+											}
+										}
+										E:Weight(option=8,color=COLHAPPA){}
+										W:Weight(option=8,color=COLHAPPA){}
+									}
+								}
+								E:Weight(angle=-110,option=8,color=COLHAPPA){
+									N:Weight(angle=-85,option=8,color=COLHAPPA){}
+								}
+							}
+							E:Weight(angle=-60,option=8,color=COLHAPPA){
+								E:Weight(angle=110,option=8,color=COLHAPPA){
+									N:Weight(angle=85,option=8,color=COLHAPPA){}
+								}
+								E:Weight(angle=-110,option=8,color=COLHAPPA){
+									N:Weight(angle=-85,option=8,color=COLHAPPA){}
+								}
+							}
+						}
+						W:Weight(angle=0,option=8,color=COLHAPPA){
+							W:Weight(angle=110,option=8,color=COLHAPPA){
+								N:Weight(angle=85,option=8,color=COLHAPPA){}
+								S:Weight(angle=-90,option=8,color=COLHAPPA){
+									S:Weight(option=8,color=COLHAPPA){
+										S:Weight(angle=2,option=8,color=COLHAPPA){
+											S:Weight(option=8,color=COLHAPPA){}
+										}
+									}
+									W:Weight(option=8,color=COLHAPPA){}
+									E:Weight(option=8,color=COLHAPPA){}
+								}
+							}
+							W:Weight(angle=-110,option=8,color=COLHAPPA){
+								N:Weight(angle=-85,option=8,color=COLHAPPA){}
+							}
+						}
+					}
+				}
+			}
+		}
+		S:Weight(angle=-120){
+			S:Weight(angle=-150){
+				W:Weight(angle=AC){
+					W:Frame(angle=AA1){
+						W:Arm(angle=-AB1,power=P1,option=100000){}
+					}
+					W:Frame(angle=AA2){
+						W:Arm(angle=-AB2,power=P2,option=100000){}
+					}
+					W:Frame(angle=AA3){
+						W:Arm(angle=-AB3,power=P3,option=100000){}
+					}
+					W:Frame(angle=AA4){
+						W:Arm(angle=-AB4,power=P4,option=100000){}
+					}
+					W:Frame(angle=AA5){
+						W:Arm(angle=-AB5,power=P5,option=100000){}
+					}
+					W:Frame(angle=AA6){
+						W:Arm(angle=-AB6,power=P6,option=100000){}
+					}
+					W:Frame(angle=AA7){
+						W:Arm(angle=-AB7,power=P7,option=100000){}
+					}
+				}
+				W:Weight(angle=AC){
+					W:Frame(angle=AA8){
+						W:Arm(angle=-AB8,power=P8,option=100000){}
+					}
+					W:Frame(angle=AA9){
+						W:Arm(angle=-AB9,power=P9,option=100000){}
+					}
+					W:Frame(angle=AA10){
+						W:Arm(angle=-AB10,power=P10,option=100000){}
+					}
+					W:Frame(angle=AA11){
+						W:Arm(angle=-AB11,power=P11,option=100000){}
+					}
+					W:Frame(angle=AA12){
+						W:Arm(angle=-AB12,power=P12,option=100000){}
+					}
+					W:Frame(angle=AA13){
+						W:Arm(angle=-AB13,power=P13,option=100000){}
+					}
+					W:Frame(angle=AA14){
+						W:Arm(angle=-AB14,power=P14,option=100000){}
+					}
+				}
+				W:Weight(angle=AC){
+					W:Frame(angle=AA15){
+						W:Arm(angle=-AB15,power=P15,option=100000){}
+					}
+					W:Frame(angle=AA16){
+						W:Arm(angle=-AB16,power=P16,option=100000){}
+					}
+					W:Frame(angle=AA17){
+						W:Arm(angle=-AB17,power=P17,option=100000){}
+					}
+					W:Frame(angle=AA18){
+						W:Arm(angle=-AB18,power=P18,option=100000){}
+					}
+					W:Frame(angle=AA19){
+						W:Arm(angle=-AB19,power=P19,option=100000){}
+					}
+					W:Frame(angle=AA20){
+						W:Arm(angle=-AB20,power=P20,option=100000){}
+					}
+					W:Frame(angle=AA21){
+						W:Arm(angle=-AB21,power=P21,option=100000){}
+					}
+				}
+				E:Weight(angle=AC){
+					E:Frame(angle=AA1){
+						E:Arm(angle=-AB1,power=P1,option=100000){}
+					}
+					E:Frame(angle=AA2){
+						E:Arm(angle=-AB2,power=P2,option=100000){}
+					}
+					E:Frame(angle=AA3){
+						E:Arm(angle=-AB3,power=P3,option=100000){}
+					}
+					E:Frame(angle=AA4){
+						E:Arm(angle=-AB4,power=P4,option=100000){}
+					}
+					E:Frame(angle=AA5){
+						E:Arm(angle=-AB5,power=P5,option=100000){}
+					}
+					E:Frame(angle=AA6){
+						E:Arm(angle=-AB6,power=P6,option=100000){}
+					}
+					E:Frame(angle=AA7){
+						E:Arm(angle=-AB7,power=P7,option=100000){}
+					}
+				}
+				E:Weight(angle=AC){
+					E:Frame(angle=AA8){
+						E:Arm(angle=-AB8,power=P8,option=100000){}
+					}
+					E:Frame(angle=AA9){
+						E:Arm(angle=-AB9,power=P9,option=100000){}
+					}
+					E:Frame(angle=AA10){
+						E:Arm(angle=-AB10,power=P10,option=100000){}
+					}
+					E:Frame(angle=AA11){
+						E:Arm(angle=-AB11,power=P11,option=100000){}
+					}
+					E:Frame(angle=AA12){
+						E:Arm(angle=-AB12,power=P12,option=100000){}
+					}
+					E:Frame(angle=AA13){
+						E:Arm(angle=-AB13,power=P13,option=100000){}
+					}
+					E:Frame(angle=AA14){
+						E:Arm(angle=-AB14,power=P14,option=100000){}
+					}
+				}
+				E:Weight(angle=AC){
+					E:Frame(angle=AA15){
+						E:Arm(angle=-AB15,power=P15,option=100000){}
+					}
+					E:Frame(angle=AA16){
+						E:Arm(angle=-AB16,power=P16,option=100000){}
+					}
+					E:Frame(angle=AA17){
+						E:Arm(angle=-AB17,power=P17,option=100000){}
+					}
+					E:Frame(angle=AA18){
+						E:Arm(angle=-AB18,power=P18,option=100000){}
+					}
+					E:Frame(angle=AA19){
+						E:Arm(angle=-AB19,power=P19,option=100000){}
+					}
+					E:Frame(angle=AA20){
+						E:Arm(angle=-AB20,power=P20,option=100000){}
+					}
+					E:Frame(angle=AA21){
+						E:Arm(angle=-AB21,power=P21,option=100000){}
+					}
+				}
+			}
+		}
+	}
+}
+Lua{
+--LUA_PATH="F:/TOOLS/RigidChips/lib/?"
+require("nyori/stdlib.lua")
+require("nyori/2DGraphic.lua")
+require("hikeo/stdlib.lua")
+require("hikeo/2Dlinelib.lua")
+require("hikeo/network.lua")
+require("wakaru/wakaru_eye.lua")
+
+KEY_UP=0;
+KEY_DOWN=1;
+KEY_LEFT=2;
+KEY_RIGHT=3;
+KEY_Z=4;
+KEY_X=5;
+KEY_C=6;
+KEY_A=7;
+KEY_S=8;
+KEY_D=9;
+KEY_V=10;
+KEY_B=11;
+KEY_F=12;
+KEY_G=13;
+KEY_Q=14;
+KEY_W=15;
+KEY_E=16;
+
+initflag=false;
+
+function m_input2(free1,free2)
+	if free1==nil then free1=0 end
+	if free2==nil or free2==0 then free2=1 end
+	
+	local mx=((math.min(math.max(_MX(),0),_WIDTH()))/_WIDTH()-0.5)*(2+free1*2)
+	local my=((math.min(math.max(_MY(),0),_HEIGHT()))/_HEIGHT()-0.5)*(2+free1*2)
+	
+	if math.abs(mx)<=free1 then mx=0
+	else mx=mx-free1*(mx/math.abs(mx)) end
+	
+	if math.abs(my)<=free1 then my=0
+	else my=my-free1*(my/math.abs(my)) end
+	
+	mx=math.min(math.max(mx,-free2),free2)/(free2)
+	my=-math.min(math.max(my,-free2),free2)/(free2)
+	
+	
+	
+	if lock==0 then
+		out(4,"mouse lock")
+		--str2col("00ff00")
+		COL1=tonumber("4040FF",16)
+	else
+		out(4,"mouse unlock")
+		--str2col("ff0000")
+		COL1=tonumber("FF4040",16)
+	end
+	
+	
+	--[[
+	if _WIDTH()>_HEIGHT() then 
+		_MOVE2D((free2+free1)*_WIDTH()/_HEIGHT(),0)
+		_LINE2D((-free2-free1)*_WIDTH()/_HEIGHT(),0)
+		_MOVE2D(0,free2+free1)
+		_LINE2D(0,-free2-free1)
+	else
+		_MOVE2D(free2+free1,0)
+		_LINE2D(-free2-free1,0)
+		_MOVE2D(0,(free2+free1)*_HEIGHT()/_WIDTH())
+		_LINE2D(0,(-free2-free1)*_HEIGHT()/_WIDTH())
+	end
+	
+	]]
+	return mx,my
+end
+
+gtime=0
+gmax=21
+
+aa={}
+ab={}
+
+adef=165
+bdef=-15
+
+mova=-16
+movb=-14
+function gun(kin)
+	
+	if kin==1 then
+	
+		local tmp=gtime+1
+		
+		if tmp>gmax then tmp=tmp-gmax end
+		
+		for i=1,gmax do
+			if i==tmp then
+				aa[i]=adef + mova
+				ab[i]=bdef - movb
+			else
+				aa[i]=adef
+				ab[i]=bdef
+			end
+		end
+		
+		tmp=tmp-1
+		
+		if tmp==0 then tmp=gmax end
+		_G["P"..tmp]=100000000
+		
+		out(5,gtime)
+		
+		gtime=math.mod(gtime+1,gmax)
+	
+	end
+end
+
+function init()
+	initflag=true;
+	mono=Wakaru_Mono.new();
+	Wakaru_Eye.timeOffset=0;
+	target=0;
+	useFCS=false;
+end
+
+lock=0
+zoom=70
+function main()
+	if not initflag then init() end
+	--
+	out(0, _FPS());
+	if _KEYDOWN(KEY_S)==1 then
+		useFCS=not useFCS;
+	end
+	if useFCS then
+		fcs();
+	end
+	--
+
+	for i=1,gmax do
+		aa[i]=_G["AA"..i]
+		ab[i]=_G["AB"..i]
+	end
+	
+	mx,my=m_input2(0.05,0.7)
+	
+	if _KEYDOWN(6)==1 then lock=math.mod(lock+1,2) end
+	
+	if _MR()==1 then
+		if _KEY(4)==1 then
+			zoom=limit(zoom-my*2,5,100)
+			
+		else
+			A=A-my*0.06*zoom
+			B=B-mx*0.06*zoom
+		end
+	end
+	
+	
+	if _ML()==1 then
+		gun(lock)
+	else
+		gun(_KEY(4))
+	end
+	
+	--[[
+	else
+		for i=1,gmax do
+			aa[i]=ang(aa[i],adef,mova)
+			ab[i]=ang(ab[i],bdef,movb)
+		end
+	end
+	]]
+	for i=1,gmax do
+		_G["AA"..i]=aa[i]
+		_G["AB"..i]=ab[i]
+	end
+	
+	_ZOOM(zoom)
+end
+
+function fcs()
+	armSpd=getSpdVec(0);
+	
+	if _KEYDOWN(KEY_D)==1 then target=target+1; end
+	if _KEYDOWN(KEY_A)==1 then target=target-1; end
+	out(1, "TARGET (A) "..target.." (D) ");
+	
+	mono:tick(Wector.new(_OX(target), _OY(target), _OZ(target)));
+	targetPos=mono:getFuturePos2(Wector:getPosVec(0), armSpd);
+	
+	aimVecV=(targetPos-Wector:getPosVec(0)):getLVec(0):getNormal();
+	aimVecV.x=0;
+	aimVecV=aimVecV:getNormal();
+	
+	rotV=math.deg(math.acos(Wector.new(0, 0, -1)^aimVecV));
+	if 0<aimVecV.y then else rotV=-rotV; end
+	
+	rotV=math.max(math.min(rotV, 10), -10);
+	A=A-rotV;
+	
+	aimVecH=(targetPos-Wector:getPosVec(0)):getLVec(0):getNormal();
+	aimVecH.y=0;
+	aimVecH=aimVecH:getNormal();
+	
+	rotH=math.deg(math.acos(Wector.new(0, 0, -1)^aimVecH));
+	if 0<aimVecH.x then else rotH=-rotH; end
+	
+	rotH=math.max(math.min(rotH, 10), -10);
+	B=B+rotH;
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function getSpdVec2(chipName)
+	return (Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+end
+}

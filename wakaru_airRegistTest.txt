@@ -1,0 +1,105 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		S:Weight(option=1) {
+			S:Weight(option=2) {
+				S:Weight(option=3) {
+					S:Weight(option=4) {
+						S:Weight(option=5) {
+							S:Weight(option=6) {
+								S:Weight(option=7) {
+									S:Weight(option=8) { }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	function analog(i)
+		if i==-1 then
+			mouseX=(_WIDTH()/2-_MX())*2/_HEIGHT();
+			return limit(mouseX, -1, 1)*_MR();
+		elseif _ANALOG(i)==0 then
+			return 0;
+		else
+			--return _ANALOG(i)/1000;
+			return (_ANALOG(i)/1000)^2.0*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+	
+	initflag=false;
+	bp={};
+	
+	require("wakaru/wakaru_eye.lua");
+	require("cel/Science/BasePhysic.lua");
+	
+	function init()
+		initflag=true;
+		
+		for i=0, _CHIPS()-1 do
+			bp[i]=BasePhysic.new(i);
+		end
+		
+		for i=0, _CHIPS()-1 do
+			_SPLIT(i);
+		end
+	end
+
+	function main()
+		if not initflag then init(); end
+		
+		for i=0, _CHIPS()-1 do
+			bp[i]:Renew();
+		end
+		
+		
+		for i=0, _CHIPS()-1 do
+			g=-9.8;
+			m=_M(i);
+			mg=m*g;
+			a=bp[i].lay;
+			f=m*a;
+			airRegistF=f-mg;
+			spdbase=math.abs(bp[i].lvy);
+			b=airRegistF/spdbase;
+			out(i, spdbase.." "..airRegistF);
+				
+			if _KEYDOWN(KEY_E)==1 then
+					file=_EXFOPEN("_AirTest.csv", "a");
+					_EXFPUTS(file, spdbase..","..airRegistF.."\n");
+					_EXFCLOSE(file);
+			end
+		end
+		
+	end
+}

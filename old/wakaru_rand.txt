@@ -1,0 +1,38 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() { }
+}
+Lua
+{
+	function main()
+		rmin=100000;
+		imin=0;
+		for i=0,10000 do
+			math.randomseed(i);
+			r=math.random()-0.5;
+			r2=r*r;
+
+			if r2<rmin then
+				rmin=r2;
+				imin=i;
+			end
+		end
+
+		out(0,"ƒÃ^2= "..rmin.." seed= "..imin);
+		
+		math.randomseed(1519);
+		out(1,math.random()^2)
+
+		math.randomseed(imin);
+		out(4,_PLAYERX(3));
+		math.randomseed(1519);
+		out(5,_PLAYERX(3));
+	end
+}

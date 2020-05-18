@@ -1,0 +1,19 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Arm() { }
+	}
+}
+Lua
+{
+_BYE(1);
+function main()
+end
+}

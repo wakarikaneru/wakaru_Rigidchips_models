@@ -1,0 +1,74 @@
+//Balloon
+Val{
+	Hydrogen(default=8000,min=0,max=40000,step=0)
+}
+Key{
+	0:Hydrogen(step=100)
+	1:Hydrogen(step=-100)
+}
+Body{
+	Core(){
+		S:Chip(){
+		}
+		S:Frame(angle=-90,Spring=0.2,Damper=0.1){
+			S:RudderF(Spring=0,Damper=0){
+				S:TrimF(Spring=0,Damper=0){
+					S:Frame(Spring=0,Damper=0){
+						S:Jet(Option=1,Power=Hydrogen,Name=BAL){
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua{
+
+I=HYDROGEN	-- 積分(I)項初期値
+Y=_Y(BAL)	-- 積分(I)項計算用
+VY=0		-- 微分(D)項計算用
+
+function main()
+	local p,d
+
+	if(_KEY(0)==0)and(_KEY(1)==0) then
+		-- 各項係数
+		local kp=500
+		local ki=100
+		local kd=500
+
+		local vy=(_Y(BAL)-Y)*30	-- 上昇/下降速度[m/s]
+		local ay=vy-VY	-- 上昇/下降加速度[m/s/s]
+
+		-- 比例項
+		p=-vy*kp
+
+		-- 積分項
+		I=I-vy*ki
+		I=math.min(16000,math.max(0,I))	-- リミッタ
+
+		-- 微分項
+		d=-ay*kd
+
+		-- 現在値保存
+		Y=_Y(BAL)
+		VY=vy
+
+		-- PID制御（リミッタ付き）
+		local dh=p+I+d-HYDROGEN
+		-- dh=math.min(1000,math.max(-1000,dh))
+		HYDROGEN=HYDROGEN+dh
+	end
+
+	out(0,"PID-Balloon")
+	out(1,"Y=",Y," m")
+	out(2,"VY=",VY," m/s")
+	out(3,"Hydrogen=",HYDROGEN)
+	out(4,"P=",p)
+	out(5,"I=",I)
+	out(6,"D=",d)
+	out(7,"Weight=",_WEIGHT()," kg")
+	out(8,"Hydrogen/Weight=",HYDROGEN/_WEIGHT())
+	out(9,"Hydrogen/Weight/6/g=",HYDROGEN/_WEIGHT()/6/9.80665," m/s/s")
+end
+}

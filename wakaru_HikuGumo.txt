@@ -1,0 +1,1683 @@
+////���ԏd�����@�w���_�x
+///WW2�����@���M���Ή�
+//���|�I�Ȗh���\�͂ƈ��肵�����s�\�͂ɂ����āA���K�ȋ��̗����񋟂������܂�
+
+///���|�I�Ȗh���\��
+//�@�̍\�����ɗ͒P���ɂ��A�啔����Weight�ō\�����邱�Ƃɂ����āA���Ȃ����ی삵�܂�
+//�G�퓬�@�ɂ��鋺�Ђ��A���p�̖��������@�e�ɂ����}���ŐϋɓI�ɉ������܂�
+
+///���肵�����s�\��
+//�������s�������ɒu�����@�̐����ɂ����āA�ė��̊댯�����炠�Ȃ����������܂�
+//�@�̂̏����𒼊��I�ɕ\�����邱�Ƃɂ����āA���͂̏󋵂ɏW���͂����������܂�
+
+////�������@
+//[��][��]	�s�b�`
+//[��][��]	���[��
+//[Z][C]		���[
+//[Q][A]		�X���b�g��
+//[X]			�G�A�u���[�L
+//[S]			�}�~��
+//[D]			�������s���[�h�̐؂��ւ�
+//[F]			ARM�̔��ː؂��ւ�
+//[G][V][B]	���@�̂̃X�e�[�^�X�؂��ւ�(�G�@�Ƃ��Đݒ肵���@�݂̂̂��U�����܂�)
+//[W]			�����ւ̐؂��ւ�(�����ւ����܂��Ȃ��Ɖ������̋@�e���g�p�ł��܂���)
+//[E]			(�����ւ��o�Ă����Ƃ��̂�)�p�[�L���O�u���[�L
+
+Val
+{
+	ABR(default=180, min=90)
+	AIL(default=180, min=150, max=210)
+	ARM_B_1(default=180, min=90, max=270)
+	ARM_B_2(default=90, min=90, max=267)
+	ARM_B_B(default=180, max=180)
+	ARM_B_TRIG(default=0, max=50000)
+	ARM_U_1(default=180, min=90, max=270)
+	ARM_U_2(default=267, min=93, max=267)
+	ARM_U_TRIG(default=0, max=50000)
+	BLADE(default=0, min=-90, max=90)
+	COL1(default=#142208)
+	COL2(default=#261109)
+	COL3(default=#D18AD1)
+	COL4(default=#000000)
+	ELE(default=0, min=-30, max=30)
+	LDG(default=90, min=90, max=180)
+	POW(default=0, max=360000)
+	RUD(default=180, min=150, max=210)
+	TBR(default=0, max=100)
+	TRU(default=0, min=-60, max=60)
+	CAM_TGT(default=-1, min=-1)
+}
+Key
+{
+}
+Body
+{
+	Core(color=COL4, name=CORE, user2=811) {
+		S:Frame(angle=60, color=COL4) {
+			S:Weight(angle=-60, color=COL1) {
+				N:Trim(angle=90, color=COL1) {
+					S:Weight(color=COL1) {
+						W:Weight(color=COL1, name=ARM_U_BASE) {
+							W:Jet(angle=ARM_U_1, color=COL1) {
+								E:Rudder(angle=ARM_U_2, color=COL1) {
+									W:Arm(name=ARM_U, option=50000, power=ARM_U_TRIG, color=COL4) { }
+								}
+							}
+						}
+						S:Weight(color=COL1) {
+							S:Weight(color=COL1) {
+								S:Weight(color=COL1) {
+									S:Trim(angle=90, color=COL1, name=TAILH) {
+										S:Weight(angle=-ELE, color=COL1) {
+											W:Weight(color=COL1) {
+												W:Weight(color=COL1) { }
+											}
+											E:Weight(color=COL1) {
+												E:Weight(color=COL1) { }
+											}
+										}
+										N:Chip(angle=ABR, color=COL1) { }
+										N:Chip(angle=-ABR, color=COL1) { }
+									}
+									S:Weight(color=COL1, name=TAILV) {
+										S:Weight(color=COL1) {
+											W:Weight(color=COL2) {
+												N:Chip(angle=RUD, color=COL2) { }
+												N:Chip(angle=RUD, color=COL2) { }
+											}
+											N:Chip(angle=RUD, color=COL1) { }
+											N:Chip(angle=RUD, color=COL1) { }
+											N:RudderF(spring=0.1, damper=0) {
+												S:RLW(angle=TRU, option=2, color=COL2) { }
+											}
+										}
+										N:Chip(angle=ABR, color=COL1) { }
+										N:Chip(angle=-ABR, color=COL1) { }
+									}
+								}
+							}
+						}
+						E:Weight(angle=ARM_B_B, color=COL1, name=ARM_B_BASE) {
+							E:Jet(angle=ARM_B_1, color=COL1) {
+								W:Rudder(angle=ARM_B_2, color=COL1) {
+									E:Arm(name=ARM_B, option=50000, power=ARM_B_TRIG, color=COL4) { }
+								}
+							}
+						}
+					}
+				}
+				N:Weight(color=COL1, name=BODY) {
+					N:Jet(angle=30, color=COL2) {
+						N:Weight(color=COL1, name=ENGINE, angle=-30, option=2) {
+							W:Weight(angle=-90, option=2, color=COL1) {
+								W:Weight(angle=70, color=COL1) {
+									N:Jet(color=COL2) { }
+								}
+								E:Weight(angle=70, color=COL1) {
+									N:Jet(color=COL2) { }
+								}
+							}
+							E:Weight(angle=-90, option=2, color=COL1) {
+								E:Weight(angle=70, color=COL1) {
+									N:Jet(color=COL2) { }
+								}
+								W:Weight(angle=70, color=COL1) {
+									N:Jet(color=COL2) { }
+								}
+							}
+							S:Weight(color=COL1) {
+								S:Weight(color=COL1) { }
+							}
+							N:RLW(name=E1, angle=-90, damper=0.9375, color=COL2, spring=0.9375, power=POW) {
+								N:Trim(angle=BLADE, damper=0.9375, color=COL2, spring=0.9375) { }
+								S:Trim(angle=BLADE, damper=0.9375, color=COL2, spring=0.9375) { }
+							}
+							N:RLW(name=E2, angle=-90, damper=0.9375, color=COL2, spring=0.9375, power=-POW) {
+								N:Trim(angle=-BLADE, damper=0.9375, color=COL2, spring=0.9375) { }
+								S:Trim(angle=-BLADE, damper=0.9375, color=COL2, spring=0.9375) { }
+							}
+						}
+					}
+				}
+				S:Weight(color=COL1) {
+					E:Weight(color=COL1) {
+						E:Weight(color=COL3) {
+							E:Weight(color=COL1) {
+								E:Weight(color=COL1) {
+									E:Weight(color=COL1) {
+										N:Chip(angle=-AIL, color=COL1) { }
+									}
+									N:Chip(angle=-AIL, color=COL1) { }
+								}
+								N:Chip(angle=-AIL, color=COL1) { }
+							}
+						}
+						E:Frame(angle=LDG, color=COL4) {
+							N:RLW(brake=TBR, option=2, color=COL2) { }
+						}
+						N:Chip(angle=-160, color=COL1) { }
+						N:Chip(angle=160, color=COL1) { }
+					}
+					W:Weight(color=COL1) {
+						W:Weight(color=COL3) {
+							W:Weight(color=COL1) {
+								W:Weight(color=COL1) {
+									W:Weight(color=COL1) {
+										N:Chip(angle=AIL, color=COL1) { }
+									}
+									N:Chip(angle=AIL, color=COL1) { }
+								}
+								N:Chip(angle=AIL, color=COL1) { }
+							}
+						}
+						W:Frame(angle=LDG, color=COL4) {
+							N:RLW(brake=TBR, option=2, color=COL2) { }
+						}
+						N:Chip(angle=-160, color=COL1) { }
+						N:Chip(angle=160, color=COL1) { }
+					}
+				}
+			}
+		}
+	}
+}
+Lua
+{
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+	function analog(i)
+		if _ANALOG(i)==0 then
+			return 0;
+		else
+			return (_ANALOG(i)/1000)^2*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+
+	initflag=false;
+
+	require("wakaru/wakaru_eye.lua");
+
+function init()
+	initflag=true;
+	eye=Wakaru_Eye.new();
+
+	bodySpd=Wector.new(0, 0, 0);
+	tailSpd=Wector.new(0, 0, 0);
+	engineSpd=Wector.new(0, 0, 0);
+	ARM_U_Spd=Wector.new(0, 0, 0);
+	ARM_B_Spd=Wector.new(0, 0, 0);
+
+	VECX=Wector.new(1, 0, 0);
+	VECY=Wector.new(0, 1, 0);
+	VECZ=Wector.new(0, 0, 1);
+
+	r=0;
+	p=0;
+	y=0;
+	b=0;
+
+	aoa=-10;
+
+	ail=0;
+	ele=0;
+	rud=0;
+
+	fbt=0;
+
+	landing=true;
+	parking=false;
+	keeph=false;
+	firing=false;
+	targetU=nil;
+	targetB=nil;
+
+	enemyList="";
+end
+
+function main()
+	if not initflag then init() end
+
+	eye:tick();
+	LimitAmmoRegulation();
+
+	_ZOOM(100);
+
+	--�@�̂̏���
+	bodySpd=getSpdVec(BODY);
+	bodyPos=Wector:getPosVec(BODY);
+	engineSpd=getSpdVec(ENGINE):getLVec(ENGINE)*30;
+	tailSpd=getSpdVec(TAILV):getLVec(TAILV)*30;
+
+	s=limit(40/-engineSpd.z, 0, 1);
+
+	--�⏕���A�M�A�Ɋւ��鏈��
+	if _KEYDOWN(KEY_D)==1 then
+		keeph=not keeph;
+	end
+
+	if keeph then
+		aoa=10+PID("AOA", bodySpd.y, 0, 0, 2, 120, -10, 10, 1.00)*s;
+	else
+		aoa=10;
+	end
+
+	r=step2(r, (_KEY(KEY_RIGHT)-_KEY(KEY_LEFT)-analog(2)*2)*20, 0.5);
+	p=step2(p, (_KEY(KEY_UP)-_KEY(KEY_DOWN)+analog(5)*2)*15+_KEY(KEY_S)*60-aoa, 0.5);
+	y=step2(y, (_KEY(KEY_Z)-_KEY(KEY_C))*10, 0.5);
+	b=step2(b, _KEY(KEY_X)*75, 15);
+
+	ail=step2(ail, -PID("AIL", -math.deg(_AZ(BODY)), r, 1, 0.1, 60, -15, 15, 0.95)*s, 3);
+	ele=step2(ele, -PID("ELE", -math.deg(_AX(BODY)), p, 1, 0.1, 60, -15, 15, 0.95)*s, 3);
+	rud=step2(rud, -PID("RUD", tailSpd.y, y, 1, 0.1, 60, -15, 15, 0.95)*s, 3);
+
+	AIL=ail+180;
+	ELE=ele;
+	RUD=rud+180;
+	ABR=180-b;
+
+	if landing then
+		LDG=step2(LDG, 90, 3);
+		if _KEYDOWN(KEY_E)==1 then parking=not parking; end
+		if parking then
+			POW=12000+12000*math.floor(math.abs(tailSpd.z/2));
+			TRU=step2(TRU, 0, 3);
+			TBR=100;
+		else
+			if _KEYDOWN(KEY_W)==1 then landing=not landing; end
+			if 0<_H(BODY) then
+				if tailSpd.z<5 then
+					TRU=step2(TRU, PID("TRU", tailSpd.y, y, 0, 1, 30, -60, 60, 0.75), 3);
+				else
+					TRU=step2(TRU, PID("TRU", tailSpd.y, y, 0, 1*5/tailSpd.z, 30, -60, 60, 0.9), 3);
+				end
+				TBR=b;
+			else
+				TRU=step2(TRU, 0, 3);
+				TBR=5;
+			end
+		end
+	else
+		if _KEYDOWN(KEY_W)==1 then landing=not landing; end
+		parking=false;
+		LDG=step2(LDG, 180, 3);
+		TRU=0;
+		TBR=5;
+	end
+
+	--�G���W���Ɋւ��鏈��
+	stall=-math.sqrt(engineSpd.x^2+engineSpd.y^2)/engineSpd.z;
+	if 1.0<stall and not parking then
+		if 12000*5<POW then
+			POW=0;
+		end
+	end
+
+	POW=POW+(_KEY(KEY_Q)-_KEY(KEY_A))*12000;
+
+	if not parking then
+		BLADE=step2(BLADE, SAE416(-engineSpd.z, _Y(ENGINE), POW, (_WY(E1)-_WY(E2))/2, 2), 3);
+	else
+		BLADE=step2(BLADE, PID("BLADE", -engineSpd.z, 0, 0, 10, 90, -45, 45, 0.99), 3);
+	end
+
+	--�����Ɋւ��鏈��
+	if LimitAmmo<=0 then
+		firing=false;
+	elseif _KEYDOWN(KEY_F)==1  then
+		firing=not firing;
+	end
+	FCS();
+
+	info();
+
+	CAM_TGT=-1;
+	if targetU~=nil then
+		for i=0,_PLAYERS()-1 do
+			if targetU==_PLAYERID(i) then CAM_TGT=i; break; end
+		end
+	else
+		for i=0,_PLAYERS()-1 do
+			if targetB==_PLAYERID(i) then CAM_TGT=i; break; end
+		end
+	end
+end
+
+function info()
+	--FPS�̕\��
+	out(0, "FPS: ", math.floor(_FPS()+0.5));
+
+	--���W�̕\��
+	local pos=Wector:getPosVec(BODY);
+	out(1, "POS: [X] ", math.floor(pos.x+0.5), " [Z] ", math.floor(pos.z+0.5));
+
+	--���ΓI�ȑ��x�����o�I�ɕ\��
+	drawGround(bodyPos, "000000");
+
+	--���@���琂���Ȑ����\��
+	drawPin(bodyPos, "00FF00");
+
+	--�o�͂̕\��
+	local i=0;
+	local str="["
+	while i<math.floor(POW/12000) do
+		i=i+1;
+		str=str.."|"
+	end
+	while i<30 do
+		i=i+1;
+		str=str.." "
+	end
+	str=str.."]";
+	out(24, str);
+
+	--���s���Ԃ̕\��
+	if keeph then
+		drawHorizon(BODY, "00FF00")
+	else
+		drawHorizon(BODY, "008000")
+	end
+
+	--�������Ԃ̕\��
+	if parking then
+	else
+		--�i�s���������o�I�ɕ\��
+		fbt=math.mod(fbt+1, 30);
+
+		drawFBody(BODY, bodyPos+bodySpd*(30-fbt), "00FF00");
+		drawFBody(BODY, bodyPos+bodySpd*(60-fbt), "00FF00");
+		drawFBody(BODY, bodyPos+bodySpd*(90-fbt), "00FF00");
+	end
+
+	--�ˌ����Ԃ̕\��
+	if firing then
+		out(22, "ARM: ON");
+	else
+		out(22, "ARM: OFF");
+	end
+
+	--�c�e���̕\��
+	out(23, "AMMO: ", math.floor(LimitAmmo/2));
+
+	--EYE�����Ղ̕\��
+	eye:dispPlayer(3, KEY_G, KEY_B, KEY_V);
+
+	--HOSTILE�ݒ肳�ꂽ�G�@�̈ꗗ���\��
+	enemyList="";
+	for i=0,_PLAYERS()-1 do
+		if eye:getState(_PLAYERID(i))==Player.STATE_HOSTILE then
+			enemyList=enemyList.." [ ".._PLAYERNAME(i).." ] ";
+		end
+	end
+	out(4, "ENEMY: "..enemyList);
+end
+
+function FCS()
+	ARM_U_Spd=Wector.new(_VX(ARM_U), _VY(ARM_U), _VZ(ARM_U)):getWVec(ARM_U,true)/_BASE();
+	ARM_B_Spd=Wector.new(_VX(ARM_B), _VY(ARM_B), _VZ(ARM_B)):getWVec(ARM_B,true)/_BASE();
+	--�W�I�̑I��
+	----���@�ɑ΂��鋺�Гx�������G�@���U������
+	----���Гx�͎��@�̖����ʒu�ɑ΂��Ăǂ̒��x�Ə����Ă��邩�ɂ����Ĕ��f����
+	local fp=Wector.new(0, 0, 0);
+	local aimVec=Wector.new(0, 1, 0);
+	local threat=0;
+	local rot=0;
+	local threatU=-1;
+	local threatB=-1;
+
+	targetU=nil;
+	targetB=nil;
+
+	for i=0,_PLAYERS()-1 do
+		id=_PLAYERID(i);
+		if (eye:getPos(id)-Wector:getPosVec(CORE)):getLength()<300 then
+			if eye:getState(id)==2 then
+				drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-Wector.getPosVec(CORE)):getLength(), "FF0000");
+
+				if firing then
+					fp=eye:getFuturePos(_PLAYERMYID(), eye:getReadTime2(id,Wector.getPosVec(BODY),Wector.new(0,0,0)));
+					aimVec=(fp-eye:getPos(id)):getNormal();
+
+					if eye:getVel(id):getLength()<0.05 then
+						threat=-1;
+					else
+						threat=aimVec^eye:getVel(id):getNormal();
+					end
+
+					aimVec=(eye:getFuturePos2(id,bodyPos,bodySpd)-bodyPos):getLVec(BODY);
+					if 0<aimVec.y then
+						if threatU<=threat then
+							threatU=threat;
+							targetU=id;
+						end
+					else
+						if threatB<=threat then
+							threatB=threat;
+							targetB=id;
+						end
+					end
+				end
+
+			else
+				if 200<(eye:getPos(id)-Wector.getPosVec(CORE)):getLength() then
+					drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-Wector.getPosVec(CORE)):getLength(), "00AA00");
+				elseif 100<(eye:getPos(id)-Wector.getPosVec(CORE)):getLength() then
+					drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-Wector.getPosVec(CORE)):getLength(), "00CC00");
+				else
+					drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-Wector.getPosVec(CORE)):getLength(), "00FF00");
+				end
+			end
+		end
+	end
+
+	--[[
+	if true or 0.99<threatU or 0.99<threatB then
+		sleepS=GetTickCount();
+		while GetTickCount()<sleepS+100 do
+
+		end
+	end
+	--]]
+
+	--ARM_U(�@�̏㕔�̋@�e)�̏���
+	if targetU~=nil then
+		aimVec=eye:getFuturePos2(targetU, Wector:getPosVec(ARM_U), ARM_U_Spd)-Wector:getPosVec(ARM_U);
+		aimVec=aimVec:getLVec(ARM_U):getNormal();
+
+		local aimVecV=Wector.new(math.sqrt(aimVec.x^2+aimVec.z^2), aimVec.y, 0):getNormal();
+		if 0<aimVecV.y then
+			rot=math.deg(math.acos(aimVecV^VECX));
+		else
+			rot=-math.deg(math.acos(aimVecV^VECX));
+		end
+		ARM_U_1=step2(ARM_U_1, ARM_U_1+rot, 15);
+
+		local aimVecH=Wector.new(aimVec.x, 0, aimVec.z):getNormal();
+		if 0<aimVecH.x then
+			rot=-math.deg(math.acos(aimVecH^(-VECZ)));
+		else
+			rot=math.deg(math.acos(aimVecH^(-VECZ)));
+		end
+		ARM_U_2=step2(ARM_U_2, ARM_U_2+rot, 15);
+
+
+		if math.deg(math.acos(aimVec^(-VECZ)))<5 then
+			ARM_U_TRIG=50000;
+		else
+			ARM_U_TRIG=0;
+		end
+	else
+		ARM_U_TRIG=0;
+		ARM_U_1=step2(ARM_U_1, 180, 6);
+		ARM_U_2=step2(ARM_U_2, 265, 6);
+	end
+
+	--ARM_B(�@�̉����̋@�e)�̏���
+	if not landing then
+		ARM_B_B=step2(ARM_B_B, 0, 3);
+		if ARM_B_B==0 then
+			if targetB~=nil then
+				aimVec=eye:getFuturePos2(targetB, Wector:getPosVec(ARM_B), ARM_B_Spd)-Wector:getPosVec(ARM_B);
+				aimVec=aimVec:getLVec(ARM_B):getNormal();
+
+				local aimVecV=Wector.new(math.sqrt(aimVec.x^2+aimVec.z^2), aimVec.y, 0):getNormal();
+				if 0<aimVecV.y then
+					rot=math.deg(math.acos(aimVecV^VECX));
+				else
+					rot=-math.deg(math.acos(aimVecV^VECX));
+				end
+				ARM_B_1=step2(ARM_B_1, ARM_B_1+rot, 15);
+
+				local aimVecH=Wector.new(aimVec.x, 0, aimVec.z):getNormal();
+				if 0<aimVecH.x then
+					rot=-math.deg(math.acos(aimVecH^(-VECZ)));
+				else
+					rot=math.deg(math.acos(aimVecH^(-VECZ)));
+				end
+				ARM_B_2=step2(ARM_B_2, ARM_B_2+rot, 15);
+
+				if math.deg(math.acos(aimVec^(-VECZ)))<5 then
+					ARM_B_TRIG=50000;
+				else
+					ARM_B_TRIG=0;
+				end
+			else
+				ARM_B_TRIG=0;
+				ARM_B_1=step2(ARM_B_1, 180, 6);
+				ARM_B_2=step2(ARM_B_2, 90, 6);
+			end
+		else
+			ARM_B_TRIG=0;
+			ARM_B_1=step2(ARM_B_1, 180, 6);
+			ARM_B_2=step2(ARM_B_2, 90, 6);
+		end
+	else
+		ARM_B_B=step2(ARM_B_B, 180, 3);
+		ARM_B_TRIG=0;
+		ARM_B_1=step2(ARM_B_1, 180, 6);
+		ARM_B_2=step2(ARM_B_2, 90, 6);
+	end
+
+	--
+	if _TOP(ARM_U)~=CORE then _RESET(ARM_U_BASE); end
+	if _TOP(ARM_B)~=CORE then _RESET(ARM_B_BASE); end
+	--
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function drawTarget(chip, pos, dis, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+
+	local p1=(Wector.new(1, 1, 0)*dis/60):getWVec(chip)+pos;
+	local p2=(Wector.new(1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p3=(Wector.new(-1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p4=(Wector.new(-1, 1, 0)*dis/60):getWVec(chip)+pos;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+end
+
+function drawFBody(chip, pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+
+	local bottom=-1.5;
+	if landing then
+		bottom=-0.9;
+	end
+
+	local p=pos;
+	local p1=Wector.new(-3.3, bottom, 0):getWVec(chip)+p;
+	local p2=Wector.new(-3.3, 1.5, 0):getWVec(chip)+p;
+	local p3=Wector.new(3.3, 1.5, 0):getWVec(chip)+p;
+	local p4=Wector.new(3.3, bottom, 0):getWVec(chip)+p;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+
+	if landing then
+		local p5=Wector.new(-0.9, -0.9-0.6, 0):getWVec(chip)+p;
+		local p6=Wector.new(-0.9, -0.9+0.6, 0):getWVec(chip)+p;
+		local p7=Wector.new(0.9, -0.9-0.6, 0):getWVec(chip)+p;
+		local p8=Wector.new(0.9, -0.9+0.6, 0):getWVec(chip)+p;
+		_MOVE3D(p5.x,p5.y,p5.z);
+		_LINE3D(p6.x,p6.y,p6.z);
+		_MOVE3D(p7.x,p7.y,p7.z);
+		_LINE3D(p8.x,p8.y,p8.z);
+	end
+end
+
+function drawGround(pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+
+	local p=Wector.new(math.floor(pos.x/100)*100+50, pos.y-10, math.floor(pos.z/100)*100+50);
+
+	local p1=Wector.new(350, 0, 50)+p;
+	local p2=Wector.new(-350, 0, 50)+p;
+	local p3=Wector.new(-350, 0, -50)+p;
+	local p4=Wector.new(350, 0, -50)+p;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+
+	p1=Wector.new(250, 0, 150)+p;
+	p2=Wector.new(-250, 0, 150)+p;
+	p3=Wector.new(-250, 0, -150)+p;
+	p4=Wector.new(250, 0, -150)+p;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+
+	p1=Wector.new(150, 0, 250)+p;
+	p2=Wector.new(-150, 0, 250)+p;
+	p3=Wector.new(-150, 0, -250)+p;
+	p4=Wector.new(150, 0, -250)+p;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+
+	p1=Wector.new(50, 0, 350)+p;
+	p2=Wector.new(-50, 0, 350)+p;
+	p3=Wector.new(-50, 0, -350)+p;
+	p4=Wector.new(50, 0, -350)+p;
+
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+end
+
+function drawPin(pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+
+	_MOVE3D(pos.x,pos.y-5,pos.z);
+	_LINE3D(pos.x,0,pos.z);
+	_MOVE3D(pos.x-1,pos.y-10,pos.z);
+	_LINE3D(pos.x+1,pos.y-10,pos.z);
+	_MOVE3D(pos.x,pos.y-10,pos.z-1);
+	_LINE3D(pos.x,pos.y-10,pos.z+1);
+end
+
+function drawHorizon(chip, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	local vec=Wector.new(0, 0, 1);
+
+	vec=Wector.new(0, 0, 1):getWVec(chip);
+	local vecH=Wector.new(vec.x, 0, vec.z):getNormal();
+	vec=Wector.new(1, 0, 0):getWVec(chip);
+	local vecS=Wector.new(vec.x, 0, vec.z):getNormal();
+
+	local p=Wector:getPosVec(chip);
+	local l0=p+vecS*10+vecH*100;
+	local l1=p+vecS*10-vecH*100;
+	local r0=p-vecS*10+vecH*100;
+	local r1=p-vecS*10-vecH*100;
+	_MOVE3D(l0.x, l0.y, l0.z);
+	_LINE3D(l1.x,l1.y,l1.z);
+	_MOVE3D(r0.x, r0.y, r0.z);
+	_LINE3D(r1.x,r1.y,r1.z);
+end
+
+function radar(chip)
+end
+
+---------------------------------------------------------------- ;
+--[[
+  Seydlitz Aero Engines AG.
+  ���U�C�h���b�c�q�󔭓��@����
+
+  SAE416 "Nieselregen II" - Operating manual
+  ���J���^ - �^�p�}�j���A��
+
+  �@
+  ���̃G���W���͎��̂悤�Ȑ݌v���Ώۂɂ��Ă��܂��B
+  �قȂ��ꍇ�́A�ő��̐��\���ۏႷ�邽�߂ɂ�
+  SAE���̑��̃G���W���������߂��������B
+    �v���y������ : 2 - 4
+    �G���W���o�� : 180,000 - 360,000
+    ���p�㏸���x : 6000m
+
+  �\���� 1:
+	N:Frame(Angle=-30,Damper=0.9375,Spring=0.9375){
+		N:RLW(Name=ENGINE,Angle=120,Damper=0.9375,Spring=0.9375,Power=THRUST){
+			N:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			S:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			E:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			W:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+		}
+	}
+
+  �\���� 2:
+	N:Frame(Angle=-30,Damper=0.9375,Spring=0.9375){
+		N:RLW(Name=ENGINE,Angle=120,Damper=0.9375,Spring=0.9375,Power=THRUST){
+			N:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+			S:Trim(Angle=-BLADE,Damper=0.9375,Spring=0.9375){}
+		}
+	}
+
+  �A
+  ���Ɏ������C��
+    ---------------------------------------------------------------- ;
+  �ň͂܂����͈͂��@�̂�Lua�ɃR�s�[���Ă��������B
+  ������ main() ���̊֐��̒��͔����Ă��������B
+
+  �B
+  main() �֐��Ȃ����͏����̂ǂ����Ŏ��Ɏ����֐�
+    [�v���y���s�b�`������VAL�ϐ���] = SAE416( [�O�i���x] , [���x] , [�o��] , [�G���W�����]��] , [�u���[�h����] )
+  ���Ăяo���Ă��������B
+  �G���W���Ɏg�����Ă����z�C�[���t�߂̑��x��
+  �����Ƃ��K�؂Ǝv�������̂ŁA���Ƃ��Ύ��̂悤�ȏꍇ
+    �G���W���̃z�C�[���� : name = ENGINE
+    �v���y���s�b�`�̕ϐ� : angle = �}BLADE
+    �G���W���o��         : power = THRUST
+    �u���[�h����         : 4
+  �Ȃ��΁A���̂悤�ȗ��ɂȂ��܂��B
+    BLADE = �}SAE416( �}_VY(ENGINE), _Y(ENGINE), �}THRUST, �}_WY(ENGINE), 4 );
+  �������A�}�͑O�i���ɒl�����ɂȂ��悤�ɓK�X�������Ă��������B
+
+  �C�@�\�Љ�
+    1. �G���W���o�͂��[���ɂ����ƑĐ����s���[�h�ɓ����܂��B
+    2. �Ή��o�͂ɂ������ō��������񋟂��܂��B
+    3. �Ή����x�ɂ������ō��������񋟂��܂��B
+    4. �Ή��u���[�h�����ɂ������ō��������񋟂��܂��B
+
+]]
+SAE416DatAlt = {300, 1000, 2000, 3000, 4000, 5000, 6000};
+SAE416DatPwr = {180000, 360000};
+SAE416Dat = {
+	[2] = {
+		[180000] = {};
+		[360000] = {};
+	};
+	[4] = {
+		[180000] = {};
+		[360000] = {};
+	};
+};
+SAE416Dat[2][180000][0] = {
+	MinVel =  -2.677664	;
+	MinAng =   0.86466496110832802	;
+	[0] =  4.2446139492086559	;
+	[1] =  1.9014540791614643	;
+	[2] =  0.12539276732577509	;
+	[3] = -0.030388096517108498	;
+	[4] =  0.0035994156411873479	;
+	[5] = -0.00027630560828737199	;
+	[6] =  0.000014633450029450371	;
+	[7] = -0.00000055000377836943402	;
+	[8] =  0.000000014744199958217255	;
+	[9] = -0.0000000002784625973407689	;
+	[10] =  0.0000000000035998178532640037	;
+	[11] = -0.00000000000003018775530705908	;
+	[12] =  0.00000000000000014749488383067818	;
+	[13] = -0.00000000000000000031805209920818614	;
+	MaxVel =  74.995345999999998	;
+	MaxAng =  76.072678407537751	;
+};
+SAE416Dat[2][360000][0] = {
+	MinVel =   0.182781	;
+	MinAng =   4.2274433621594047	;
+
+	[0] =  4.0351822893331359	;
+	[1] =  1.0271653769832589	;
+	[2] =  0.13730726956266537	;
+	[3] = -0.011967561024727638	;
+	[4] =  0.00049858964908116839	;
+	[5] = -0.000011852749475333399	;
+	[6] =  0.00000015501234682449067	;
+	[7] = -0.00000000086354702837868556	;
+	[8] = -0.0000000000013040966533385843	;
+	[9] =  0.000000000000024803586054022669	;
+	[10] = 0.	;
+	[11] = 0.	;
+	[12] = 0.	;
+	[13] = 0.	;
+	MaxVel =  70.345695000000006	;
+	MaxAng =  68.675221828615008	;
+};
+SAE416Dat[4][180000][0] = {
+	MinVel =  -1.9992350000000001	;
+	MinAng =   1.1989944238255885	;
+	[0] =  4.8580904143774717	;
+	[1] =  2.2698946082472258	;
+	[2] =  0.12009229803800636	;
+	[3] = -0.037506250990974932	;
+	[4] =  0.0052887030251932005	;
+	[5] = -0.0004206726774262223	;
+	[6] =  0.000019622651632267496	;
+	[7] = -0.00000053703606899947355	;
+	[8] =  0.000000007665977928830052	;
+	[9] = -0.000000000013472187165227526	;
+	[10] = -0.0000000000014198101299231878	;
+	[11] =  0.000000000000023912599526258464	;
+	[12] = -0.0000000000000001687540555720393	;
+	[13] =  0.00000000000000000046323345531409463	;
+	MaxVel =  73.064423000000005	;
+	MaxAng =  79.918634680099785	;
+};
+SAE416Dat[4][360000][0] = {
+	MinVel =   0.65013900000000002	;
+	MinAng =   4.4868074665630386	;
+	[0] =  3.0905116220261277	;
+	[1] =  2.2057693908650933	;
+	[2] = -0.10748291070122207	;
+	[3] =  0.030416755729962053	;
+	[4] = -0.0040337916708709093	;
+	[5] =  0.00028487505488285127	;
+	[6] = -0.000011914744121254721	;
+	[7] =  0.00000030239558290790933	;
+	[8] = -0.0000000044125752390040158	;
+	[9] =  0.000000000026574850566707629	;
+	[10] =  0.00000000000019242859529531194	;
+	[11] = -0.0000000000000046059208431298036	;
+	[12] =  0.000000000000000031214328386143728	;
+	[13] = -0.000000000000000000076403518040850942	;
+	MaxVel =  73.885666000000001	;
+	MaxAng =  74.883033075981075	;
+};
+SAE416Dat[2][180000][300] = {
+	MinVel = -30.008841	;
+	MinAng =  24.106831068032822	;
+	[0] = 42.744659969751638	;
+	[1] =  0.66695428486790898	;
+	[2] = -0.00033395057100727571	;
+	[3] = -0.000049526922873892798	;
+	[4] = -0.000003491164434496419	;
+	[5] =  0.000000022364349217199732	;
+	[6] =  0.0000000046210875605246452	;
+	[7] = -0.00000000010594027429655587	;
+	[8] = -0.0000000000005210974367489709	;
+	[9] =  0.000000000000050964571373007826	;
+	[10] = -0.00000000000000084134225277694024	;
+	[11] =  0.0000000000000000067414894675139611	;
+	[12] = -0.000000000000000000027498926978955131	;
+	[13] =  0.000000000000000000000045832435540765351	;
+	MaxVel = 129.473434	;
+	MaxAng =  86.300471084192395	;
+};
+SAE416Dat[2][180000][1000] = {
+	MinVel = -30.012796000000002	;
+	MinAng =  24.941484320809739	;
+	[0] = 43.613718070524399	;
+	[1] =  0.67809795977465337	;
+	[2] = -0.0012266764769531466	;
+	[3] = -0.00009942659770941875	;
+	[4] = -0.0000004545452628443933	;
+	[5] = -0.000000017922965621633721	;
+	[6] =  0.0000000036670925513704311	;
+	[7] = -0.000000000047965799152795926	;
+	[8] = -0.0000000000020649189142378752	;
+	[9] =  0.000000000000076691811565068799	;
+	[10] = -0.0000000000000011119286567314938	;
+	[11] =  0.0000000000000000084641147196019349	;
+	[12] = -0.000000000000000000033535036853465628	;
+	[13] =  0.000000000000000000000054754310244616454	;
+	MaxVel = 129.309967	;
+	MaxAng =  86.619834719313076	;
+};
+SAE416Dat[2][180000][2000] = {
+	MinVel = -29.992477000000001	;
+	MinAng =  26.599392995166898	;
+	[0] = 44.749059277446591	;
+	[1] =  0.62942538366936307	;
+	[2] = -0.00061165773927492062	;
+	[3] = -0.000055177885668866483	;
+	[4] = -0.0000016589936362998631	;
+	[5] =  0.00000001914104403965668	;
+	[6] =  0.0000000017735649053582892	;
+	[7] = -0.000000000041549740109848739	;
+	[8] = -0.00000000000011691765921932347	;
+	[9] =  0.000000000000016331154895744766	;
+	[10] = -0.00000000000000027173591539255839	;
+	[11] =  0.0000000000000000021958330797274526	;
+	[12] = -0.0000000000000000000091258342161249966	;
+	[13] =  0.000000000000000000000015656409197496827	;
+	MaxVel = 129.519577	;
+	MaxAng =  88.222054971774924	;
+};
+SAE416Dat[2][180000][3000] = {
+	MinVel = -30.023264000000001	;
+	MinAng =  28.963583825733259	;
+	[0] = 46.09724186895717	;
+	[1] =  0.63231449192310207	;
+	[2] = -0.0024584263188283939	;
+	[3] = -0.00016701633585433444	;
+	[4] =  0.0000045721327382635397	;
+	[5] =  0.00000013026907208890276	;
+	[6] = -0.0000000076383836462284131	;
+	[7] =  0.000000000046660472344790423	;
+	[8] =  0.0000000000037693077472438662	;
+	[9] = -0.00000000000010812935199830225	;
+	[10] =  0.0000000000000013654697991186165	;
+	[11] = -0.0000000000000000093347021175463661	;
+	[12] =  0.000000000000000000033616737748205492	;
+	[13] = -0.000000000000000000000050083597554308655	;
+	MaxVel = 129.42569	;
+	MaxAng =  89.676904572785133	;
+};
+SAE416Dat[2][180000][4000] = {
+	MinVel = -30.007019	;
+	MinAng =  30.161074314922647	;
+	[0] = 46.930603621981206	;
+	[1] =  0.5919299547367034	;
+	[2] = -0.0013589379858725201	;
+	[3] = -0.00012345698495551806	;
+	[4] =  0.0000040649474961474254	;
+	[5] =  0.000000069134951240250888	;
+	[6] = -0.0000000075729884297424509	;
+	[7] =  0.00000000010917213495953644	;
+	[8] =  0.000000000002694184848180225	;
+	[9] = -0.00000000000011172952390890586	;
+	[10] =  0.0000000000000016330965498320975	;
+	[11] = -0.000000000000000012309287717087889	;
+	[12] =  0.000000000000000000047840576540694869	;
+	[13] = -0.000000000000000000000076033560792844321	;
+	MaxVel = 129.02932699999999	;
+	MaxAng =  90.52972633522586	;
+};
+SAE416Dat[2][180000][5000] = {
+	MinVel = -30.497858000000001	;
+	MinAng =  31.043249490682072	;
+	[0] = 48.052719808991185	;
+	[1] =  0.58326267597092762	;
+	[2] = -0.00068399476961557293	;
+	[3] = -0.00009495801675188774	;
+	[4] = -0.0000005206944870550715	;
+	[5] =  0.000000059039160348785908	;
+	[6] =  0.00000000013741429008042814	;
+	[7] = -0.000000000036080253107609015	;
+	[8] =  0.00000000000031958076575585173	;
+	[9] =  0.000000000000010541277600914292	;
+	[10] = -0.00000000000000028039188169868285	;
+	[11] =  0.0000000000000000028451487554809078	;
+	[12] = -0.000000000000000000013799974059619316	;
+	[13] =  0.000000000000000000000026559437254803491	;
+	MaxVel = 126.87370300000001	;
+	MaxAng =  90.208488922464312	;
+};
+SAE416Dat[2][180000][6000] = {
+	MinVel = -30.651373	;
+	MinAng =  32.997846567819721	;
+	[0] = 49.020683818608084	;
+	[1] =  0.54213949015565321	;
+	[2] = -0.00092493977298408608	;
+	[3] = -0.000075539908916230836	;
+	[4] = -0.00000001280452407565445	;
+	[5] =  0.00000010287140294531939	;
+	[6] = -0.000000002419442733438575	;
+	[7] = -0.000000000037533312282352646	;
+	[8] =  0.0000000000024229762555743286	;
+	[9] = -0.000000000000041514539324141975	;
+	[10] =  0.0000000000000003228299503405953	;
+	[11] = -0.00000000000000000092783227709653916	;
+	[12] = -0.0000000000000000000015762452832708072	;
+	[13] =  0.000000000000000000000010611325231098744	;
+	MaxVel = 125.957176	;
+	MaxAng =  89.903543254833494	;
+};
+SAE416Dat[2][360000][300] = {
+	MinVel = -30.032883000000002	;
+	MinAng =  28.399731406773562	;
+	[0] = 44.391932967233195	;
+	[1] =  0.50512010267281404	;
+	[2] = -0.0011961569830905641	;
+	[3] =  0.000082198847174811763	;
+	[4] = -0.0000015103125114142795	;
+	[5] = -0.0000002010520842821669	;
+	[6] =  0.000000005225013596004777	;
+	[7] =  0.000000000079888356854579499	;
+	[8] = -0.0000000000041464907295749446	;
+	[9] =  0.000000000000040856922056560772	;
+	[10] =  0.00000000000000022149203110815946	;
+	[11] = -0.0000000000000000068894922441284402	;
+	[12] =  0.000000000000000000047251005926129914	;
+	[13] = -0.00000000000000000000011040497996781019	;
+	MaxVel = 116.96867399999999	;
+	MaxAng =  82.423480832119822	;
+};
+SAE416Dat[2][360000][1000] = {
+	MinVel = -31.017944	;
+	MinAng =  28.750611941820512	;
+	[0] = 45.119566245236996	;
+	[1] =  0.50743996464972763	;
+	[2] = -0.0014958686497740237	;
+	[3] = -0.000029105732190357688	;
+	[4] =  0.0000011446718406765275	;
+	[5] = -0.000000059234884291221591	;
+	[6] =  0.0000000013088214526051579	;
+	[7] =  0.000000000022576171476890905	;
+	[8] = -0.0000000000018830876070443796	;
+	[9] =  0.00000000000004457530088511573	;
+	[10] = -0.0000000000000005505881413221349	;
+	[11] =  0.0000000000000000038048633213376341	;
+	[12] = -0.000000000000000000013862062212404191	;
+	[13] =  0.000000000000000000000020620320145808966	;
+	MaxVel = 116.992615	;
+	MaxAng =  84.083578067848066	;
+};
+SAE416Dat[2][360000][2000] = {
+	MinVel = -30.018360000000001	;
+	MinAng =  31.701825454278531	;
+	[0] = 46.022406415839939	;
+	[1] =  0.48776691621060375	;
+	[2] =  0.00068770159601682377	;
+	[3] =  0.000010649340857321263	;
+	[4] = -0.0000067892975600667267	;
+	[5] =  0.000000018084759598958774	;
+	[6] =  0.0000000092573707807705461	;
+	[7] = -0.00000000019617275757612314	;
+	[8] = -0.0000000000018447588605619357	;
+	[9] =  0.00000000000012288966194365167	;
+	[10] = -0.0000000000000019761420391478616	;
+	[11] =  0.000000000000000015723111544675543	;
+	[12] = -0.000000000000000000063791284607218818	;
+	[13] =  0.00000000000000000000010552745963433829	;
+	MaxVel = 114.97283899999999	;
+	MaxAng =  83.71859634116845	;
+};
+SAE416Dat[2][360000][3000] = {
+	MinVel = -29.970103999999999	;
+	MinAng =  32.952581950526984	;
+	[0] = 47.275412017875006	;
+	[1] =  0.46516962782175392	;
+	[2] = -0.0012786597755491012	;
+	[3] = -0.000026214132254927675	;
+	[4] =  0.0000005639136917374917	;
+	[5] =  0.000000018819225096263389	;
+	[6] = -0.0000000011523372451219337	;
+	[7] =  0.0000000000027723120540988761	;
+	[8] =  0.00000000000073950257772926638	;
+	[9] = -0.000000000000017765218594392492	;
+	[10] =  0.00000000000000018750250777327737	;
+	[11] = -0.0000000000000000010072087838687637	;
+	[12] =  0.0000000000000000000025462171761579335	;
+	[13] = -0.0000000000000000000000020347592061032513	;
+	MaxVel = 115.803223	;
+	MaxAng =  86.958868848010752	;
+};
+SAE416Dat[2][360000][4000] = {
+	MinVel = -30.057562000000001	;
+	MinAng =  34.44341717265543	;
+	[0] = 48.211302971977048	;
+	[1] =  0.44267366997313595	;
+	[2] =  0.00047681368271619562	;
+	[3] = -0.000031453233794318837	;
+	[4] = -0.0000064178361326877484	;
+	[5] =  0.00000015505633064685427	;
+	[6] =  0.0000000066865071552207436	;
+	[7] = -0.00000000027575368790170697	;
+	[8] =  0.00000000000074126085232743876	;
+	[9] =  0.00000000000011419041111771615	;
+	[10] = -0.0000000000000024547284445906268	;
+	[11] =  0.000000000000000023019299050292962	;
+	[12] = -0.00000000000000000010572660276775776	;
+	[13] =  0.00000000000000000000019393113542745833	;
+	MaxVel = 115.827316	;
+	MaxAng =  83.672406955287443	;
+};
+SAE416Dat[2][360000][5000] = {
+	MinVel = -29.974862999999999	;
+	MinAng =  36.166330535766598	;
+	[0] = 49.056550866599615	;
+	[1] =  0.44879598441401675	;
+	[2] = -0.0019300393766869461	;
+	[3] = -0.000019131419206691092	;
+	[4] =  0.0000013871412518811506	;
+	[5] = -0.0000000070538651677189208	;
+	[6] = -0.000000001443021216405465	;
+	[7] =  0.000000000020994210529035908	;
+	[8] =  0.0000000000010211101902802736	;
+	[9] = -0.000000000000041616360124139572	;
+	[10] =  0.00000000000000067744079509877059	;
+	[11] = -0.0000000000000000059023819622833443	;
+	[12] =  0.000000000000000000027218284144102343	;
+	[13] = -0.000000000000000000000052377472301924852	;
+	MaxVel = 115.97473100000001	;
+	MaxAng =  87.294480406373623	;
+};
+SAE416Dat[2][360000][6000] = {
+	MinVel = -30.001324	;
+	MinAng =  36.993876463845936	;
+	[0] = 49.678001859269756	;
+	[1] =  0.44718652722935059	;
+	[2] =  0.00017984318765240301	;
+	[3] = -0.00010557575801792101	;
+	[4] = -0.0000018694079673017445	;
+	[5] =  0.00000017559570458899542	;
+	[6] = -0.0000000011869179548270874	;
+	[7] = -0.00000000010343900228207188	;
+	[8] =  0.000000000002642224381518061	;
+	[9] = -0.0000000000000213510781864573	;
+	[10] = -0.000000000000000032839283391645131	;
+	[11] =  0.0000000000000000014955940188722713	;
+	[12] = -0.0000000000000000000079615432768323212	;
+	[13] =  0.000000000000000000000012654834706771564	;
+	MaxVel = 117.049561	;
+	MaxAng =  89.232384880482641	;
+};
+SAE416Dat[4][180000][300] = {
+	MinVel = -30.360050000000001	;
+	MinAng =  18.313963246023867	;
+	[0] = 41.463261817398845	;
+	[1] =  0.87667576726941698	;
+	[2] = -0.0015253582775190955	;
+	[3] = -0.00019629584498416497	;
+	[4] = -0.000000081992036307083042	;
+	[5] =  0.000000056620646652687115	;
+	[6] =  0.0000000018969887578633833	;
+	[7] = -0.000000000060170664547742438	;
+	[8] = -0.00000000000063656673160219872	;
+	[9] =  0.000000000000043418786181780144	;
+	[10] = -0.0000000000000007038264292258755	;
+	[11] =  0.0000000000000000055843878446439957	;
+	[12] = -0.000000000000000000022463224943893092	;
+	[13] =  0.000000000000000000000036721213545771085	;
+	MaxVel = 134.27024800000001	;
+	MaxAng =  86.768938738241559	;
+};
+SAE416Dat[4][180000][1000] = {
+	MinVel = -30.458548	;
+	MinAng =  19.18079092699757	;
+	[0] = 42.762485880477527	;
+	[1] =  0.82588759527808153	;
+	[2] = -0.0043309661651522516	;
+	[3] = -0.00003859712156854757	;
+	[4] =  0.0000030136801203500189	;
+	[5] = -0.00000019283700940439235	;
+	[6] =  0.0000000038887529175257916	;
+	[7] =  0.000000000047366558542082995	;
+	[8] = -0.0000000000036262867701625291	;
+	[9] =  0.000000000000075579208326347448	;
+	[10] = -0.00000000000000084653153247137982	;
+	[11] =  0.0000000000000000054915259644109979	;
+	[12] = -0.000000000000000000019467579217045918	;
+	[13] =  0.000000000000000000000029262325508102447	;
+	MaxVel = 134.25058000000001	;
+	MaxAng =  86.962075445771916	;
+};
+SAE416Dat[4][180000][2000] = {
+	MinVel = -29.994049	;
+	MinAng =  21.503611750446314	;
+	[0] = 43.785080991203898	;
+	[1] =  0.79086061938771979	;
+	[2] = -0.0026840126508850259	;
+	[3] = -0.00009072579129105389	;
+	[4] =  0.0000012788999923581727	;
+	[5] = -0.000000013926095352756402	;
+	[6] =  0.00000000016489309611151947	;
+	[7] = -0.00000000000094366203391433684	;
+	[8] = -0.000000000000032800235641655508	;
+	[9] =  0.0000000000000022471124370081274	;
+	[10] = -0.000000000000000051848007836111453	;
+	[11] =  0.00000000000000000055801010255714366	;
+	[12] = -0.0000000000000000000028760258762361581	;
+	[13] =  0.0000000000000000000000057625589328665406	;
+	MaxVel = 134.14544699999999	;
+	MaxAng =  87.641369971461245	;
+};
+SAE416Dat[4][180000][3000] = {
+	MinVel = -30.53219	;
+	MinAng =  23.163687168665625	;
+	[0] = 44.941927891383727	;
+	[1] =  0.80781924355622747	;
+	[2] = -0.0010884231773236885	;
+	[3] = -0.00023712190424612394	;
+	[4] =  0.00000011540904441605663	;
+	[5] =  0.00000015159997014338082	;
+	[6] = -0.00000000095682549959309549	;
+	[7] = -0.00000000006237400129017986	;
+	[8] =  0.00000000000096124821717090832	;
+	[9] =  0.0000000000000065140024616242245	;
+	[10] = -0.00000000000000028214743201750203	;
+	[11] =  0.0000000000000000028734602368547746	;
+	[12] = -0.000000000000000000013092745704259489	;
+	[13] =  0.000000000000000000000023147506643556504	;
+	MaxVel = 134.377228	;
+	MaxAng =  89.863138180327951	;
+};
+SAE416Dat[4][180000][4000] = {
+	MinVel = -30.405688999999999	;
+	MinAng =  25.319830328817403	;
+	[0] = 46.355627056281307	;
+	[1] =  0.75436465190032842	;
+	[2] = -0.0021337136572610327	;
+	[3] = -0.00014384593997679896	;
+	[4] =  0.0000014594652237168405	;
+	[5] =  0.000000044200336360240346	;
+	[6] = -0.0000000012177759190356395	;
+	[7] = -0.0000000000018788164956019932	;
+	[8] =  0.00000000000053342642138902224	;
+	[9] = -0.0000000000000094540353152908658	;
+	[10] =  0.000000000000000068991470676268237	;
+	[11] = -0.00000000000000000014119862577643602	;
+	[12] = -0.00000000000000000000073729446400843794	;
+	[13] =  0.0000000000000000000000031049915388645065	;
+	MaxVel = 134.12402299999999	;
+	MaxAng =  90.24818745326229	;
+};
+SAE416Dat[4][180000][5000] = {
+	MinVel = -30.454687	;
+	MinAng =  26.907469691030592	;
+	[0] = 47.587477409213733	;
+	[1] =  0.73428054369339979	;
+	[2] = -0.0032162573594762961	;
+	[3] = -0.00020284367495921685	;
+	[4] =  0.0000068737549374200594	;
+	[5] =  0.000000075648537501528161	;
+	[6] = -0.0000000084581040384767119	;
+	[7] =  0.00000000011394756166942138	;
+	[8] =  0.0000000000021818106397995471	;
+	[9] = -0.000000000000085756078525122255	;
+	[10] =  0.0000000000000011501861233329426	;
+	[11] = -0.0000000000000000079494895266419271	;
+	[12] =  0.000000000000000000028374456596726835	;
+	[13] = -0.000000000000000000000041471153229520115	;
+	MaxVel = 134.06021100000001	;
+	MaxAng =  91.175081597844837	;
+};
+SAE416Dat[4][180000][6000] = {
+	MinVel = -30.007757000000002	;
+	MinAng =  29.089217498360259	;
+	[0] = 48.656172665135784	;
+	[1] =  0.70720834725802861	;
+	[2] = -0.0015038647790237905	;
+	[3] = -0.00015732911473154956	;
+	[4] = -0.0000014747538295325821	;
+	[5] =  0.00000012655096340857627	;
+	[6] =  0.0000000016000236173813431	;
+	[7] = -0.00000000011701030054816601	;
+	[8] =  0.00000000000078821665481610496	;
+	[9] =  0.000000000000032350627747499959	;
+	[10] = -0.00000000000000074552035469811621	;
+	[11] =  0.000000000000000006811200363169728	;
+	[12] = -0.0000000000000000000298834135069877	;
+	[13] =  0.00000000000000000000005206467777443879	;
+	MaxVel = 131.982147	;
+	MaxAng =  89.703169402899221	;
+};
+SAE416Dat[4][360000][300] = {
+	MinVel = -30.080072000000001	;
+	MinAng =  24.111280371753843	;
+	[0] = 43.646362511409023	;
+	[1] =  0.6772994255672351	;
+	[2] = -0.0049391588051598337	;
+	[3] = -0.00011935405604758488	;
+	[4] =  0.0000086091856743454141	;
+	[5] =  0.000000022160737377580773	;
+	[6] = -0.000000010319804098794369	;
+	[7] =  0.00000000015947944997449014	;
+	[8] =  0.0000000000034121135361375173	;
+	[9] = -0.00000000000014366231273823442	;
+	[10] =  0.0000000000000020705236731544509	;
+	[11] = -0.000000000000000015407874638742619	;
+	[12] =  0.000000000000000000059412890459364283	;
+	[13] = -0.000000000000000000000094220809042369421	;
+	MaxVel = 126.936729	;
+	MaxAng =  84.144386664003832	;
+};
+SAE416Dat[4][360000][1000] = {
+	MinVel = -30.839376000000001	;
+	MinAng =  24.781780153267793	;
+	[0] = 44.366150939473215	;
+	[1] =  0.6750385927847562	;
+	[2] = -0.0045884039456137587	;
+	[3] = -0.00014878096217435174	;
+	[4] =  0.0000084145032595928559	;
+	[5] =  0.00000001885544786525919	;
+	[6] = -0.0000000089175242969261503	;
+	[7] =  0.00000000014761358332342217	;
+	[8] =  0.0000000000021251409572996408	;
+	[9] = -0.00000000000010130653206660964	;
+	[10] =  0.0000000000000014732792406571056	;
+	[11] = -0.000000000000000010925404880763512	;
+	[12] =  0.000000000000000000041856852036732383	;
+	[13] = -0.000000000000000000000065899458718558486	;
+	MaxVel = 127.68446400000001	;
+	MaxAng =  84.745491906214738	;
+};
+SAE416Dat[4][360000][2000] = {
+	MinVel = -30.030391999999999	;
+	MinAng =  27.06312191738337	;
+	[0] = 45.519910689077292	;
+	[1] =  0.58911084381273848	;
+	[2] = -0.0023876738746598306	;
+	[3] =  0.00011730449809505775	;
+	[4] = -0.0000017559127039152661	;
+	[5] = -0.00000025032781255782207	;
+	[6] =  0.0000000079221347646576327	;
+	[7] =  0.000000000018571014558722658	;
+	[8] = -0.0000000000045557973247403732	;
+	[9] =  0.000000000000093475076886267657	;
+	[10] = -0.00000000000000092982829537120903	;
+	[11] =  0.0000000000000000050307493963376183	;
+	[12] = -0.000000000000000000013986063564051515	;
+	[13] =  0.000000000000000000000015231481062646109	;
+	MaxVel = 125.90849300000001	;
+	MaxAng =  84.637961604810698	;
+};
+SAE416Dat[4][360000][3000] = {
+	MinVel = -30.010691000000001	;
+	MinAng =  29.396647306130617	;
+	[0] = 46.392274834930589	;
+	[1] =  0.6005814222243322	;
+	[2] = -0.00036561021672414443	;
+	[3] = -0.000079769014943534516	;
+	[4] = -0.0000020588985287102842	;
+	[5] =  0.00000011350940057238321	;
+	[6] = -0.0000000012261600026581336	;
+	[7] = -0.000000000051708702625123248	;
+	[8] =  0.0000000000026407244659618327	;
+	[9] = -0.000000000000057558974150785428	;
+	[10] =  0.00000000000000071068720328711656	;
+	[11] = -0.0000000000000000050914758573936826	;
+	[12] =  0.000000000000000000019708257551797473	;
+	[13] = -0.000000000000000000000031886105504469353	;
+	MaxVel = 127.024086	;
+	MaxAng =  86.802746193963685	;
+};
+SAE416Dat[4][360000][4000] = {
+	MinVel = -30.902301999999999	;
+	MinAng =  30.511286733948776	;
+	[0] = 47.495868458972467	;
+	[1] =  0.6071628676035612	;
+	[2] = -0.0013817928933440998	;
+	[3] = -0.0002419024987208372	;
+	[4] =  0.0000053467370055573717	;
+	[5] =  0.00000022847901131423208	;
+	[6] = -0.000000012437020162575018	;
+	[7] =  0.00000000011010774992169603	;
+	[8] =  0.0000000000052532105430991439	;
+	[9] = -0.00000000000017537220737777347	;
+	[10] =  0.0000000000000024385245827091101	;
+	[11] = -0.000000000000000018205828072032338	;
+	[12] =  0.000000000000000000071511317803580927	;
+	[13] = -0.00000000000000000000011633635097204861	;
+	MaxVel = 127.99580400000001	;
+	MaxAng =  88.095697742246557	;
+};
+SAE416Dat[4][360000][5000] = {
+	MinVel = -31.037319	;
+	MinAng =  31.138506997527752	;
+	[0] = 48.621909101832131	;
+	[1] =  0.55008544491000799	;
+	[2] = -0.0029038601450033612	;
+	[3] =  0.00001580290399123439	;
+	[4] =  0.0000042986356572283024	;
+	[5] = -0.00000017972105781008748	;
+	[6] = -0.0000000022246824847576502	;
+	[7] =  0.00000000018577517949267368	;
+	[8] = -0.0000000000018015903823342656	;
+	[9] = -0.000000000000041367615143919542	;
+	[10] =  0.0000000000000011441469357710413	;
+	[11] = -0.000000000000000011264817055649371	;
+	[12] =  0.00000000000000000005208656354510068	;
+	[13] = -0.000000000000000000000094676329327926886	;
+	MaxVel = 127.02113300000001	;
+	MaxAng =  87.069877771078609	;
+};
+SAE416Dat[4][360000][6000] = {
+	MinVel = -30.019521999999998	;
+	MinAng =  33.949142349442923	;
+	[0] = 49.550414716470613	;
+	[1] =  0.58743495382973643	;
+	[2] = -0.0034018609101947178	;
+	[3] = -0.00024993870941957983	;
+	[4] =  0.0000088348340744998056	;
+	[5] =  0.00000019531301744322074	;
+	[6] = -0.000000014189952859501796	;
+	[7] =  0.00000000014117918500856557	;
+	[8] =  0.0000000000055908235571825731	;
+	[9] = -0.00000000000019041750705751517	;
+	[10] =  0.0000000000000026304495557703535	;
+	[11] = -0.000000000000000019469384565536994	;
+	[12] =  0.000000000000000000075952493258003368	;
+	[13] = -0.00000000000000000000012305475425515634	;
+	MaxVel = 127.963036	;
+	MaxAng =  88.436182354402263	;
+};
+function SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, Alt, Pwr)
+		local Ang;
+
+		if ( Vel > SAE416Dat[Bld][Pwr][Alt].MaxVel ) then
+			Ang = SAE416Dat[Bld][Pwr][Alt].MaxAng ;
+		elseif ( Vel < SAE416Dat[Bld][Pwr][Alt].MinVel ) then
+			Ang = SAE416Dat[Bld][Pwr][Alt].MinAng ;
+		else
+			Ang
+			 = SAE416Dat[Bld][Pwr][Alt][13] * V13
+			 + SAE416Dat[Bld][Pwr][Alt][12] * V12
+			 + SAE416Dat[Bld][Pwr][Alt][11] * V11
+			 + SAE416Dat[Bld][Pwr][Alt][10] * V10
+			 + SAE416Dat[Bld][Pwr][Alt][9] * Vl9
+			 + SAE416Dat[Bld][Pwr][Alt][8] * Vl8
+			 + SAE416Dat[Bld][Pwr][Alt][7] * Vl7
+			 + SAE416Dat[Bld][Pwr][Alt][6] * Vl6
+			 + SAE416Dat[Bld][Pwr][Alt][5] * Vl5
+			 + SAE416Dat[Bld][Pwr][Alt][4] * Vl4
+			 + SAE416Dat[Bld][Pwr][Alt][3] * Vl3
+			 + SAE416Dat[Bld][Pwr][Alt][2] * Vl2
+			 + SAE416Dat[Bld][Pwr][Alt][1] * Vel
+			 + SAE416Dat[Bld][Pwr][Alt][0] ;
+		end
+
+		return Ang;
+end
+function SAE416(Vel, Alt, Pwr, AngVel, Bld)
+	if (Pwr == 0) then
+		if (Vel < 0) then
+			return 45;
+		else
+			local Ang = math.deg(math.atan2(Vel, AngVel * 0.6));
+			if (Vel < 1) then
+				Ang = Ang * Vel +(1 -Vel) *45;
+			end
+			return Ang;
+		end
+	end
+	local Vl2 = Vel * Vel;
+	local Vl3 = Vl2 * Vel;
+	local Vl4 = Vl3 * Vel;
+	local Vl5 = Vl4 * Vel;
+	local Vl6 = Vl5 * Vel;
+	local Vl7 = Vl6 * Vel;
+	local Vl8 = Vl7 * Vel;
+	local Vl9 = Vl8 * Vel;
+	local V10 = Vl9 * Vel;
+	local V11 = V10 * Vel;
+	local V12 = V11 * Vel;
+	local V13 = V12 * Vel;
+	local Bld = Bld;
+	if (Bld <= 2) then
+		Bld = 2;
+	elseif (Bld >= 4) then
+		Bld = 4;
+	else
+		Bld = math.floor(Bld + 0.5);
+	end
+	local Ang;
+	local LowPwr;
+	local HigPwr;
+	local PwrBal;
+	if (Pwr < SAE416DatPwr[ 1 ]) then
+		LowPwr = SAE416DatPwr[ 1 ];
+		HigPwr = SAE416DatPwr[ 1 ];
+		PwrBal = 0;
+	else
+		local SAE416DatPwrLen = table.getn(SAE416DatPwr);
+		for i = 2, SAE416DatPwrLen do
+			if (Pwr <= SAE416DatPwr[ i ]) then
+				LowPwr = SAE416DatPwr[ i - 1 ];
+				HigPwr = SAE416DatPwr[ i ];
+
+				break;
+			end
+		end
+
+		if (LowPwr == nil) then
+			LowPwr = SAE416DatPwr[ SAE416DatPwrLen ];
+			HigPwr = SAE416DatPwr[ SAE416DatPwrLen ];
+			PwrBal = 1;
+		else
+			PwrBal = (Pwr - LowPwr) / (HigPwr - LowPwr);
+		end
+	end
+	if (Alt < -0.45) then
+
+		local AngLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, 0, LowPwr);
+		local AngHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, 0, HigPwr);
+
+		Ang = (1 - PwrBal) * AngLowPwr + PwrBal * AngHigPwr;
+
+	elseif (Alt <= SAE416DatAlt[ 1 ]) then
+
+		local AngLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, SAE416DatAlt[ 1 ], LowPwr);
+		local AngHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, SAE416DatAlt[ 1 ], HigPwr);
+
+		Ang = (1 - PwrBal) * AngLowPwr + PwrBal * AngHigPwr;
+
+	else
+		local HigAlt;
+		local LowAlt;
+		local SAE416DatAltLen = table.getn(SAE416DatAlt);
+		for i = 2, SAE416DatAltLen do
+			if (Alt <= SAE416DatAlt[ i ]) then
+				LowAlt = SAE416DatAlt[ i - 1 ];
+				HigAlt = SAE416DatAlt[ i ];
+
+				break;
+			end
+		end
+
+		if (LowAlt == nil) then
+			LowAlt = SAE416DatAlt[ SAE416DatAltLen ];
+			HigAlt = SAE416DatAlt[ SAE416DatAltLen ];
+			AltBal = 1;
+		else
+			AltBal = (Alt - LowAlt) / (HigAlt - LowAlt);
+		end
+
+		local AngLowAltLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, LowAlt, LowPwr);
+		local AngLowAltHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, LowAlt, HigPwr);
+
+		local AngLowAlt = (1 - PwrBal) * AngLowAltLowPwr + PwrBal * AngLowAltHigPwr;
+
+		local AngHigAltLowPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, HigAlt, LowPwr);
+		local AngHigAltHigPwr = SAE416Ang(Vel, Vl2, Vl3, Vl4, Vl5, Vl6, Vl7, Vl8, Vl9, V10, V11, V12, V13, Bld, HigAlt, HigPwr);
+
+		local AngHigAlt = (1 - PwrBal) * AngHigAltLowPwr + PwrBal * AngHigAltHigPwr;
+
+		Ang = (1 - AltBal) * AngLowAlt + AltBal * AngHigAlt;
+	end
+	return Ang;
+end
+
+LimitAmmo = 0;           --���@�̎��c���e���|�C���g�B�c�e�\�����t���O�Ɏg���Ă��������B
+LimitAmmoMax = 0;
+isJetPlaneLimitAmmo = false;--�W�F�b�g�@�Ȃ�true�ɏ`
+isBomberLimitAmmo = true;--�����@�Ȃ�true�ɏ`
+isLimitAmmoInitialized = false;--�����I�ȏ������t���O�B���������炾�߁[�悗
+Cost100k = 12;           --100k(Option=100000)�ȏ���ARM�̒e���R�X�g
+Cost50k = 2;             --50k�ȏ�100k�����̒e���R�X�g
+ListChipType = {};       --ARM�̃`�b�v�ԍ����i�[
+ArmCostList = {}; --�������ꂽArm�̃R�X�g�����Ɏ��[
+function LimitAmmoRegulation()
+	--�����ݒ�
+	if not isLimitAmmoInitialized then
+		--�d�ʂɉ����Ēe���|�C���g������
+		if isJetPlaneLimitAmmo then
+			LimitAmmo = 1200;
+		elseif isBomberLimitAmmo then
+			LimitAmmo = 600;
+		elseif 2200<=_WEIGHT() then
+			LimitAmmo = 500;
+		else
+			LimitAmmo = math.max(_WEIGHT()-1300, 0)/100*20+350;
+		end
+		LimitAmmoMax= LimitAmmo;
+		local chipNum = _CHIPS() - 1;
+		for i = 1, chipNum do
+			--ARM�`�F�b�N
+			if _TYPE(i) == 10 then
+				--50k�̏ꍇ�A100k�̏ꍇ�ł��ꂼ���e���R�X�g���i�[
+				if _OPTION(i) == 50000 then
+					table.insert(ListChipType, i);
+					table.insert(ArmCostList, Cost50k);
+				elseif _OPTION(i) >= 100000 then
+					table.insert(ListChipType, i);
+					table.insert(ArmCostList, Cost100k);
+				end
+			end
+		end
+		isLimitAmmoInitialized = true;
+	elseif _TICKS() > 150 then
+		--���˃J�E���g
+		local n = table.getn(ListChipType);
+		for i = 1, n do
+			--���˔���
+			if _E(ListChipType[i]) == 0 and _TOP(ListChipType[i]) == 0 then
+				LimitAmmo = LimitAmmo - ArmCostList[i];  --�e���|�C���g�����e���R�X�g�����Z
+			end
+		end
+		local h = _H(0);
+		local speed = _VZ(0);
+		if (0 < h and h < 2) and math.abs(speed) < 1.5 then
+			if isJetPlaneLimitAmmo then
+				LimitAmmo = LimitAmmo + 1;
+			else
+				LimitAmmo = LimitAmmo + 0.5;
+			end
+			if LimitAmmo > LimitAmmoMax then LimitAmmo = LimitAmmoMax; end
+		end
+	end
+end
+}

@@ -1,0 +1,199 @@
+// [RCD] 
+Val
+{
+	COL_SAISEN(default=#FFFF00)
+	PITCH(default=90, min=90, max=180)
+	YAW(default=90, min=-2147483648, max=2147483648)
+	
+	POW_SAISEN_0(default=90, max=2147483648)
+	POW_SAISEN_1(default=90, max=2147483648)
+	POW_SAISEN_2(default=90, max=2147483648)
+	POW_SAISEN_3(default=90, max=2147483648)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Weight(angle=PITCH) {
+			E:Weight(angle=YAW) {
+				N:Weight(angle=60) {
+					N:Weight() {
+						E:Weight() { }
+						W:Weight() { }
+					}
+				}
+				N:Weight(angle=-60) {
+					N:Weight() {
+						W:Weight() { }
+						E:Weight() { }
+					}
+				}
+			}
+		}
+		E:Weight(angle=-90) {
+			S:Jet(angle=-90, name=SAISEN_0, power=POW_SAISEN_0, color=COL_SAISEN) { }
+			S:Jet(angle=-90, name=SAISEN_1, power=POW_SAISEN_1, color=COL_SAISEN) { }
+			S:Jet(angle=-90, name=SAISEN_2, power=POW_SAISEN_2, color=COL_SAISEN) { }
+			S:Jet(angle=-90, name=SAISEN_3, power=POW_SAISEN_3, color=COL_SAISEN) { }
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	SAISEN_WEIGHT=36.756637573242188;
+	GRAVITY=9.80665;
+	
+	require("wakaru/wakaru_eye.lua");
+	
+	initflag=false;
+	
+	function init()
+		initflag=true;
+
+		rotSpd=1;
+				
+		saisenNum=0;
+		saisenPow=1600000;
+		saisenPos=Wector.new(0, 0, 0);
+		saisenSpd=Wector.new(0, 0, 0);
+		saisenDir=Wector.new(0, 1, 0);
+		
+		targetPos=Wector.new(1793,417,2393);
+		
+		gravityVec=Wector.new(0, -GRAVITY, 0);
+		saisenInitVel=math.min(saisenPow/6/SAISEN_WEIGHT/_BASE()^2, 100);
+	end
+
+	function main()
+		if not initflag then init(); end
+		
+		for i=0, 3 do
+			_G["POW_SAISEN_"..i]=0;
+			local s=getSpdVec2(_G["SAISEN_"..i]);
+		end
+		
+		if saisenNum<4 then
+			saisenPos=Wector:getPosVec(_G["SAISEN_"..saisenNum]);
+			saisenSpd=getSpdVec2(_G["SAISEN_"..saisenNum]);
+			saisenDir=Wector.new(_YX(_G["SAISEN_"..saisenNum]), _YY(_G["SAISEN_"..saisenNum]), _YZ(_G["SAISEN_"..saisenNum])):getNormal();
+			
+			dis=math.floor((targetPos-saisenPos):getLength());
+			out(0, dis.."[m]");
+			
+			_SETCOLOR(tonumber("00FF00", 16));
+			gt=0;
+			gf=false;
+			pointPos=saisenPos;
+			_MOVE3D(saisenPos.x, saisenPos.y, saisenPos.z);
+			
+			while not gf do
+				gt=gt+_BASE();
+				pointPos=saisenPos+(saisenSpd+saisenDir*saisenInitVel)*gt+gravityVec/2*(gt/_BASE())^2;
+				_LINE3D(pointPos.x, pointPos.y, pointPos.z);
+				if pointPos.y<=_GETY(pointPos.x, pointPos.z) or pointPos.y<=0 or 60*_BASE()<gt then
+					gf=true;
+				end
+				_LINE3D(pointPos.x, pointPos.y, pointPos.z);
+			end
+			
+			for i=0, _BASE() do
+				gt=gt-1;
+				pointPos=saisenPos+(saisenSpd+saisenDir*saisenInitVel)*gt+gravityVec/2*(gt/_BASE())^2;
+				if pointPos.y<=_GETY(pointPos.x, pointPos.z) or pointPos.y<=0  then
+				else
+					_MOVE3D(pointPos.x, pointPos.y, pointPos.z);
+					_LINE3D(pointPos.x, pointPos.y+10, pointPos.z);
+					break;
+				end
+			end
+			
+			hVec=pointPos-saisenPos;
+			hVec.y=0;
+			hDis=hVec:getLength();
+			_MOVE2D(0, saisenPos.y/1000);
+			for i=0, hDis, hDis/30 do
+				local y=math.max(_GETY(hVec.x*i/hDis+saisenPos.x, hVec.z*i/hDis+saisenPos.z), 0);
+				_LINE2D(i/hDis, y/1000);
+			end
+			
+			if _KEY(KEY_Z)==1 then
+				rotSpd=100/hDis;
+			else
+				rotSpd=1;
+			end
+			
+			if _KEY(KEY_UP)==1 then
+				PITCH=PITCH+rotSpd;
+			end
+			if _KEY(KEY_DOWN)==1 then
+				PITCH=PITCH-rotSpd;
+			end
+			if _KEY(KEY_LEFT)==1 then
+				YAW=YAW+rotSpd;
+			end
+			if _KEY(KEY_RIGHT)==1 then
+				YAW=YAW-rotSpd;
+			end
+			
+			if _KEY(KEY_A)==1 then
+				local v1=(pointPos-saisenPos):getLVec(0);
+				v1.y=0;
+				v1=v1:getNormal();
+				local v2=(targetPos-saisenPos):getLVec(0);
+				v2.y=0;
+				v2=v2:getNormal();
+				
+				local sgn=v1:getOuter(v2).y;
+				sgn=sgn/math.abs(sgn);
+				local rot=math.min(math.max(math.deg(math.acos(v1^v2))/10, -1), 1)*sgn;
+				if -1<=rot and rot<=1 then
+					YAW=YAW-rot;
+				end
+				
+				local d1=(pointPos-saisenPos):getLVec(0);
+				d1.y=0;
+				d1=d1:getLength();
+				local d2=(targetPos-saisenPos):getLVec(0);
+				d2.y=0;
+				d2=d2:getLength();
+				rot=math.min(math.max((d1-d2)/1000, -1), 1);
+				PITCH=PITCH+rot;
+			end
+			
+			if _KEY(KEY_V)==1 then
+				_SETVIEW(pointPos.x, pointPos.y+1000, pointPos.z, pointPos.x, pointPos.y, pointPos.z);
+			end
+			
+			if _KEYDOWN(KEY_X)==1 then
+				_SPLIT(_G["SAISEN_"..saisenNum]);
+				_G["POW_SAISEN_"..saisenNum]=saisenPow;
+				saisenNum=saisenNum+1;
+			end
+		end
+	end
+	
+	
+	function getSpdVec2(chipName)
+		return (Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+	end
+}

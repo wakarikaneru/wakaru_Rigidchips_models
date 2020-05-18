@@ -1,0 +1,23 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Arm(name=aa) { }
+		E:Weight(angle=-120, option=1) { }
+		S:Weight(angle=-120, option=1) { }
+		W:Weight(angle=-120, option=1) { }
+		N:Weight(angle=-120, option=1) { }
+	}
+}
+Lua
+{
+_BYE(1);
+function main()
+end
+}

@@ -1,0 +1,221 @@
+loadlib("Spirytus.DLL", "rc_OpenSpirytus")();
+loadlib("NATSound.dll", "Load")();
+
+initFlag=false;
+
+soundFlag=true;
+idCount=0;
+
+--射撃音 ARMのOPTIONによって変化
+soundShot1="material/Bullet_se/fire/Gun.wav";	--<=50k
+soundShot2="material/Bullet_se/fire/GunMed.wav";	--<=100k
+soundShot3="material/Bullet_se/fire/CannSmal.wav";	--<=200k
+soundShot4="material/Bullet_se/fire/CannMed.wav";	--<=800k
+soundShot5="material/Bullet_se/fire/CannLarg.wav";	--<=1600k
+soundShot6="material/Bullet_se/fire/CannBig.wav";	--1600k<
+
+--被弾音 ランダムで変化
+soundHit1="material/Bullet_se/hit/HGunElev.wav";
+soundHit2="material/Bullet_se/hit/HGunFuse.wav";
+soundHit3="material/Bullet_se/hit/HGunTail.wav";
+soundHit4="material/Bullet_se/hit/HGunWing.wav";
+
+--破壊音 ランダムで変化
+soundBrk1="material/Bullet_se/hit/HCanElev.wav";
+soundBrk2="material/Bullet_se/hit/HCanFuse.wav";
+soundBrk3="material/Bullet_se/hit/HCanTail.wav";
+soundBrk4="material/Bullet_se/hit/HCanWing.wav";
+
+--エンジン音
+soundEng1="material/Bullet_se/engine/EnARun.wav";	--空冷
+soundEng2="material/Bullet_se/engine/EnWRun1.wav";	--液冷(高)
+soundEng3="material/Bullet_se/engine/EnWRun2.wav";	--液冷(低)
+
+--飛行音
+soundAir="material/sample/air.wav";
+
+airId=0;
+lastId=0;
+
+airVol=100;
+airSpd=1;
+
+targetFlag=false;
+target=0;
+
+distanceBfr=0;
+distanceSpd=0;
+
+--初期化
+function init()
+	initFlag=true;
+	
+	for i=0, _CHIPS()-1 do
+		_G["chip_T"..i]=_T(i);
+		_G["chip_E"..i]=_E(i);
+	end
+	
+	for i=0, 31 do
+		Stop(i);
+	end
+	
+	--playAirSound();
+end
+
+function main()
+	if not initFlag then
+		init();
+		return;
+	end
+	
+	if _SKEYDOWN(0)==1 then
+		soundFlag=not soundFlag;
+	end
+	
+	if soundFlag then
+		out(0, "SOUND ON [H]");
+	else
+		out(0, "SOUND OFF [H]");
+		for i=0, 31 do
+			Stop(i);
+		end
+		return;
+	end
+	
+	if _SKEYDOWN(1)==1 then
+		targetFlag=not targetFlag;
+	end
+	
+	if targetFlag then
+		out(1, "TARGET ON [J]");
+		if _PLAYERS()~=0 then
+			if _SKEYDOWN(2)==1 then target=target+1; end
+			if _SKEYDOWN(3)==1 then target=target-1; end
+			if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+			out(2, "TARGET [N] ".._PLAYERNAME(target).." [M]");
+			out(3, "DISTANSE "..math.floor(getDistance(target)).."m")
+		else
+			out(2, "OFFLINE");
+		end
+	else
+		out(1, "TARGET OFF [J]");
+	end
+	
+	--ここから音を出す処理
+	
+	--乱数の初期化
+	math.randomseed((_WX(0)+_WY(0)+_WZ(0))*100000);
+	out(9, math.random(), " ", math.random());
+	
+	vol=0;	--db
+	spd=1;	--倍率
+	
+	--ドップラー効果の処理
+	if targetFlag then
+		distance=getDistance(target);
+		disSpd=distance-distanceBfr;
+		distanceBfr=distance;
+		distanceSpd=(distanceSpd*2+disSpd)/3;	--緩やかに変化するように
+		sonic=340/_BASE();
+		
+		vol=math.min(-5+20*math.log10(20/distance), 0);
+		spd=sonic/(sonic+distanceSpd);
+	end
+	
+	shotFlag=false;
+	shotPow=0;
+	brkFlag=false;
+	brkPow=0;
+	hitFlag=false;
+	hitPow=0;
+	
+	for i=0, _CHIPS()-1 do
+		if _T(i)<_G["chip_T"..i] then
+			if _T(i)<=-1 then
+				brkFlag=true;
+			end
+			hitFlag=true;
+		end
+		if _E(i)<_G["chip_E"..i] then
+			if shotPow<_OPTION(i) then
+				shotPow=_OPTION(i);
+			end
+			shotFlag=true;
+		end
+		_G["chip_T"..i]=_T(i);
+		_G["chip_E"..i]=_E(i);
+	end
+	
+	if shotFlag then
+		if shotPow<=50000 then
+			playSound(soundShot1, vol, spd);
+		elseif shotPow<=100000 then
+			playSound(soundShot2, vol, spd);
+		elseif shotPow<=200000 then
+			playSound(soundShot3, vol, spd);
+		elseif shotPow<=800000 then
+			playSound(soundShot4, vol, spd);
+		elseif shotPow<=1600000 then
+			playSound(soundShot5, vol, spd);
+		else
+			playSound(soundShot6, vol, spd);
+		end
+	end
+	
+	if brkFlag then
+		local r=math.floor(math.random()*4+1);
+		playSound(_G["soundBrk"..r], vol,  spd*(math.random()*0.5+0.75));
+	else
+		if hitFlag then
+		local r=math.floor(math.random()*4+1);
+		playSound(_G["soundHit"..r], vol,  spd*(math.random()*0.5+0.75));
+		end
+	end
+	
+	--エンジン音の処理
+	--[[
+	if math.mod(_NTICKS(), _BASE())==0 then
+		Stop(airId);
+		airId=playSound(soundEng1, vol,  spd);
+		SetLoop(airId, 1);
+	end
+	
+	moveSpd=math.sqrt(_VX(0)^2+_VY(0)^2+_VZ(0)^2);
+	--SetVolume(airId, ((-100+moveSpd*2)+vol)*100);
+	--SetPlaySpeed(airId, spd*(1+moveSpd/1000*3600/200));
+	out(10, moveSpd/1000*3600/200);
+	out(11, lastId, " ", airId)
+	--]]
+end
+
+function playSound(path, vol, spd)
+	id=LoadSound(path);
+	if IsValidID(id)==1 then
+		Stop(id);
+		SetLoop(id, 0);
+		SetVolume(id, vol*100);
+		SetPlaySpeed(id, spd);
+		Play(id);
+		lastId=id;
+		return id;
+	end
+	return nil
+end
+
+function getDistance(player)
+	local nt=_NTICKS();
+	local nm=_PLAYERCHIPS(playerNum)^(1/3);
+	local nx=(math.sin(nt/150)-math.sin(nt/350))/2;
+	local ny=(math.sin(nt/160)-math.sin(nt/360))/2;
+	local nz=(math.sin(nt/140)-math.sin(nt/340))/2;
+	math.randomseed(1519);
+	local dx=_X(0)-_PLAYERX(player)-nx*nm;
+	math.randomseed(1519);
+	local dy=_Y(0)-_PLAYERY(player)-ny*nm;
+	math.randomseed(1519);
+	local dz=_Z(0)-_PLAYERZ(player)-nz*nm;
+	return math.sqrt(dx^2+dy^2+dz^2);
+end
+
+function OnInit()  initFlag=false; end
+function OnReset() initFlag=false; end

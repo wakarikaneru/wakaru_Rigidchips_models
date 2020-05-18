@@ -1,0 +1,130 @@
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+	}
+}
+Lua
+{
+
+function main()
+	--こんな感じで定義する　左からx,y,z
+	vec1=Vector.new(1, 2, 3);
+	vec2=Vector.new(1, 1, 1);
+
+	--tostringでそのまま表示できる
+	out(0, "vec1= "..tostring(vec1));
+	out(1, "vec2= "..tostring(vec2));
+
+	--ベクトル同士の加算減算
+	out(2, "vec1+vec2= "..tostring(vec1+vec2));
+	out(3, "vec1-vec2= "..tostring(vec1-vec2));
+	out(4, "vec2-vec1= "..tostring(vec2-vec1));
+
+	--ベクトルと実数の乗算除算
+	out(5, "vec1*2= "..tostring(vec1*2));
+	out(6, "vec1/2= "..tostring(vec1/2));
+
+	--逆ベクトルも思いのまま
+	out(7, "-vec1= "..tostring(-vec1));
+	out(8, "-vec2= "..tostring(-vec2));
+
+	--ベクトルの長さを求める
+	out(9, "vec1:getLength()= "..tostring(vec1:getLength()));
+	out(10, "vec2:getLength()= "..tostring(vec2:getLength()));
+
+	--ベクトルの正規化(長さを1に)
+	out(11, "vec1:getNormal()= "..tostring(vec1:getNormal()));
+	out(12, "vec2:getNormal()= "..tostring(vec2:getNormal()));
+
+	--ベクトルの内積(できる)外積(できない)
+	out(13, "vec1^vec2= "..tostring(vec1^vec2));
+	--out(14, "vec1<vec2= "..tostring(vec1<vec2));
+
+end
+
+----vectorクラス
+--RigidChipsで扱う用の3次元ベクトルを扱うクラスです
+
+---おおまかな使い方
+--変数名=Vector.new(X, Y, Z)ってやると{X, Y, Z}ベクトルが出来るって寸法
+--使い方のサンプルは上のほうにありんす
+
+---基本機能
+--ベクトル同士の足し算引き算は+,-でできる
+--ベクトルと実数の掛け算割り算は*,/でできる
+
+---便利機能(この辺あんまり確認してないから怪しい)
+--getLength()でベクトルの長さを返してくれる
+--getNormal()でベクトルの長さを1にしてくれる
+--ベクトル同士の内積は^でできる
+--ベクトル同士の外積は でできる(できない)
+
+Vector={};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+	}
+
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+		end,
+	}
+
+	setmetatable(obj, operation);
+
+	return obj;
+end
+
+}

@@ -1,0 +1,233 @@
+// [RCD] 
+Val
+{
+	JET_X(default=0, min=-1000000, max=1000000)
+	JET_Y(default=0, min=-1000000, max=1000000)
+	JET_Z(default=0, min=-1000000, max=1000000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		E:Jet(angle=180, power=-JET_Y) { }
+		W:Jet(angle=180, power=-JET_Y) { }
+		N:Arm(name=ARM) { }
+		W:TrimF(angle=90, option=1) {
+			E:Jet(power=-JET_Z) { }
+		}
+		N:TrimF(angle=90, option=1) {
+			S:Jet(power=-JET_X) { }
+		}
+		S:TrimF(angle=-90, option=1) {
+			N:Jet(power=-JET_X) { }
+		}
+		E:TrimF(angle=-90, option=1) {
+			W:Jet(power=-JET_Z) { }
+		}
+		S:TrimF(angle=-90, option=1) {
+			N:Jet(power=-JET_X) { }
+		}
+		S:Trim(angle=90) {
+			S:Trim(angle=90) {
+				S:Trim(angle=90) {
+					S:Trim(angle=90) {
+						E:Chip() { }
+						W:Chip() { }
+					}
+					W:Chip() { }
+					E:Chip() { }
+				}
+				W:Chip() { }
+				E:Chip() { }
+			}
+			E:Chip() { }
+			W:Chip() { }
+		}
+		S:Trim(angle=0) {
+			S:Trim(angle=90) {
+				S:Trim(angle=90) {
+					S:Trim(angle=90) {
+						W:Chip() { }
+						E:Chip() { }
+					}
+					W:Chip() { }
+					E:Chip() { }
+				}
+				E:Chip() { }
+				W:Chip() { }
+			}
+			E:Chip() { }
+			W:Chip() { }
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+	h=300;
+	r=300;
+	s=5;
+	
+	X=0;
+	Y=h;
+	Z=0;
+	
+	rad=0;
+	
+	hoge=_BYE(ARM);
+function main()
+	out(0,"x= ", _X(0), " y= ", _Y(0), " z= ", _Z(0));
+	
+	if _KEY(KEY_A)==1 then h=h+1; elseif _KEY(KEY_Z)==1 then h=h-1; end
+	if _KEY(KEY_S)==1 then r=r+1; elseif _KEY(KEY_X)==1 then r=r-1; end
+	if _KEY(KEY_D)==1 then s=s+1; elseif _KEY(KEY_C)==1 then s=s-1; end
+	
+	out(2,"HEIGHT ", h, "m");
+	out(3,"RADIUS ", r, "m");
+	out(4,"SPEED ", s, "deg/s");
+	
+	rad=rad+math.rad(s/30);
+	X=math.sin(rad)*r;
+	Y=h;
+	Z=math.cos(rad)*r;
+	
+	powX=limit(PID("POWERX", _X(CORE), X, 5000, 50, -50000, -5000, 5000, 0.95), -100000, 100000);
+	powY=limit(PID("POWERY", _Y(CORE), Y, 25000, 100, -250000, 5000, 15000, 0.99), -100000, 100000);
+	powZ=limit(PID("POWERZ", _Z(CORE), Z, 5000, 50, -50000, -5000, 5000, 0.95), -100000, 100000);
+	
+	pow=Vector.new(powX, powY, powZ);
+	pow=pow:getLVec(CORE);
+	
+	JET_X=pow.x;
+	JET_Y=pow.y;
+	JET_Z=pow.z;
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(_G["PID_D_"..id]-dis)*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+----Vectorクラス
+--このゲーム内の、空間上のベクトルを扱う
+Vector={
+	getPosVec=function(self, chipName)
+		return Vector.new(_X(chipName), _Y(chipName), _Z(chipName));
+	end,
+};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+
+		getWVec=function(self, chipName)
+			local wx=_XX(chipName)*self.x+_YX(chipName)*self.y+_ZX(chipName)*self.z;
+			local wy=_XY(chipName)*self.x+_YY(chipName)*self.y+_ZY(chipName)*self.z;
+			local wz=_XZ(chipName)*self.x+_YZ(chipName)*self.y+_ZZ(chipName)*self.z;
+
+			return Vector.new(wx, wy, wz);
+		end,
+
+		getLVec=function(self, chipName)
+			local lx=_XX(chipName)*self.x+_XY(chipName)*self.y+_XZ(chipName)*self.z;
+			local ly=_YX(chipName)*self.x+_YY(chipName)*self.y+_YZ(chipName)*self.z;
+			local lz=_ZX(chipName)*self.x+_ZY(chipName)*self.y+_ZZ(chipName)*self.z;
+
+			return Vector.new(lx, ly, lz);
+		end,
+	}
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+--[[
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+]]--
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+		end,
+	}
+	setmetatable(obj, operation);
+	return obj;
+end
+}

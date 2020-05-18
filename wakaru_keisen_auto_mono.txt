@@ -1,0 +1,1124 @@
+Val
+{
+	ARM_0(default=0, max=180)
+	ARM_1(default=45, max=180)
+	ARM_2(default=45, max=180)
+	BREAK(default=0, max=80)
+	COL0(default=#FF0000)
+	ENGINE0(default=0, max=360000)
+	ENGINE1(default=0, max=360000)
+	FLAP(default=-60, min=-75, max=-45)
+	GEAR(default=60, min=60, max=180)
+	HANDLE(default=0, min=-60, max=60)
+	PITCH(default=0, min=-30, max=30)
+	PROP0(default=0, max=180)
+	PROP1(default=0, max=180)
+	ROLL(default=0, min=-30, max=30)
+	TRIG_0(default=0, max=50000)
+	TRIG_1(default=0, max=50000)
+	TRIG_2(default=0, max=50000)
+	YAW(default=0, min=-30, max=30)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		S:RudderF() {
+			N:Frame(angle=60) {
+				N:Jet(angle=FLAP) {
+					E:Chip() {
+						E:Trim(angle=ROLL) {
+							E:Cowl(option=5, color=#A4A4A4) { }
+						}
+					}
+					W:Chip() {
+						W:Trim(angle=ROLL) {
+							W:Cowl(option=5, color=#A4A4A4) { }
+						}
+					}
+				}
+				N:Jet(angle=-60, name=BODY) {
+					N:Frame(angle=30) {
+						N:RLW(angle=-120, power=ENGINE0, color=#000000, name=E0) {
+							W:Trim(angle=PROP0, color=#000000, name=E00) { }
+							E:Trim(angle=PROP0, color=#000000, name=E01) { }
+						}
+						N:RLW(angle=-120, power=-ENGINE1, name=E1) {
+							W:Trim(angle=-PROP1, color=#000000, name=E10) { }
+							E:Trim(angle=-PROP1, color=#000000, name=E11) { }
+						}
+						N:Cowl(angle=-60, color=#800000) {
+							N:Cowl(angle=-120, color=#800000) {
+								W:Cowl(angle=-90, option=3, color=#800000) { }
+								E:Cowl(angle=-90, option=4, color=#800000) { }
+							}
+							E:Cowl(angle=-90, option=3, color=#800000) { }
+							W:Cowl(angle=-90, option=4, color=#800000) { }
+						}
+					}
+					N:Frame(angle=ARM_0) {
+						N:Arm(angle=-ARM_0, option=50000, power=TRIG_0, name=A0) { }
+					}
+					N:Frame(angle=ARM_1) {
+						N:Arm(angle=-ARM_1, option=50000, power=TRIG_1, name=A1) { }
+					}
+					N:Frame(angle=ARM_2) {
+						N:Arm(angle=-ARM_2, option=50000, power=TRIG_2, name=A2) { }
+					}
+					S:TrimF() {
+						S:TrimF() {
+							S:TrimF(angle=90) {
+								S:Chip(angle=-YAW) {
+									E:Chip() { }
+								}
+							}
+							S:TrimF() {
+								S:Chip(angle=PITCH) {
+									E:Chip() { }
+									W:Chip() { }
+								}
+							}
+						}
+					}
+					E:RLW(angle=GEAR, option=2, color=#808080) { }
+					W:RLW(angle=GEAR, option=2, color=#808080) { }
+				}
+			}
+			S:Cowl(angle=-150, option=1, color=#808080) {
+				S:Cowl(angle=-30, option=1, color=#808080) {
+					S:Cowl(angle=-60, option=1, color=#808080) { }
+					W:Cowl(angle=-90, option=1, color=#808080) { }
+					E:Cowl(angle=-90, option=1, color=#808080) { }
+				}
+			}
+		}
+	}
+}
+Lua
+{
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+	require("cel/Science/BasePhysic.lua");
+	require "Boot" {"cel/Equa"};
+	
+function init()
+	initflag=true;
+	mono=Wakaru_Dual.new();
+	monoMe=Wakaru_Mono.new();
+	
+	VECX=Wector.new(1, 0, 0);
+	VECY=Wector.new(0, 1, 0);
+	VECZ=Wector.new(0, 0, 1);
+	VEC0=Wector.new(0, 0, 0);
+	
+	autoMode=true;
+	
+	attack=false;
+	target=0;
+	
+	power=0;
+	airBreak=0;
+	gear=true;
+	
+	bodySpdWB=Wector.new(0, 0, 0);
+	
+	corePhys=BasePhysic.new(CORE);
+	bodyPhys=BasePhysic.new(BODY);
+	engPhys0=BasePhysic.new(E0);
+	engPhys1=BasePhysic.new(E1);
+	
+	Eg0=trit_Component.AE10:new();
+	Eg1=trit_Component.AE10:new();
+	
+	trig=false;
+	
+	--oasobi
+	ballet={}
+	for i=0, 120 do
+		ballet[i]={};
+		ballet[i].pos=Wector.new(0, 0, 0);
+		ballet[i].spd=Wector.new(0, 0, 0);
+	end
+	fbt=0;
+	
+	blood=0;
+	faintLine=1000;
+	faintTime=0;
+	
+	targetPos=Wector.new(0, 0, 0);
+	targetPosBfr=Wector.new(0, 0, 0);
+	targetSpd=Wector.new(0, 0, 0);
+	targetSpdBfr=Wector.new(0, 0, 0);
+	targetAcc=Wector.new(0, 0, 0);
+	
+	accTime=0;
+	
+	flightPoint=Wector.new(0, 0, 0);
+	
+	aimPoint=Wector.new(0, 0, 0);
+	
+	dis=0;
+	disBfr=0;
+	disSpd=0;
+	disInt=0;
+	
+	AImode=mode_dogfight;
+	AI_dive_and_zoom=AI_riseAA;
+	AI_dogfight=AI_attack;
+	
+	emergencyNow=false;
+	emergencyRadius=4.5;
+	offs=Wector.new(0,1,0):rotation(math.random()*2*math.pi, math.random()*2*math.pi, math.random()*2*math.pi)*emergencyRadius;
+
+	kr=1;
+	kp=1;
+	ky=1;
+	
+	rSpd=0;
+	pSpd=0;
+	ySpd=0;
+	
+	col=0;
+end
+
+function main()
+	if not initflag then init() end
+	_ZOOM(100);
+	out(5,_WEIGHT())
+	LimitAmmoRegulation();
+	
+	if _KEYDOWN(KEY_E)==1 then
+		col=math.mod(col+1, 3);
+	end
+	
+	if col==0 then
+		COL0=tonumber("FF0000", 16);
+	elseif col==1 then
+		COL0=tonumber("00FF00", 16);
+	else
+		COL0=tonumber("0000FF", 16);
+	end
+	
+	--機体の情報を取得
+	monoMe:tick(Wector:getPosVec(BODY))
+	
+	corePhys:Renew();
+	bodyPhys:Renew();
+	engPhys0:Renew();
+	engPhys1:Renew();
+	
+	bodySpdW=getSpdVec(BODY);
+	bodySpdL=bodySpdW:getLVec(BODY);
+	bodyAccW=bodySpdW-bodySpdWB;
+	bodyAccL=bodyAccW:getLVec(BODY);
+	bodyPos=Wector:getPosVec(BODY);
+	
+	bodySpdWB=bodySpdW;
+	
+	--いろいろ表示
+	--disp();
+	if math.abs(bodyPhys.lvz/13.89)<1 then
+		s=limit(math.abs(bodyPhys.lvz/13.89), 0, 1);
+	else
+		s=limit(math.abs(13.89/bodyPhys.lvz), 0, 1);
+	end
+	
+	if _KEY(KEY_X)==1 then
+		trig=true;
+	else
+		trig=false;
+	end
+	
+	if _KEYDOWN(KEY_F)==1 then
+		autoMode=not autoMode;
+	end
+	--動翼の制御
+	if autoMode then
+		auto();
+	else
+		ROLL=step2(ROLL, PID("ROLL", -math.deg(bodyPhys.wz), (_KEY(KEY_LEFT)-_KEY(KEY_RIGHT))*360, 0.5, 0.5, 0.0, -1.5, 1.5, 1.00)*s, 15);
+		PITCH=step2(PITCH, PID("PITCH", -math.deg(bodyPhys.wx), (_KEY(KEY_UP)-_KEY(KEY_DOWN))*180, 0.5, 0.5, 0.0, -1.5, 1.5, 1.00)*s, 15);
+		YAW=step2(YAW, PID("YAW", -math.deg(bodyPhys.wy), (_KEY(KEY_Z)-_KEY(KEY_C))*180, 0.5, 0.5, 0.0, -1.5, 1.5, 1.00)*s, 15);
+	end
+	
+	--ペラの制御
+	if (_TOP(E00)~=CORE or _TOP(E01)~=CORE) and _TOP(E0)==CORE then
+		hoge=_BYE(E0-1);
+	end
+	if (_TOP(E10)~=CORE or _TOP(E11)~=CORE) and _TOP(E1)==CORE then
+		hoge=_BYE(E1-1);
+	end
+	
+	enum=0;
+	if _TOP(E0)==CORE then
+		enum=enum+1;
+	end
+	if _TOP(E1)==CORE then
+		enum=enum+1;
+	end
+	
+	--スロットル
+	power=limit(power+(_KEY(KEY_Q)-_KEY(KEY_A))*360000/30, 0, 360000);
+	if 0<enum then
+		ENGINE0=power/enum;
+		ENGINE1=power/enum;
+	end
+	
+	--プロペラの制御
+	Eg0:SetParameter(engPhys0.wy, -_VY(E0));
+	Eg1:SetParameter(engPhys1.wy, -_VY(E1));
+	Eg0();Eg1();
+	PROP0=step2(PROP0, Eg0:GetAngle(), 15);
+	PROP1=step2(PROP1, Eg1:GetAngle(), 15);
+	
+	airBreak=step2(airBreak, _KEY(KEY_S), 1);
+	Eg0:SetPerBladeBrake(airBreak);
+	Eg1:SetPerBladeBrake(airBreak);
+	
+	--ギアの制御
+	if _KEYDOWN(KEY_W)==1 then
+		gear=not gear;
+	end
+	
+	if gear then
+		GEAR=step2(GEAR, 90, 5);
+		
+		HANDLE=step2(HANDLE, (_KEY(KEY_C)-_KEY(KEY_Z))*60, 5);
+		BREAK=step2(BREAK, _KEY(KEY_S)*100, 100/15);
+	else
+		GEAR=step2(GEAR, 180, 5);
+		HANDLE=step2(HANDLE, 0, 5);
+	end
+	
+	--武装の制御
+	arm();
+	
+	--いろいろ描画
+	--sight();
+	if not autoMode then
+		if _KEY(KEY_X)==1 then
+			_SETCOLOR(tonumber("FF0000", 16));
+		else
+			_SETCOLOR(tonumber("00FF00", 16));
+		end
+		drawRect(0, 0, 1/16);
+	end
+	
+	--エフェクト
+	--gLoc();
+	
+	--damageVision();
+	
+	--空戦フラップ
+	--FLAP=-60+_VY(BODY)-1;
+end
+
+function disp()
+	--FPSの表示
+	out(0, "FPS: ", math.floor(_FPS()+0.5));
+	
+	--座標の表示
+	local pos=Wector:getPosVec(BODY);
+	out(1, "POS: [X] ", math.floor(pos.x+0.5), " [Z] ", math.floor(pos.z+0.5));
+
+	--絶対的な速度を視覚的に表示
+	drawGround(bodyPos, "000000");
+	
+	--自機から垂直な線を表示
+	drawPin(bodyPos, "00FF00");
+	
+	--出力の表示
+	local i=0;
+	local str="["
+	while i<math.floor(power/12000) do
+		i=i+1;
+		str=str.."|"
+	end
+	while i<30 do
+		i=i+1;
+		str=str.." "
+	end
+	str=str.."]";
+	out(24, str);
+	
+	--進行方向を視覚的に表示
+	fbt=math.mod(fbt+1, 30);
+	drawFBody(BODY, bodyPos+bodySpdW*(30-fbt), "00FF00");
+	drawFBody(BODY, bodyPos+bodySpdW*(60-fbt), "00FF00");
+	drawFBody(BODY, bodyPos+bodySpdW*(90-fbt), "00FF00");
+	
+	--残弾数の表示
+	out(23, "AMMO: ", math.floor(LimitAmmo/2));
+end
+
+armNum=0;
+function arm()
+	fire=false;
+	
+	for i=0,2 do
+		_G["TRIG_"..i]=0;
+	end
+	
+	for i=0, 2 do
+		if armNum==i then
+			if	_G["ARM_"..i]==0 and trig and _OPTION(_G["A"..i])<=_E(_G["A"..i]) then
+				_G["TRIG_"..i]=_OPTION(_G["A"..i]);
+				fire=true;
+				_G["ARM_"..i]=step2(_G["ARM_"..i], 45, 45/2);
+			else
+				_G["ARM_"..i]=step2(_G["ARM_"..i], 0, 45/2);
+			end
+		else
+			_G["ARM_"..i]=step2(_G["ARM_"..i], 45, 45/2);
+		end
+	end
+	
+	m=0;
+	if fire then
+		for i=0, 2 do
+			if armNum~=i and m<_E(_G["A"..i]) then
+				nextNum=i;
+				m=_E(_G["A"..i]);
+			end
+		end
+		armNum=nextNum;
+		_G["ARM_"..nextNum]=step2(_G["ARM_"..nextNum], 0, 45/2);
+	end
+end
+
+function sight()
+	z=(-VECZ*600+Wector.new(_VX(BODY), _VY(BODY), _VZ(BODY))):getWVec(BODY)/_BASE()*4;
+	
+	--曳航弾
+	for i=120, 1, -1 do
+		ballet[i].pos=ballet[i-1].pos;
+		ballet[i].spd=ballet[i-1].spd;
+	end
+	ballet[0].pos=Wector:getPosVec(BODY);
+	ballet[0].spd=(-VECZ*600+Wector.new(_VX(BODY), _VY(BODY), _VZ(BODY))):getWVec(BODY)/_BASE();
+	
+	local p1=(Wector.new(1, 1, 0)*0.3):getWVec(BODY);
+	local p2=(Wector.new(1, -1, 0)*0.3):getWVec(BODY);
+	local p3=(Wector.new(-1, -1, 0)*0.3):getWVec(BODY);
+	local p4=(Wector.new(-1, 1, 0)*0.3):getWVec(BODY);
+	
+	_SETCOLOR(tonumber("FF0000", 16));
+	_MOVE3D(_X(BODY), _Y(BODY), _Z(BODY));
+	_LINE3D(_X(BODY)+z.x, _Y(BODY)+z.y, _Z(BODY)+z.z);
+	p=Wector:getPosVec(BODY)+z;
+	_MOVE3D(p1.x*10+p.x, p1.y*10+p.y, p1.z*10+p.z);
+	_LINE3D(p2.x*10+p.x, p2.y*10+p.y, p2.z*10+p.z);
+	_LINE3D(p3.x*10+p.x, p3.y*10+p.y, p3.z*10+p.z);
+	_LINE3D(p4.x*10+p.x, p4.y*10+p.y, p4.z*10+p.z);
+	_LINE3D(p1.x*10+p.x, p1.y*10+p.y, p1.z*10+p.z);
+	
+	if _KEY(KEY_X)==1 then
+		_SETCOLOR(tonumber("FFFF00", 16));
+	else
+		_SETCOLOR(tonumber("FFFF00", 16));
+	end
+	
+	_MOVE3D(ballet[0].pos.x, ballet[0].pos.y, ballet[0].pos.z)
+	for i=0, 120 do
+		p=ballet[i].pos;
+		ballet[i].pos=ballet[i].pos+ballet[i].spd;
+		_LINE3D(p.x, p.y, p.z);
+	end
+end
+
+function gLoc()
+	out(3, string.format("G=%+d",corePhys.lay));
+	blood=(blood-corePhys.lay)*0.95;
+	out(4, string.format("BLOOD=%+d",blood));
+	if faintLine<math.abs(blood) then
+		faintTime=30;
+	end
+	
+	offset=2*math.pi*math.random();
+	for i=0, 511 do
+		a=offset+2*math.pi*i/512;
+		r=math.max(2-math.abs(blood/faintLine)^2-math.random()*math.abs(blood/faintLine)^2, 0);
+		if 0<blood then
+			_SETCOLOR(tonumber("FF4000", 16));
+		else
+			_SETCOLOR(tonumber("404040", 16));
+		end
+		_MOVE2D(math.cos(a)*r, math.sin(a)*r);
+		_LINE2D(math.cos(a)*2, math.sin(a)*2);
+	end
+	
+end
+
+function auto()
+	if _PLAYERS()~=0 then
+		if _KEYDOWN(KEY_B)==1 then target=target+1; end
+		if _KEYDOWN(KEY_V)==1 then target=target-1; end
+		if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+		out(0, "TARGET [V] ".._PLAYERNAME(target).." [B] ");
+	else
+		out(0, "OFFLINE");
+	end
+	
+	if _KEYDOWN(KEY_G)==1 then
+		attack=not attack;
+	end
+		
+	_MOVE3D(bodyPos.x, bodyPos.y, bodyPos.z);
+	
+	emergency=false;
+	
+	_SETCOLOR(tonumber("FF00FF", 16));
+	_MOVE3D(bodyPos.x, bodyPos.y, bodyPos.z);
+	local emLength=math.max(90+(bodySpdL.z*108/100*30),30);
+	
+	
+	for i=0, emLength, 3 do
+		local p=monoMe:getFuturePos(i)+offs;
+		_LINE3D(p.x, p.y, p.z);
+		if p.y<=_GETY(p.x, p.z) or p.y<=0 then
+			emergency=true;
+			emergencyPoint=monoMe:getFuturePos(i)+offs;
+			break;
+		end
+	end
+	
+	if emergency==false or offs==nil then
+		offs=Wector.new(0,1,0):rotation(math.random()*2*math.pi, math.random()*2*math.pi, math.random()*2*math.pi)*emergencyRadius;
+	end
+	
+	local nt=_NTICKS();
+	local nx=(math.sin(nt/150)-math.sin(nt/350))/2;
+	local ny=(math.sin(nt/160)-math.sin(nt/360))/2;
+	local nz=(math.sin(nt/140)-math.sin(nt/340))/2;
+	
+	math.randomseed(1519);	--魔法のおまじない
+	local targetX=_PLAYERX(target);
+	math.randomseed(1519);
+	local targetY=_PLAYERY(target);
+	math.randomseed(1519);
+	local targetZ=_PLAYERZ(target);
+			
+	targetPos=Wector.new(targetX, targetY, targetZ)-Wector.new(nx, ny, nz)*(_PLAYERCHIPS(target)^(1/3));
+	targetSpd=targetPos-targetPosBfr;
+	
+	mono:tick(targetPos);
+	
+	
+	math.randomseed((_WX(0)+_WY(0)+_WZ(0)+_TICKS())*123456789);
+	
+	trig=false;
+	if attack then
+		aimPoint=mono:getFuturePos2(bodyPos, bodySpdW); --火器管制
+		local cross=(mono:getVel():getNormal())^((-VECZ):getWVec(BODY):getNormal());
+		if mono:getVel():getLength()<0.46 then
+			cross=0;
+		end
+		local cof=1.8+(1-math.abs(cross))*0.6*5;
+		if math.sin(math.acos((-VECZ):getWVec(BODY)^(aimPoint-bodyPos):getNormal()))*dis<=cof and 0<(-VECZ):getWVec(BODY)^(aimPoint-bodyPos) then
+			trig=true;
+		end
+	end
+	
+	_MOVE3D(bodyPos.x, bodyPos.y, bodyPos.z);
+	if emergency or emergencyNow then
+		out(1, "MODE EMERGENCY");
+		mode_emergency();
+	else
+		if attack then
+			out(1, "MODE [G]ATTACK");
+			
+			dis=(mono:getPos()-bodyPos):getLength();
+			disSpd=dis-disBfr;
+			disBfr=dis;
+			
+			if dis<=1200 then	--接近したときの動作
+				_SETCOLOR(tonumber("FF0000", 16));
+			else	--敵機に近づくまでの動作
+				_SETCOLOR(tonumber("FFFF00", 16));
+			end
+			
+			if 60<mono:getReadTime2(bodyPos, bodySpdW)then
+				flightPoint=mono:getFuturePos(60)-bodySpdW*60;
+			else
+				flightPoint=mono:getFuturePos2(bodyPos, bodySpdW);
+			end
+			flightPoint.y=math.max(flightPoint.y, _GETY(flightPoint.x, flightPoint.z)+emergencyRadius*0);
+			
+			_LINE3D(flightPoint.x, flightPoint.y, flightPoint.z);
+			_LINE3D(mono:getPos(0).x, mono:getPos(0).y, mono:getPos(0).z);
+			
+			do
+				local v=(flightPoint-bodyPos):getLVec(BODY):getNormal();
+				local vp=Wector.new(0, v.y, v.z):getNormal();
+				local vr=Wector.new(v.x, v.y, 0):getNormal();
+				local vy=Wector.new(v.x, 0, v.z):getNormal();
+			
+				local p=math.deg(math.acos(vp^(-VECZ)));
+				if 0<vp.y then p=-p; end
+				local r=math.deg(math.acos(vr^(VECY)))*(1-math.abs(v^-VECZ));
+				if vr.x<0 then r=-r; end
+				local y=math.deg(math.acos(vy^(-VECZ)));
+				if vy.x<0 then y=-y; end
+			
+				ROLL=step2(ROLL, PID("ROLL", 0, limit(r, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+				PITCH=step2(PITCH, PID("PITCH", 0, limit(p, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+				YAW=step2(YAW, PID("YAW", 0, limit(y/1, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+			end
+		else
+			out(1, "MODE [G]ORBITAL");
+			if math.sqrt(bodyPos.x^2+bodyPos.z^2)<1200 then
+				mode_orbital();
+			else
+				mode_return();
+			end
+		end
+	end
+end
+
+function mode_return()
+	point=Wector.new(0, _GETY(0, 0)+1000, 0);
+	point.y=math.max(point.y, bodyPos.y);
+
+	local v=(bodySpdL+(point-bodyPos):getLVec(BODY):getNormal()*bodySpdL:getLength()/10):getNormal();
+	local vp=Wector.new(0, v.y, v.z):getNormal();
+	local vr=Wector.new(v.x, v.y, 0):getNormal();
+	local vy=Wector.new(v.x, 0, v.z):getNormal();
+
+	local p=math.deg(math.acos(vp^(-VECZ)));
+	if 0<vp.y then p=-p; end
+	local r=math.deg(math.acos(vr^(VECY)))*(1-math.abs(v^-VECZ));
+	if vr.x<0 then r=-r; end
+	local y=math.deg(math.acos(vy^(-VECZ)));
+	if vy.x<0 then y=-y; end
+
+	ROLL=step2(ROLL, PID("ROLL", 0, limit(r, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+	PITCH=step2(PITCH, PID("PITCH", 0, limit(p, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+	YAW=step2(YAW, PID("YAW", 0, limit(y, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+
+	_SETCOLOR(tonumber("0000FF", 16));
+	_LINE3D(point.x, point.y, point.z);
+end
+
+function mode_orbital()
+	point=Wector.new(0, _GETY(0, 0)+1000, 0);
+	point.y=math.max(point.y, bodyPos.y);
+
+	local v=(bodySpdL+((point-bodyPos):getLVec(BODY):getNormal())*bodySpdL:getLength()*0+VECY:getLVec(BODY)*bodySpdL:getLength()/10):getNormal();
+	local vp=Wector.new(0, v.y, v.z):getNormal();
+	local vr=Wector.new(v.x, v.y, 0):getNormal();
+	local vy=Wector.new(v.x, 0, v.z):getNormal();
+
+	local p=math.deg(math.acos(vp^(-VECZ)));
+	if 0<vp.y then p=-p; end
+	local r=math.deg(math.acos(vr^(VECY)))*(1-math.abs(v^-VECZ));
+	if vr.x<0 then r=-r; end
+	local y=math.deg(math.acos(vy^(-VECZ)));
+	if vy.x<0 then y=-y; end
+
+	ROLL=step2(ROLL, PID("ROLL", 0, limit(r, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+	PITCH=step2(PITCH, PID("PITCH", 0, limit(p, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+	YAW=step2(YAW, PID("YAW", 0, limit(y, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+
+	_SETCOLOR(tonumber("0000FF", 16));
+	_LINE3D(point.x, point.y, point.z);
+end
+
+function mode_emergency()
+	--地形の法線ベクトルを取得
+	local r=_TICKS()*1;
+	local p0=Wector.new(emergencyPoint.x, math.max(_GETY(emergencyPoint.x, emergencyPoint.z), 0), emergencyPoint.z);
+	local p1=Wector.new(p0.x+math.sin(math.rad(r))*10, math.max(_GETY(p0.x+math.sin(math.rad(r))*10, p0.z+math.cos(math.rad(r))*10), 0), p0.z+math.cos(math.rad(r))*10);
+	local p2=Wector.new(p0.x+math.sin(math.rad(r+120))*10, math.max(_GETY(p0.x+math.sin(math.rad(r+120))*10, p0.z+math.cos(math.rad(r+120))*10), 0), p0.z+math.cos(math.rad(r+120))*10);
+	local p3=Wector.new(p0.x+math.sin(math.rad(r-120))*10, math.max(_GETY(p0.x+math.sin(math.rad(r-120))*10, p0.z+math.cos(math.rad(r-120))*10), 0), p0.z+math.cos(math.rad(r-120))*10);
+	
+	local v1=(p2-p1):getNormal();
+	local v2=(p3-p1):getNormal();
+	
+	local v=v1:getOuter(v2):getNormal():getLVec(BODY);	--地形の法線ベクトル
+	
+	local vp=Wector.new(0, v.y, v.z):getNormal();
+	local vr=Wector.new(v.x, v.y, 0):getNormal();
+	local vy=Wector.new(v.x, 0, v.z):getNormal();
+	
+	local p=math.deg(math.acos(vp^(-VECZ)));
+	if 0<vp.y then p=-p; end
+	local r=math.deg(math.acos(vr^(VECY)));
+	if vr.x<0 then r=-r; end
+	local y=math.deg(math.acos(vy^(-VECZ)));
+	if vy.x<0 then y=-y; end
+	
+	local i=math.deg(math.acos((v^(-VECZ))));
+	i=limit((i-90)+15, -0, 90);
+	
+	ROLL=step2(ROLL, PID("ROLL", 0, limit(r, -90, 90)/90, 5, 5, 25, -5, 5, 1.00)*s, 15);
+	PITCH=step2(PITCH, PID("PITCH", 0, limit(-i*vr.y, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+	YAW=step2(YAW, PID("YAW", 0, limit(i*vr.x, -90, 90), 5, 5, 25, -5, 5, 1.00)*s, 15);
+		
+	local vv=v1:getOuter(v2):getNormal();
+	
+	--地形から離れたかどうかチェック
+	if ((v^(-VECZ))<0 or true) and ((bodyPos-p0):getLength()*((bodyPos-p0):getNormal()^vv)<emergencyRadius and false) then
+		--emergencyNow=true;
+	else
+		emergencyNow=false;
+	end
+	
+	_SETCOLOR(tonumber("00FFFF", 16));
+	_MOVE3D(p1.x+vv.x*1, p1.y+vv.y*1, p1.z+vv.z*1);
+	_LINE3D(p2.x+vv.x*1, p2.y+vv.y*1, p2.z+vv.z*1);
+	_LINE3D(p3.x+vv.x*1, p3.y+vv.y*1, p3.z+vv.z*1);
+	_LINE3D(p1.x+vv.x*1, p1.y+vv.y*1, p1.z+vv.z*1);
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function step3(val, target, ratio)
+	return val+(target-val)/ratio;
+end
+
+function step4(val, target, step, ratio)
+	return step2(val, step3(val, target, ratio), step);
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+	
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function drawTarget(chip, pos, dis, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	local p1=(Wector.new(1, 1, 0)*dis/60):getWVec(chip)+pos;
+	local p2=(Wector.new(1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p3=(Wector.new(-1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p4=(Wector.new(-1, 1, 0)*dis/60):getWVec(chip)+pos;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+end
+
+function drawFBody(chip, pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	local p=pos;
+	local p1=Wector.new(-3.0, -3.0, 0):getWVec(chip)+p;
+	local p2=Wector.new(-3.0, 3.0, 0):getWVec(chip)+p;
+	local p3=Wector.new(3.0, 3.0, 0):getWVec(chip)+p;
+	local p4=Wector.new(3.0, -3.0, 0):getWVec(chip)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+end
+
+function drawGround(pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	local p=Wector.new(math.floor(pos.x/100)*100+50, pos.y-10, math.floor(pos.z/100)*100+50);
+
+	local p1=Wector.new(350, 0, 50)+p;
+	local p2=Wector.new(-350, 0, 50)+p;
+	local p3=Wector.new(-350, 0, -50)+p;
+	local p4=Wector.new(350, 0, -50)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	p1=Wector.new(250, 0, 150)+p;
+	p2=Wector.new(-250, 0, 150)+p;
+	p3=Wector.new(-250, 0, -150)+p;
+	p4=Wector.new(250, 0, -150)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);	
+	
+	p1=Wector.new(150, 0, 250)+p;
+	p2=Wector.new(-150, 0, 250)+p;
+	p3=Wector.new(-150, 0, -250)+p;
+	p4=Wector.new(150, 0, -250)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	p1=Wector.new(50, 0, 350)+p;
+	p2=Wector.new(-50, 0, 350)+p;
+	p3=Wector.new(-50, 0, -350)+p;
+	p4=Wector.new(50, 0, -350)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+end
+
+function drawPin(pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	_MOVE3D(pos.x,pos.y-5,pos.z);
+	_LINE3D(pos.x,0,pos.z);
+	
+	_MOVE3D(pos.x-1,pos.y-10,pos.z);
+	_LINE3D(pos.x+1,pos.y-10,pos.z);
+	_MOVE3D(pos.x,pos.y-10,pos.z-1);
+	_LINE3D(pos.x,pos.y-10,pos.z+1);
+end
+
+function drawRect(x, y, size)
+	_MOVE2D(x+size/2,y+size/2);
+	_LINE2D(x+size/2,y-size/2);
+	_LINE2D(x-size/2,y-size/2);
+	_LINE2D(x-size/2,y+size/2);
+	_LINE2D(x+size/2,y+size/2);
+end
+
+function damageVision()
+	drawChip=function(chip)
+		local cp=Wector:getPosVec(chip);
+		local p0=Wector.new(0.3, 0.03, 0.3):getWVec(chip)+cp;
+		local p1=Wector.new(0.3, 0.03, -0.3):getWVec(chip)+cp;
+		local p2=Wector.new(-0.3, 0.03, -0.3):getWVec(chip)+cp;
+		local p3=Wector.new(-0.3, 0.03, 0.3):getWVec(chip)+cp;
+		
+		local p4=Wector.new(0.3, -0.03, 0.3):getWVec(chip)+cp;
+		local p5=Wector.new(0.3, -0.03, -0.3):getWVec(chip)+cp;
+		local p6=Wector.new(-0.3, -0.03, -0.3):getWVec(chip)+cp;
+		local p7=Wector.new(-0.3, -0.03, 0.3):getWVec(chip)+cp;
+		
+		_MOVE3D(p3.x, p3.y, p3.z);
+		_LINE3D(p0.x, p0.y, p0.z);
+		_LINE3D(p1.x, p1.y, p1.z);
+		_LINE3D(p2.x, p2.y, p2.z);
+		_LINE3D(p3.x, p3.y, p3.z);
+		
+		_MOVE3D(p7.x, p7.y, p7.z);
+		_LINE3D(p4.x, p4.y, p4.z);
+		_LINE3D(p5.x, p5.y, p5.z);
+		_LINE3D(p6.x, p6.y, p6.z);
+		_LINE3D(p7.x, p7.y, p7.z);
+	end
+	
+	for i=0, _CHIPS()-1 do
+		if _T(i)<=0 then
+			_SETCOLOR(tonumber("000000", 16));
+		elseif _T(i)<=5000 then
+			_SETCOLOR(tonumber("FF0000", 16));
+		elseif _T(i)<10000 then
+			_SETCOLOR(tonumber("FFFF00", 16));
+		else
+			_SETCOLOR(tonumber("FFFFFF", 16));
+		end
+		
+		drawChip(i);
+	end
+end
+	
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--trit_Component_AE10 "Radiata"
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--
+--trit製航空機用発動機 trit_Component_AE10 "Radiata" Manual (Ver.Equa)
+--
+--■導入
+--	当製品は全速度、全高度に於いて理論上最高効率を実現するため演繹的手法により制御を行う。
+--
+--■搭載方法
+--	例
+--	□Main関数, OnFrame関数の前に記述すること
+--
+--		--"■"線で囲った部分を記述する。
+--		Eg = trit_Component.AE10:new() --Objectの生成
+--
+--	□Main関数, OnFrame関数の内部に記述すること
+--
+--		Eg:SetParameter( RLWの回転速度,　RLWのY軸並進速度, Bladeに該当するチップのRLWからの距離 )　
+--		--RLWのY軸並進速度は前進時に正の数になるよう代入する。 RLWの回転速度の符号は特に指定しない。
+--		--Bladeに該当するチップのRLWからの距離はデフォルトで0.6，この引数は省略可能である。
+--
+--		Eg() --内部で演算を行う。
+--		angEgBlade = Eg:GetAngle() --Bladeの角度を取得する。　なお代入する際、適宜符号を調節する。
+--
+--■運用条件
+--	高度  大気中(約10000mまで)
+--	速度  全速度域
+--	Bladeは偶数ならば何枚でも可
+--
+--■各種機能
+--	□推力、空気抵抗の調節機能
+--		method "SetPerConvert"に0~1の任意の値を代入することで、
+--		推力、空気抵抗の割合を変更する。
+--		0を代入した場合、推力0、進行方向の空気抵抗も0となり惰性飛行を行うことが出来る。
+--		Default値は1である。
+--
+--	□BladeBrake機能
+--		method "SetPerBladeBrake"に0~1の任意の値を代入することで、
+--		Bladeを減速に使用することができる。
+--		Default値は0である。
+--
+--■その他
+--	□角速度の取得について
+--		RC標準関数"_WY(cn)"は得られる値の精度が低いため、
+--		他の関数からの算出を推奨する。
+--
+--■Log
+--Ver.6 2011.08.12 説明を加筆
+--Ver.5 2011.03.25 大径プロペラに正式対応　
+--Ver.4 2010.11.04 修正版公開　
+--	回転速度の符号が乱れるため絶対値で演算するようにした。
+--	今後、method SetParameterに代入するRLWの回転速度の符号は任意とする。
+--
+--Ver.3 2010.11.01 公開
+
+--require "Boot" {"cel/Equa"}
+
+namespace "trit_Component"
+{
+	concept "IAeroEngine"
+	{
+		method "GetVer"
+		:description "Versionの取得。";
+
+		method "SetParameter"
+		:description "第一引数にRLWの回転速度、第二引数にRLWのY軸並進速度、第三引数にプロペラの半径(0.6*プロペラ一枚あたりのチップ数)を代入する。第三引数は省略可(自動的に0.6となる。)";
+
+		method "SetPerConvert"
+		:description "推力、空気抵抗の割合を変更する。";
+
+		method "SetPerBladeBrake"
+		:description "Bladeを減速に使用する。";
+
+		method "GetAngle"
+		:description "Bladeの角度を取得する。";
+
+		metamethod "__call"
+		:description "発動機の制御を行う。";
+	};
+}
+
+namespace "trit_Component"
+{
+	class  "AE10"
+	:implements(trit_Component.IAeroEngine)
+	{
+		metamethod "_init"
+		:body(
+			function(self)
+				self.ver = 6
+				self.m_per_sec_x_Trim = 0
+				self.rev_per_sec_y_Wheel = 0
+				self.m_per_sec_y_Wheel = 0
+				self.m_rad = 0.6
+				self.angBlade = 45
+				self.perConvert = 1
+				self.perBladeBrake = 0
+
+			end
+		);
+
+		method "GetVer"
+		:body(
+			function(self)
+				return self.ver
+			end
+		);
+
+		method "SetParameter"
+		:body(
+			function(self,w,v,r)
+				self.rev_per_sec_y_Wheel = math.abs(w)
+
+				if v > 0 then
+					self.m_per_sec_y_Wheel = v
+				else
+					self.m_per_sec_y_Wheel = 0
+				end
+				self.m_rad = r or 0.6
+				self.m_per_sec_x_Trim = self.rev_per_sec_y_Wheel*self.m_rad
+			end
+		);
+
+		method "SetPerConvert"
+		:body(
+			function(self,per)
+				self.perConvert = per
+			end
+		);
+
+		method "SetPerBladeBrake"
+		:body(
+			function(self,per)
+				self.perBladeBrake = per
+			end
+		);
+
+		method "GetAngle"
+		:body(
+			function(self)
+				return self.angBlade
+			end
+		);
+
+		metamethod "__call"
+		:body(
+			function(self)
+				self.angBlade = math.deg(math.pi/2+math.atan2(self.m_per_sec_y_Wheel,math.abs(self.m_per_sec_x_Trim)))/(1+self.perConvert)*(1-self.perBladeBrake)
+			end
+		);
+	};
+}
+
+--
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+LimitAmmo = 0;           --自機の持つ残り弾薬ポイント。残弾表示やフラグに使ってください。
+LimitAmmoMax = 0;
+isJetPlaneLimitAmmo = false;--ジェット機ならtrueに汁
+isBomberLimitAmmo = false;--爆撃機ならtrueに汁
+isLimitAmmoInitialized = false;--内部的な初期化フラグ。いじったらだめーよｗ
+Cost100k = 12;           --100k(Option=100000)以上のARMの弾薬コスト
+Cost50k = 2;             --50k以上100k未満の弾薬コスト
+ListChipType = {};       --ARMのチップ番号を格納
+ArmCostList = {}; --発見されたArmのコストを順に収納
+function LimitAmmoRegulation()
+	--初期設定
+	if not isLimitAmmoInitialized then
+		--重量に応じて弾薬ポイントを決定
+		if isJetPlaneLimitAmmo then
+			LimitAmmo = 1200;
+		elseif isBomberLimitAmmo then
+			LimitAmmo = 600;
+		elseif 2200<=_WEIGHT() then
+			LimitAmmo = 500;
+		else
+			LimitAmmo = math.max(_WEIGHT()-1300, 0)/100*20+350;
+		end
+		LimitAmmoMax= LimitAmmo;
+		local chipNum = _CHIPS() - 1;
+		for i = 1, chipNum do
+			--ARMチェック
+			if _TYPE(i) == 10 then
+				--50kの場合、100kの場合でそれぞれ弾薬コストを格納
+				if _OPTION(i) == 50000 then
+					table.insert(ListChipType, i);
+					table.insert(ArmCostList, Cost50k);
+				elseif _OPTION(i) >= 100000 then
+					table.insert(ListChipType, i);
+					table.insert(ArmCostList, Cost100k);
+				end
+			end 
+		end
+		isLimitAmmoInitialized = true;
+	elseif _TICKS() > 150 then
+		--発射カウント
+		local n = table.getn(ListChipType);
+		for i = 1, n do
+			--発射判定
+			if _E(ListChipType[i]) == 0 and _TOP(ListChipType[i]) == 0 then
+				LimitAmmo = LimitAmmo - ArmCostList[i];  --弾薬ポイントから弾薬コストを減算
+			end
+		end
+		local h = _H(0);
+		local speed = _VZ(0);
+		if (0 < h and h < 2) and math.abs(speed) < 1.5 then
+			if isJetPlaneLimitAmmo then
+				LimitAmmo = LimitAmmo + 1;
+			else
+				LimitAmmo = LimitAmmo + 0.5;
+			end
+			if LimitAmmo > LimitAmmoMax then LimitAmmo = LimitAmmoMax; end
+		end
+	end
+end
+}

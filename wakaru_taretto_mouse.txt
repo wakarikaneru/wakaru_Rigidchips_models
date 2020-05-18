@@ -1,0 +1,378 @@
+// [RCD] 
+Val
+{
+	FIRE(default=0, max=1200000, step=1200000)
+	PITCH(default=90, max=180, min=75)
+	YAW(default=0, min=-3600000, max=3600000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		S:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			S:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				S:Weight(angle=150, damper=0.9375, spring=0.9375) { }
+			}
+		}
+		W:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			W:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				W:Weight(angle=150, damper=0.9375, spring=0.9375) { }
+			}
+		}
+		N:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			N:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				N:Weight(angle=150, damper=0.9375, spring=0.9375) { }
+			}
+		}
+		E:Weight(angle=30, damper=0.9375, spring=0.9375) {
+			E:Weight(angle=0, damper=0.9375, spring=0.9375) {
+				E:Weight(angle=150, damper=0.9375, spring=0.9375) { }
+			}
+		}
+		S:Weight(angle=120, damper=1, spring=1) {
+			S:Weight(angle=150, damper=1, spring=1) {
+				S:Trim(angle=YAW, damper=1, spring=1) {
+					S:Rudder(angle=PITCH, damper=1, spring=1) {
+						N:Arm(name=ARM, power=FIRE, option=50000) {
+							S:Chip(spring=1, damper=1) { }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+	initflag=false;
+
+function init()
+	initflag=true;
+	
+	aimVec=Vector.new(0, 0, -1);
+	yaw=0;
+	pitch=0;
+	t=0;
+	
+	_SETVIEWZOOM(90);
+	lock=true;
+	r=0;
+	p=0;
+end
+
+function main()
+	if not initflag then init() end
+	
+	out(0, "クリックすると(だいたい)マウスで狙ったところ(のちょっと上)を射撃するぞ！");
+	out(1, "[W][A][S][D]視点移動");
+	
+	if lock then
+		out(2, "[Z]射撃ロック中");
+	else
+		out(2, "[Z]射撃できます");
+	end
+	
+	mouse();
+	
+	if _KEYDOWN(KEY_Z)==1 then
+		lock=not lock;
+	end
+	
+	if not lock and _ML()==1 then FIRE=400000; else FIRE=0; end
+	
+	aimVec=mouseAim:getLVec(CORE);
+	rotV=math.deg(math.acos(Vector.new(0, 1, 0)^aimVec));
+	
+	pitch=rotV;
+	
+	aimVecH=aimVec;
+	aimVecH.y=0;
+	aimVecH=aimVecH:getNormal();
+	
+	rotH=math.deg(math.acos(Vector.new(0, 0, -1)^aimVecH));
+	
+	if 0<aimVecH.x then else rotH=-rotH; end
+	
+	local disR=angleNorm(angleNorm(rotH)-angleNorm(yaw));
+	
+	if yaw~=0 and yaw/yaw~=1 then rotH=0; yaw=0; disR=0; end
+	
+	yaw=yaw+disR;
+	
+	pitch=limit(pitch, 0, 180);
+	YAW=step2(YAW, yaw+90, 15);
+	PITCH=step2(PITCH, 180-pitch, 15);
+end
+
+function mouse()
+	mouseX=-(_WIDTH()/2-_MX())*2/_HEIGHT();
+	mouseY=(_HEIGHT()/2-_MY())*2/_HEIGHT()+0.1;
+	
+	--[[
+	r=r+math.rad((_KEY(KEY_D)-_KEY(KEY_A))*5);
+	p=limit(p-math.rad((_KEY(KEY_W)-_KEY(KEY_S))*5), -math.pi/2, math.pi/2);
+	--]]
+	---[[
+	r=r+math.rad(limit(mouseX, -1, 1)^3*15);
+	p=limit(p-math.rad(limit(mouseY, -1, 1)^3*15), -math.pi/2, math.pi/2);
+	--]]
+	
+	cameraPos=Vector.new(_X(0)+math.sin(r)*2, _Y(0)+2,  _Z(0)+math.cos(r)*2);
+	cameraAim=Vector.new(_X(0)-math.sin(r)*math.cos(p)*1200, _Y(0)-math.sin(p)*1200, _Z(0)-math.cos(r)*math.cos(p)*1200);
+	cameraUp=Vector.new(0, 1, 0);
+	
+	_SETVIEW(cameraPos.x, cameraPos.y, cameraPos.z, cameraAim.x, cameraAim.y, cameraAim.z);
+	_SETVIEWUP(cameraUp.x, cameraUp.y, cameraUp.z);
+	
+	cameraVecZ=(cameraPos-cameraAim):getNormal();
+	cameraVecY=(cameraUp-cameraVecZ*(cameraUp^cameraVecZ)):getNormal();
+	cameraVecX=Vector.new(cameraVecZ.y*cameraVecY.z-cameraVecZ.z*cameraVecY.y, cameraVecZ.z*cameraVecY.x-cameraVecZ.x*cameraVecY.z, cameraVecZ.x*cameraVecY.y-cameraVecZ.y*cameraVecY.x);
+	
+	zoom=math.tan(math.rad(_GETVIEWZOOM()/2))
+	mouseAim=Vector.new(mouseX*zoom, mouseY*zoom, -1):getWVec2(cameraVecX, cameraVecY, cameraVecZ):getNormal();
+	
+	p0=Vector.new(1, 1, 0):getWVec2(cameraVecX, cameraVecY, cameraVecZ)/10+mouseAim*5+cameraPos;
+	p1=Vector.new(-1, 1, 0):getWVec2(cameraVecX, cameraVecY, cameraVecZ)/10+mouseAim*5+cameraPos;
+	p2=Vector.new(-1, -1, 0):getWVec2(cameraVecX, cameraVecY, cameraVecZ)/10+mouseAim*5+cameraPos;
+	p3=Vector.new(1, -1, 0):getWVec2(cameraVecX, cameraVecY, cameraVecZ)/10+mouseAim*5+cameraPos;
+	
+	_SETCOLOR(tonumber("FF0000", 16));
+	
+	_MOVE3D(p3.x, p3.y, p3.z);
+	_LINE3D(p0.x, p0.y, p0.z);
+	_LINE3D(p1.x, p1.y, p1.z);
+	_LINE3D(p2.x, p2.y, p2.z);
+	_LINE3D(p3.x, p3.y, p3.z);
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function angleNorm(rot)
+	while(rot<-180) do
+		rot=rot+360;
+	end
+	while(rot>180) do
+		rot=rot-360;
+	end
+	return rot;
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Vector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Vector.new(0, 0, 0);
+	local posVec=Vector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+----Vectorクラス
+--このゲーム内の、空間上のベクトルを扱う
+Vector={
+	getPosVec=function(self, chipName)
+		return Vector.new(_X(chipName), _Y(chipName), _Z(chipName));
+	end,
+};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+
+		getWVec=function(self, chipName)
+			local t;
+			local lx; local ly; local lz;
+			local wx; local wy; local wz;
+			
+			lx=self.x;
+			ly=self.y;
+			lz=self.z;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx
+				lx=-lz;
+				lz=t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx
+				lx=lz;
+				lz=-t;
+			end
+			
+			wx=_XX(chipName)*lx+_YX(chipName)*ly+_ZX(chipName)*lz;
+			wy=_XY(chipName)*lx+_YY(chipName)*ly+_ZY(chipName)*lz;
+			wz=_XZ(chipName)*lx+_YZ(chipName)*ly+_ZZ(chipName)*lz;
+
+			return Vector.new(wx, wy, wz);
+		end,
+
+		getLVec=function(self, chipName)
+			local t;
+			local wx; local wy; local wz;
+			local lx; local ly; local lz;
+			
+			wx=self.x;
+			wy=self.y;
+			wz=self.z;
+				
+			lx=_XX(chipName)*wx+_XY(chipName)*wy+_XZ(chipName)*wz;
+			ly=_YX(chipName)*wx+_YY(chipName)*wy+_YZ(chipName)*wz;
+			lz=_ZX(chipName)*wx+_ZY(chipName)*wy+_ZZ(chipName)*wz;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then--
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx;
+				lx=lz;
+				lz=-t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx;
+				lx=-lz;
+				lz=t;
+			end
+			
+			return Vector.new(lx, ly, lz);
+		end,
+				
+		getWVec2=function(self, x, y, z)
+			local t;
+			local lx; local ly; local lz;
+			local wx; local wy; local wz;
+			
+			lx=self.x;
+			ly=self.y;
+			lz=self.z;
+			
+			wx=x.x*lx+y.x*ly+z.x*lz;
+			wy=x.y*lx+y.y*ly+z.y*lz;
+			wz=x.z*lx+y.z*ly+z.z*lz;
+
+			return Vector.new(wx, wy, wz);
+		end,
+		
+		getLVec2=function(self, x, y, z)
+			local t;
+			local wx; local wy; local wz;
+			local lx; local ly; local lz;
+			
+			wx=self.x;
+			wy=self.y;
+			wz=self.z;
+				
+			lx=x.x*wx+x.y*wy+x.z*wz;
+			ly=y.x*wx+y.y*wy+y.z*wz;
+			lz=z.x*wx+z.y*wy+z.z*wz;
+			
+			return Vector.new(lx, ly, lz);
+		end,
+		
+		getOuter=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+	}
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+--[[
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+]]--
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+			--return "x="..math.floor(self.x)..",y="..math.floor(self.y)..",z="..math.floor(self.z);
+		end,
+	}
+	setmetatable(obj, operation);
+	return obj;
+end
+}

@@ -1,0 +1,932 @@
+// [RCD] 
+// [Z]アクセル
+// [X]ブレーキ
+// [A]バック
+// [S]モード切り替え
+Val
+{
+	AEROD(default=150, min=90, max=150)
+	AEROFL(default=180, min=90, max=270)
+	AEROFR(default=180, min=90, max=270)
+	AERORL(default=180, min=90, max=270)
+	AERORR(default=180, min=90, max=270)
+	BREAKFL(default=0)
+	BREAKFR(default=0)
+	BREAKRL(default=0)
+	BREAKRR(default=0)
+	ENGINEFL(default=0, min=-10000)
+	ENGINEFR(default=0, min=-10000)
+	ENGINERL(default=0, min=-10000)
+	ENGINERR(default=0, min=-10000)
+	HANDLEL(default=180, min=90, max=270)
+	HANDLER(default=180, min=90, max=270)
+	SIDEFL(default=90, min=60, max=120)
+	SIDEFR(default=90, min=60, max=120)
+	SIDERL(default=90, min=60, max=120)
+	SIDERR(default=90, min=60, max=120)
+	EXAMV_POWER(default=0, min=-1000000, max=1000000)
+	EXAMH_POWER(default=0, min=-1000000, max=1000000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Frame(angle=AEROD, option=1) {
+			N:Frame(angle=-150, name=BODY) {
+				N:Frame(name=FRONT) {
+					E:Frame() {
+						N:Chip(angle=-AEROFR, name=FR) {
+							S:Chip(angle=180) { }
+						}
+						E:RudderF(angle=HANDLER) {
+							W:Wheel(angle=90, power=ENGINEFR, break=BREAKFR, name=WHEELFR) { }
+							W:Frame(angle=SIDEFR, option=1) {
+								E:Rudder(angle=-90) {
+									W:Chip(angle=180) { }
+								}
+							}
+						}
+					}
+					W:Frame() {
+						N:Chip(angle=-AEROFL, name=FL) {
+							S:Chip(angle=180) { }
+						}
+						W:RudderF(angle=HANDLEL) {
+							E:Wheel(angle=90, power=-ENGINEFL, break=BREAKFL, name=WHEELFL) { }
+							E:Frame(angle=SIDEFL, option=1) {
+								W:Rudder(angle=90) {
+									E:Chip(angle=180) { }
+								}
+							}
+						}
+					}
+					S:TrimF(angle=90) {
+						N:Jet(angle=180, power=EXAMV_POWER, name=EXAMV) { }
+					}
+					S:Jet(power=EXAMH_POWER, name=EXAMH) { }
+				}
+				S:Frame() {
+					S:Frame(name=REAR) {
+						E:Frame() {
+							N:Chip(angle=-AERORR, name=RR) {
+								S:Chip(angle=180) { }
+							}
+							E:Wheel(angle=90, power=ENGINERR, break=BREAKRR, name=WHEELRR) { }
+							E:Frame(angle=SIDERR, option=1) {
+								W:Rudder(angle=-90) {
+									E:Chip(angle=180) { }
+								}
+							}
+						}
+						W:Frame() {
+							N:Chip(angle=-AERORL, name=RL) {
+								S:Chip(angle=180) { }
+							}
+							W:Wheel(angle=90, power=-ENGINERL, break=BREAKRL, name=WHEELRL) { }
+							W:Frame(angle=SIDERL, option=1) {
+								E:Rudder(angle=90) {
+									W:Chip(angle=180) { }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	function analog(i)
+		if i==-1 then
+			mouseX=(_WIDTH()/2-_MX())*2/_HEIGHT();
+			return limit(mouseX, -1, 1)*_MR();
+		elseif _ANALOG(i)==0 then
+			return 0;
+		else
+			--return _ANALOG(i)/1000;
+			return (_ANALOG(i)/1000)^2.0*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+	
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+	require("cel/Science/BasePhysic.lua");
+	
+	function init()
+		initflag=true;
+		mono=Wakaru_Mono.new();
+			
+		VECX=Wector.new(1, 0, 0);
+		VECY=Wector.new(0, 1, 0);
+		VECZ=Wector.new(0, 0, 1);
+		VEC0=Wector.new(0, 0, 0);
+		
+		bodyPhys=BasePhysic.new(BODY);
+		bodySpdWB=Wector.new(0, 0, 0);
+		bodyAccWB=Wector.new(0, 0, 0);
+		
+		spd=Wector.new(0, 0, 0);
+		acc=Wector.new(0, 0, 0);
+		
+		engineFL=0;
+		engineRL=0;
+		engineFR=0;
+		engineRR=0;
+		
+		breakFL=0;
+		breakRL=0;
+		breakFR=0;
+		breakRR=0;
+		
+		handle=0;
+		h=0;
+		h1=0;
+		h2=0;
+		
+		rSpd=0;
+		pSpd=0;
+		
+		gfl=0;
+		gfr=0;
+		grl=0;
+		grr=0;
+			
+		fl=0;
+		fr=0;
+		rl=0;
+		rr=0;
+		
+		slow=false;
+		superslow=false;
+		
+		flightmode=false;
+		
+		--表示用
+		view_tcs_fl=false;
+		view_tcs_fr=false;
+		view_tcs_rl=false;
+		view_tcs_rr=false;
+		
+		view_abs_fl=false;
+		view_abs_fr=false;
+		view_abs_rl=false;
+		view_abs_rr=false;
+		
+		view_on="■";
+		view_off="□";
+		
+		kmph=0;
+		kmLog=Fifo.new(30, kmph);
+		kmAcc=0;
+		
+		isLec=false;
+		lecCount=0;
+	end
+
+	function main()
+		if not initflag then init(); end
+		--
+		bodyPhys:Renew();
+		mono:tick(Wector:getPosVec(BODY));
+		--
+		bodySpdW=getSpdVec(BODY);
+		bodySpdL=bodySpdW:getLVec(BODY);
+		bodyAccW=bodySpdW-bodySpdWB;
+		bodyAccL=bodyAccW:getLVec(BODY);
+		bodyPos=Wector:getPosVec(BODY);
+		
+		bodySpdWB=bodySpdW;
+		bodyAccWB=bodyAccW;
+		
+		FLSpdW=getSpdVec(WHEELFL-1);
+		FLSpdL=FLSpdW:getLVec(WHEELFL-1);
+		
+		RLSpdW=getSpdVec(WHEELRL-1);
+		RLSpdL=RLSpdW:getLVec(WHEELRL-1);
+		
+		FRSpdW=getSpdVec(WHEELFR-1);
+		FRSpdL=FRSpdW:getLVec(WHEELFR-1);
+		
+		RRSpdW=getSpdVec(WHEELRR-1);
+		RRSpdL=RRSpdW:getLVec(WHEELRR-1);
+		
+		kmph=-bodySpdL.z*_BASE()*60*60/1000;
+		kmLog:put(kmph);
+		kmAcc=(kmLog:get(0)-kmLog:get(14))/15;
+		--
+		local s=limit(-bodySpdL.z*3600/30, 0, 500);
+		if s<=10 then
+			ratioFL=1.0;
+			ratioRL=1.0;
+			ratioFR=1.0;
+			ratioRR=1.0;
+		else
+			if FLSpdL.x<0 then  ratioFL=_WY(WHEELFL)/FLSpdL.x; else ratioFL=1.0;end
+			if RLSpdL.x<0 then  ratioRL=_WY(WHEELRL)/RLSpdL.x; else ratioRL=1.0;end
+			if FRSpdL.x>0 then  ratioFR=_WY(WHEELFR)/FRSpdL.x; else ratioFR=1.0;end
+			if RRSpdL.x>0 then  ratioRR=_WY(WHEELRR)/RRSpdL.x; else ratioRR=1.0;end
+		end
+		
+		--
+		input();
+		wheel();
+		handling();
+		ayc();
+		aero();
+		
+		if _KEYDOWN(KEY_S)==1 then
+			flightmode=not flightmode;
+		end
+		
+		disp();
+		--
+		
+		p0=Wector:getPosVec(BODY);
+		p1=p0-VECZ:getWVec(BODY)*30;
+		
+		--[[
+		_SETCOLOR(tonumber("0000FF", 16));
+		_MOVE3D(p0.x, p0.y, p0.z);
+		_LINE3D(p1.x, p1.y, p1.z);
+		--]]
+		---[[
+		p1=p0+(bodySpdW+bodySpdWB)/2*30;
+		_SETCOLOR(tonumber("FF0000", 16));
+		_MOVE3D(p0.x, p0.y, p0.z);
+		_LINE3D(p1.x, p1.y, p1.z);
+		--]]
+		
+		acc=(bodyAccW+bodyAccWB)/2;
+		
+		_SETCOLOR(tonumber("00FF00", 16));
+		_MOVE3D(p0.x, _GETY(p0.x, p0.z)+0.3, p0.z);
+		for i=0, 30 do
+			local p=bodyPos+bodySpdW*i+acc/2*i^2;
+			_LINE3D(p.x, _GETY(p.x, p.z)+0.3, p.z);
+		end
+		
+		if _KEYDOWN(KEY_C)==1 then
+			slow=not slow;
+		end
+		if _KEYDOWN(KEY_V)==1 then
+			superslow=not superslow;
+		end
+		
+		if superslow then
+			sleepS=GetTickCount();
+			--while _KEY(KEY_W)==0 do
+			--end
+			while GetTickCount()<sleepS+25*4 do
+			end
+		elseif slow then
+			sleepS=GetTickCount();
+			while GetTickCount()<sleepS+25*2 do
+			end
+		end
+		
+		
+				---[[
+				
+		if _KEYDOWN(KEY_E)==1 then
+			isLec=not isLec;
+			lecCount=0;
+			if isLec then
+				file=_EXFOPEN("_AutoDrive_CrossStream.csv", "w");
+				_EXFPUTS(file,"");
+				_EXFCLOSE(file);
+			end
+		end
+		if isLec then
+			out(24,"●REC")
+			lecCount=lecCount+1;
+			file=_EXFOPEN("_AutoDrive_CrossStream.csv", "a");
+			_EXFPUTS(file,lecCount..","..bodyPos.x..","..bodyPos.y..","..bodyPos.z.."\n");
+			_EXFCLOSE(file);
+		end
+				--]]
+		
+		EXAMV_POWER=bodySpdL.x*100000*0;
+		EXAMH_POWER=-math.abs(bodySpdL.z)*100000-math.abs(bodySpdL.x)*100000-100000*0;
+	end
+	
+	function disp()
+		_ZOOM(100);
+		i=20;
+		--out(i, math.floor(kmph+0.5).." [km/h]");
+		if 0<=kmph then
+			out(i, string.format("+%.2f [km/h]", kmph));
+		else
+			out(i, string.format("%.2f [km/h]", kmph));
+		end
+		i=i+1;
+		--out(i, ""..math.floor(kmAcc+0.5).." [km/h/f]");
+		if 0<=kmAcc then
+			out(i, string.format("+%.2f [km/h/f]", kmAcc));
+		else
+			out(i, string.format("%.2f [km/h/f]", kmAcc));
+		end
+		i=i+1;
+		out(i, "[MODE] "..(flightmode and "Flight" or "Drive"));
+		
+		i=10;
+		out(i, "[TCS]");
+		i=i+1;
+		out(i, (view_tcs_fl and view_on or view_off)..(view_tcs_fr and view_on or view_off));
+		i=i+1;
+		out(i, (view_tcs_rl and view_on or view_off)..(view_tcs_rr and view_on or view_off));
+		i=i+1;
+		out(i, "[ABS]");
+		i=i+1;
+		out(i, (view_abs_fl and view_on or view_off)..(view_abs_fr and view_on or view_off));
+		i=i+1;
+		out(i, (view_abs_rl and view_on or view_off)..(view_abs_rr and view_on or view_off));
+		
+		i=0;
+		out(i, "[WIDTH] ".._WIDTH().."  [HEIGHT] ".._HEIGHT());
+		i=i+1;
+		out(i, "[FPS] "..math.floor(_FPS()+0.5));
+		
+		dispWheelInfo();
+		dispBodyWidth();
+		speedVision();
+	end
+	
+	inputAccel=0;
+	inputBack=0;
+	inputBreak=0;
+	inputHandle=0;
+	function input()
+		inputAccel=limit(_KEY(KEY_Z)+limit(analog(2)*2, 0, 1), -1, 1);
+		inputBack=limit(_KEY(KEY_A), -1, 1);
+		inputBreak=limit(_KEY(KEY_X)+limit(-analog(2)*2, 0, 1), -1, 1);
+		inputHandle=limit(_KEY(KEY_RIGHT)-_KEY(KEY_LEFT)-analog(0), -1, 1)
+		handle=step2(handle, inputHandle*360, 45);
+		inputRSpd=analog(3);
+		inputPSpd=_KEY(KEY_UP)-_KEY(KEY_DOWN)+analog(4);
+	end
+	
+	TCS_LINE=1.00+0.10;
+	TCS_ADD=2500;
+	TCS_ACC=5000;
+	TCS_MIN=100;
+	TCS_AVE=0.01;
+	
+	TCS_SLIP=3;
+	
+	ABS_LINE=1.00-0.10;
+	ABS_ACC=10;
+	
+	function wheel()
+		--アクセル
+		if 0.5<inputAccel then
+			if 10<-bodySpdL.z*3600/30 then
+			
+				power_min=(-bodySpdL.z*3600/30)*TCS_MIN;
+				engineFL=engineFL+TCS_ADD+PID("engineFL", ratioFL, 100*TCS_LINE, 10.00, 10.00, 1.00, -0.00, TCS_ADD*30, 1.00);
+				engineRL=engineRL+TCS_ADD+PID("engineRL", ratioRL, 100*TCS_LINE, 10.00, 10.00, 1.00, -0.00, TCS_ADD*30, 1.00);
+				engineFR=engineFR+TCS_ADD+PID("engineFR", ratioFR, 100*TCS_LINE, 10.00, 10.00, 1.00, -0.00, TCS_ADD*30, 1.00);
+				engineRR=engineRR+TCS_ADD+PID("engineRR", ratioRR, 100*TCS_LINE, 10.00, 10.00, 1.00, -0.00, TCS_ADD*30, 1.00);
+				
+				--左右の出力を平均化する
+				engineF=(engineFL+engineFR)/2;
+				engineR=(engineRL+engineRR)/2;
+				engineFL=(engineFL*(1-TCS_AVE))+(engineF*TCS_AVE);
+				engineFR=(engineFR*(1-TCS_AVE))+(engineF*TCS_AVE);
+				engineRL=(engineRL*(1-TCS_AVE))+(engineR*TCS_AVE);
+				engineRR=(engineRR*(1-TCS_AVE))+(engineR*TCS_AVE);
+				
+				engineFL=math.max(engineFL,power_min);
+				engineRL=math.max(engineRL,power_min);
+				engineFR=math.max(engineFR,power_min);
+				engineRR=math.max(engineRR,power_min);
+				
+				if ratioFL<100*TCS_LINE*TCS_SLIP then
+					ENGINEFL=engineFL;
+					view_tcs_fl=false;
+				else
+					ENGINEFL=0;
+					engineFL=engineFL*0.90;
+					view_tcs_fl=true;
+				end
+				
+				if ratioRL<100*TCS_LINE*TCS_SLIP then
+					ENGINERL=engineRL;
+					view_tcs_rl=false;
+				else
+					ENGINERL=0;
+					engineRL=engineRL*0.90;
+					view_tcs_rl=true;
+				end
+				
+				if ratioFR<100*TCS_LINE*TCS_SLIP then
+					ENGINEFR=engineFR;
+					view_tcs_fr=false;
+				else
+					ENGINEFR=0;
+					engineFR=engineFR*0.90;
+					view_tcs_fr=true;
+				end
+				
+				if ratioRR<100*TCS_LINE*TCS_SLIP then
+					ENGINERR=engineRR;
+					view_tcs_rr=false;
+				else
+					ENGINERR=0;
+					engineRR=engineRR*0.90;
+					view_tcs_rr=true;
+				end
+				
+				--[[
+				file=_EXFOPEN("_SpeedTest.csv", "a");
+				_EXFPUTS(file,(-bodySpdL.z*3600/30)..","..(-bodyAccL.z*3600/30)..","..(ENGINEFL+ENGINEFR+ENGINERL+ENGINERR).."\n");
+				_EXFCLOSE(file);
+				--]]
+			else
+				engineFL=0;
+				engineRL=0;
+				engineFR=0;
+				engineRR=0;
+				ENGINEFL=math.min(ENGINEFL+TCS_ACC*1, TCS_ACC*2);
+				ENGINERL=math.min(ENGINERL+TCS_ACC*1, TCS_ACC*2);
+				ENGINEFR=math.min(ENGINEFR+TCS_ACC*1, TCS_ACC*2);
+				ENGINERR=math.min(ENGINERR+TCS_ACC*1, TCS_ACC*2);
+				view_tcs_fl=false;
+				view_tcs_fr=false;
+				view_tcs_rl=false;
+				view_tcs_rr=false;
+				PID("engineFL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+				PID("engineRL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+				PID("engineFR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+				PID("engineRR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			end
+		elseif 0<inputBack then
+			engineFL=0;
+			engineRL=0;
+			engineFR=0;
+			engineRR=0;
+			ENGINEFL=math.max(ENGINEFL-TCS_ACC*1, -TCS_ACC*2);
+			ENGINERL=math.max(ENGINERL-TCS_ACC*1, -TCS_ACC*2);
+			ENGINEFR=math.max(ENGINEFR-TCS_ACC*1, -TCS_ACC*2);
+			ENGINERR=math.max(ENGINERR-TCS_ACC*1, -TCS_ACC*2);
+			view_tcs_fl=false;
+			view_tcs_fr=false;
+			view_tcs_rl=false;
+			view_tcs_rr=false;
+			PID("engineFL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("engineRL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("engineFR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("engineRR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+		else
+			engineFL=0;
+			engineRL=0;
+			engineFR=0;
+			engineRR=0;
+			ENGINEFL=0;
+			ENGINERL=0;
+			ENGINEFR=0;
+			ENGINERR=0;
+			view_tcs_fl=false;
+			view_tcs_fr=false;
+			view_tcs_rl=false;
+			view_tcs_rr=false;
+			PID("engineFL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("engineRL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("engineFR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("engineRR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+		end
+
+		--ブレーキ
+		if 0.5<inputBreak then
+			if 10<-bodySpdL.z*3600/30 then
+				
+					breakFL=breakFL-PID("breakFL", ratioFL, 100*ABS_LINE, 1.00, 1.00, 0.01*0, -0.00, 100.00, 1.00);
+					breakRL=breakRL-PID("breakRL", ratioRL, 100*ABS_LINE, 1.00, 1.00, 0.01*0, -0.00, 100.00, 1.00);
+					breakFR=breakFR-PID("breakFR", ratioFR, 100*ABS_LINE, 1.00, 1.00, 0.01*0, -0.00, 100.00, 1.00);
+					breakRR=breakRR-PID("breakRR", ratioRR, 100*ABS_LINE, 1.00, 1.00, 0.01*0, -0.00, 100.00, 1.00);
+					
+					breakFL=math.max(breakFL,ABS_ACC);
+					breakRL=math.max(breakRL,ABS_ACC);
+					breakFR=math.max(breakFR,ABS_ACC);
+					breakRR=math.max(breakRR,ABS_ACC);
+					
+					BREAKRR=breakRR;
+					view_abs_rr=false;
+					BREAKFR=breakFR;
+					view_abs_fr=false;
+					BREAKRL=breakRL;
+					view_abs_rl=false;
+					BREAKFL=breakFL;
+					view_abs_fl=false;
+			else
+				breakFL=100;
+				breakRL=100;
+				breakFR=100;
+				breakRR=100;
+				BREAKFL=100;
+				BREAKRL=100;
+				BREAKFR=100;
+				BREAKRR=100;
+				view_abs_fl=false;
+				view_abs_fr=false;
+				view_abs_rl=false;
+				view_abs_rr=false;
+				PID("breakFL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+				PID("breakRL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+				PID("breakRL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+				PID("breakRR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			end
+		else
+			breakFL=0;
+			breakRL=0;
+			breakFR=0;
+			breakRR=0;
+			BREAKFL=0;
+			BREAKRL=0;
+			BREAKFR=0;
+			BREAKRR=0;
+			view_abs_fl=false;
+			view_abs_fr=false;
+			view_abs_rl=false;
+			view_abs_rr=false;
+			PID("breakFL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("breakRL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("breakRL", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+			PID("breakRR", 100, 100, 0.00, 0.00, 0.00, -0.0, 0.0, 0.00);
+		end
+	end
+	
+	handle2=0;
+	
+	WHEELBASE=0.6*3;
+	TREAD=0.6*3;
+	function handling()
+		out(2,"Handle "..handle);
+		local dir=0;
+		
+		dir=limit(-bodySpdL.z*3600/30/10, -1, 1);
+		
+		handle2=(handle2+PID("HANDLE", math.deg(bodyPhys.wy), handle, 0.10, 0.00, 0.05, -360.0, 360.0, 0.75)*dir)*0.75;
+		
+		local ri=math.abs(handle2);
+		local ro=math.deg(math.atan2(WHEELBASE, math.abs(math.tan(math.pi/2-math.rad(math.abs(handle2))))*WHEELBASE+TREAD));
+		
+		if handle2==0 then
+			HANDLEL=180+0;
+			HANDLER=180+0;
+		elseif 0<handle2 then
+			HANDLEL=180+ro;
+			HANDLER=180+ri;
+			--HANDLEL=180+ri;
+			--HANDLER=180+ri;
+		else
+			HANDLEL=180-ri;
+			HANDLER=180-ro;
+			--HANDLEL=180-ri;
+			--HANDLER=180-ri;
+		end
+		
+	end
+	
+	AYC_RANGE=360.00;
+	AYC_MULTI=1.00;
+	AYC_LIMIT=1.00;
+	AYC=0;
+	function ayc()
+		AYCD=limit(math.deg(bodyPhys.wy)-handle, -AYC_RANGE, AYC_RANGE)/AYC_RANGE;
+		AYC=limit((AYC+PID("AYC", 0, AYCD, 1.00, 0.00, 0.50, -1.00, 1.00, 0.75))*0.75, -1, 1);
+		AYCP=limit(PID("AYCP", 0, AYC, 1.00, 0.00, 1.00, -1.00, 1.00, 0.75), -1, 1);
+		
+		if 0<inputAccel  then
+			--一時退避
+			local FL=ENGINEFL;
+			local RL=ENGINERL;
+			local FR=ENGINEFR;
+			local RR=ENGINERR;
+			ENGINEFL=math.max(math.min(FL,FR*limit(1-AYCP, 0, 1)), -0);
+			ENGINERL=math.max(math.min(RL,RR*limit(1-AYCP, 0, 1)), -0);
+			ENGINEFR=math.max(math.min(FR,FL*limit(1+AYCP, 0, 1)), -0);
+			ENGINERR=math.max(math.min(RR,RL*limit(1+AYCP, 0, 1)), -0);
+		end
+	end
+	
+	rSpd=0;
+	pSpd=0;
+	function aero()
+		landing=false;
+		if _KEY(KEY_D)==0 and _KEY(KEY_F)==0 then
+			local offs=Wector.new(0, -1.2, 0):getWVec(BODY);
+			_SETCOLOR(tonumber("FF00FF", 16));
+			_MOVE3D((offs+bodyPos).x,(offs+bodyPos).y,(offs+bodyPos).z);
+			for i=0, 30 do
+				local p=offs+bodyPos+mono:getVel()*i+mono:getAcc()/2*i^2;
+				_LINE3D(p.x,p.y,p.z);
+				if p.y<=_GETY(p.x, p.z) or p.y<=0 then
+					landing=true;
+					landingPoint=p;
+					break;
+				end
+			end
+		end
+		
+		local v=VEC0;
+		
+		if landing then
+		
+			_SETCOLOR(tonumber("00FF00", 16));
+			local p0=Wector.new(landingPoint.x, math.max(_GETY(landingPoint.x, landingPoint.z), 0), landingPoint.z);
+			p1=p0+Wector.new(0, 0, 1.2):getWVec(BODY);
+			p2=p0+Wector.new(0.9, 0, -0.6):getWVec(BODY);
+			p3=p0+Wector.new(-0.9, 0, -0.6):getWVec(BODY);
+			p1.y=math.max(_GETY(p1.x, p1.z),0);
+			p2.y=math.max(_GETY(p2.x, p2.z),0);
+			p3.y=math.max(_GETY(p3.x, p3.z),0);
+			
+			if math.cos(math.rad(60))<(p0-bodyPos):getLVec(BODY):getNormal()^VECY then
+				p1=Wector:getPosVec(REAR);
+				p2=Wector:getPosVec(WHEELFL);
+				p3=Wector:getPosVec(WHEELFR);
+				if 0<_H(REAR)+_H(WHEELFR)+_H(WHEELFL) then
+					p1.y=math.max(p1.y-_H(REAR),0);
+					p2.y=math.max(p2.y-_H(WHEELFL),0);
+					p3.y=math.max(p3.y-_H(WHEELFR),0);
+				else
+					p1.y=0;
+					p2.y=0;
+					p3.y=0;
+				end
+			end
+			
+			local v1=(p2-p1):getNormal();
+			local v2=(p3-p1):getNormal();
+			
+			if _YY(BODY)<0 then
+				tmp=v1;
+				v1=v2;
+				v2=tmp;
+			end
+			
+			v=v1:getOuter(v2):getNormal();	--地形の法線ベクトル
+			
+			p1=p1+v*0.3;
+			p2=p2+v*0.3;
+			p3=p3+v*0.3;
+			
+			_MOVE3D(p1.x, p1.y, p1.z);
+			_LINE3D(p2.x, p2.y, p2.z);
+			_LINE3D(p3.x, p3.y, p3.z);
+			_LINE3D(p1.x, p1.y, p1.z);
+			
+			v=v:getLVec(BODY);
+		else
+			v=VECY:getLVec(BODY);
+		end
+		
+		d=flightmode and 0 or 300*1.0*(1.5-_YY(BODY)*0.5);	--速度に応じて変化
+		
+		f=flightmode and 0 or inputBreak*30;	--固定
+
+		local vr=Wector.new(v.x, v.y, 0):getNormal();
+		local vp=Wector.new(0, v.y, v.z):getNormal();
+		
+		local r=math.deg(math.acos(vr^VECY));
+		if vr.x<0 then r=-r; end
+		local p=math.deg(math.acos(vp^VECY));
+		if vp.z<0 then p=-p; end
+		
+		if _KEY(KEY_F)==1 then
+			r=0;
+			p=0;
+		end
+		
+		--ピッチ，ロールの制御
+		rSpd=PID("ROLL", 0, r+inputRSpd*30, 3.0, 3.0, 15.0, -3.0, 3.0, 1.00);
+		tab=flightmode and 0 or 0;	--固定
+		pSpd=PID("PITCH", 0, p-(inputPSpd+tab)*30, 3.0, 3.0, 15.0, -3.0, 3.0, 1.00);
+		
+		--グリップの制御
+		if (not flightmode) and landing then
+			gfl=-PID("GFL", math.abs(ratioFL/100-1.00), 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+			gfr=-PID("GFR", math.abs(ratioFR/100-1.00), 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+			grl=-PID("GRL", math.abs(ratioRL/100-1.00), 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+			grr=-PID("GRR", math.abs(ratioRR/100-1.00), 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+		else
+			gfl=-PID("GFL", 0, 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+			gfr=-PID("GFR", 0, 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+			grl=-PID("GRL", 0, 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+			grr=-PID("GRR", 0, 0, 5.00, 5.00, 0.00, -0.00, 5.00, 0.75);
+		end
+		
+		fl=-gfl-d;
+		fr=-gfr-d;
+		rl=-grl-d;
+		rr=-grr-d;
+		
+		local wingRatio=1.0;
+		if 25<-bodySpdL.z*3600/30/wingRatio then
+			s=limit(25/limit(-bodySpdL.z*3600/30/wingRatio, 25, 500), 0, 0.10);
+		else
+			s=limit(limit(math.max(-bodySpdL.z*3600/30/wingRatio, 5), 0, 25)/25, 0, 0.10);
+		end
+		
+		--AEROD=step2(AEROD, -d*s+120-f, 10);
+		
+		---[[
+		AEROFL=step2(AEROFL, ((-rSpd+pSpd+fl)*s-f)+180, 10);
+		AEROFR=step2(AEROFR, ((rSpd+pSpd+fr)*s-f)+180, 10);
+		AERORL=step2(AERORL, ((-rSpd-pSpd+rl)*s-f)+180, 10);
+		AERORR=step2(AERORR, ((rSpd-pSpd+rr)*s-f)+180, 10);
+		--]]
+		
+		--横DF
+		if flightmode then
+			SIDEFL=step2(SIDEFL, 90, 10);
+			SIDEFR=step2(SIDEFR, 90, 10);
+			SIDERL=step2(SIDERL, 90, 10);
+			SIDERR=step2(SIDERR, 90, 10);
+		else
+			SIDEFL=step2(SIDEFL, 90-limit(FLSpdL.y*30*60*60/1000/2, -10.00, 10.00), 10);
+			SIDEFR=step2(SIDEFR, 90-limit(FRSpdL.y*30*60*60/1000/2, -10.00, 10.00), 10);
+			SIDERL=step2(SIDERL, 90-limit(RLSpdL.y*30*60*60/1000/2, -10.00, 10.00), 10);
+			SIDERR=step2(SIDERR, 90-limit(RRSpdL.y*30*60*60/1000/2, -10.00, 10.00), 10);
+		end
+	end
+
+	function dispWheelInfo()
+		dispWheel(WHEELFL, ratioFL, ENGINEFL);
+		dispWheel(WHEELRL, ratioRL, ENGINERL);
+		dispWheel(WHEELFR, ratioFR, ENGINEFR);
+		dispWheel(WHEELRR, ratioRR, ENGINERR);
+	end
+	
+	wheelSize=0.60;
+	function dispWheel(cn, ratio, power)
+		--_SETCOLOR(rgb(ratio/100-TCS_LINE, 0.0, TCS_LINE-ratio/100));
+		_SETCOLOR(rgb(ratio/100-1.00, 0.0, 1.00-ratio/100));
+		local pw=limit(math.log10(math.abs(power/100000))*0.3, 0, 0.3);
+		----------------------------------------
+		local cp=Wector:getPosVec(cn);
+		local p=Wector.new(wheelSize, pw, 0.0):getWVec(cn);
+		_MOVE3D(cp.x+p.x, cp.y+p.y, cp.z+p.z)
+		for i=1, 16 do
+			p=Wector.new(math.cos(i/16*math.pi*2)*wheelSize, pw, math.sin(i/16*math.pi*2)*wheelSize):getWVec(cn);
+			_LINE3D(cp.x+p.x, cp.y+p.y, cp.z+p.z)
+		end
+		----------------------------------------
+		p=Wector.new(wheelSize, -pw, 0.0):getWVec(cn);
+		_MOVE3D(cp.x+p.x, cp.y+p.y, cp.z+p.z)
+		for i=1, 16 do
+			p=Wector.new(math.cos(i/16*math.pi*2)*wheelSize, -pw, math.sin(i/16*math.pi*2)*wheelSize):getWVec(cn);
+			_LINE3D(cp.x+p.x, cp.y+p.y, cp.z+p.z)
+		end
+		
+		----------------------------------------
+		--[[
+		p=Wector.new(0.0, 30.0, 0.0):getWVec(cn);
+		_MOVE3D(cp.x+p.x, cp.y+p.y, cp.z+p.z)
+		p=Wector.new(0.0, -30.0, 0.0):getWVec(cn);
+		_LINE3D(cp.x+p.x, cp.y+p.y, cp.z+p.z)
+		--]]
+	end
+
+	function dispBodyWidth()
+		local vec=Wector.new(0, 0, -1):getWVec(BODY);
+		dispChipLine(WHEELFL-1, vec, 30);
+		dispChipLine(WHEELFR-1, vec, 30)
+	end
+	
+	function dispChipLine(cn, vec, len)
+		_SETCOLOR(rgb(1.0, 1.0, 1.0));
+		
+		local p=Wector:getPosVec(cn);
+		local l=vec*len;
+		_MOVE3D(p.x, p.y, p.z);
+		_LINE3D(p.x+l.x, p.y+l.y, p.z+l.z);
+	end
+	
+	function speedVision()
+		drawChip=function(chip)
+			local cp=Wector:getPosVec(chip);
+			local p0=Wector.new(0.3, 0.03, 0.3):getWVec(chip)+cp;
+			local p1=Wector.new(0.3, 0.03, -0.3):getWVec(chip)+cp;
+			local p2=Wector.new(-0.3, 0.03, -0.3):getWVec(chip)+cp;
+			local p3=Wector.new(-0.3, 0.03, 0.3):getWVec(chip)+cp;
+			
+			local p4=Wector.new(0.3, -0.03, 0.3):getWVec(chip)+cp;
+			local p5=Wector.new(0.3, -0.03, -0.3):getWVec(chip)+cp;
+			local p6=Wector.new(-0.3, -0.03, -0.3):getWVec(chip)+cp;
+			local p7=Wector.new(-0.3, -0.03, 0.3):getWVec(chip)+cp;
+			
+			_MOVE3D(p3.x, p3.y, p3.z);
+			_LINE3D(p0.x, p0.y, p0.z);
+			_LINE3D(p1.x, p1.y, p1.z);
+			_LINE3D(p2.x, p2.y, p2.z);
+			_LINE3D(p3.x, p3.y, p3.z);
+			
+			_MOVE3D(p7.x, p7.y, p7.z);
+			_LINE3D(p4.x, p4.y, p4.z);
+			_LINE3D(p5.x, p5.y, p5.z);
+			_LINE3D(p6.x, p6.y, p6.z);
+			_LINE3D(p7.x, p7.y, p7.z);
+		end
+		
+		--local r=limit(-bodySpdL.z*3600/30/500, -0, 1)*2-1;
+		local r=0;
+		if 0.5<-bodySpdL.z*3600/30/500 then r=1 end
+		local g=limit(-bodySpdL.z*3600/30/500, -0, 1)*2;
+		if 1<g then g=g-1 end
+		local b=limit(-bodySpdL.z*3600/30/500, -0, 1)*2;
+		if 1<b then b=b-1 end
+		_SETCOLOR(rgb(r,g,b));
+		
+		drawChip(CORE);
+end
+
+	function step2(val, target, step)
+		if math.abs(val-target)<=step then
+			val=target;
+		else
+			if target<val then
+				val=val-step;
+			else
+				val=val+step;
+			end
+		end
+		return val;
+	end
+
+	function step3(val, target, ratio)
+		return val+(target-val)/ratio;
+	end
+
+	function step4(val, target, step, ratio)
+		return step2(val, step3(val, target, ratio), step);
+	end
+
+	function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+		local p,i,d;
+		
+		local dis=target-val;
+		if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+		if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+		p=dis*kp;
+
+		_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+		_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+		i=_G["PID_I_"..id];
+
+		d=(dis-_G["PID_D_"..id])*kd;
+		_G["PID_D_"..id]=dis;
+
+		if debug~=nil then
+			out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+		end
+
+		return p+i+d
+	end
+
+	function limit(val,min,max)
+		return math.max(min,math.min(max,val));
+	end
+
+	function getSpdVec(chipName)
+		if not _G["getSpdVec_init"..chipName] then
+			_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+			_G["getSpdVec_init"..chipName]=true;
+		end
+
+		local spdVec=Wector.new(0, 0, 0);
+		local posVec=Wector:getPosVec(chipName);
+		spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+		
+		_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+		return spdVec;
+	end
+
+	function rgb(r,g,b)
+		return math.floor(math.max(math.min(r*255, 255), 0))*65536+math.floor(math.max(math.min(g*255, 255), 0))*256+math.floor(math.max(math.min(b*255, 255), 0))
+	end
+}

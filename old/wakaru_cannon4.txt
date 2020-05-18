@@ -1,0 +1,277 @@
+// [RCD] 
+Val
+{
+	JET_SA1(default=0, min=-1000000, max=1000000)
+	JET_SA2(default=0, min=-1000000, max=1000000)
+	PITCH_C(default=-90, min=-180, max=0)
+	A0(default=-90, min=-180, max=0)
+	A1(default=-180, min=-180, max=0)
+	A2(default=-180, min=-180, max=0)
+	A3(default=-180, min=-180, max=0)
+	A4(default=-180, min=-180, max=0)
+	A5(default=-180, min=-180, max=0)
+	A6(default=-180, min=-180, max=0)
+	A7(default=-180, min=-180, max=0)
+	A8(default=-180, min=-180, max=0)
+	A9(default=-180, min=-180, max=0)
+	A10(default=-90, min=-180, max=0)
+	A11(default=-180, min=-180, max=0)
+	A12(default=-180, min=-180, max=0)
+	A13(default=-180, min=-180, max=0)
+	A14(default=-180, min=-180, max=0)
+	A15(default=-180, min=-180, max=0)
+	A16(default=-180, min=-180, max=0)
+	A17(default=-180, min=-180, max=0)
+	A18(default=-180, min=-180, max=0)
+	A19(default=-180, min=-180, max=0)
+	A20(default=-90, min=-180, max=0)
+	A21(default=-180, min=-180, max=0)
+	A22(default=-180, min=-180, max=0)
+	A23(default=-180, min=-180, max=0)
+	A24(default=-180, min=-180, max=0)
+	A25(default=-180, min=-180, max=0)
+	A26(default=-180, min=-180, max=0)
+	A27(default=-180, min=-180, max=0)
+	A28(default=-180, min=-180, max=0)
+	A29(default=-180, min=-180, max=0)
+	A30(default=-180, min=-180, max=0)
+	A31(default=-180, min=-180, max=0)
+	T0(default=0, max=160000000)
+	T1(default=0, max=160000000)
+	T2(default=0, max=160000000)
+	T3(default=0, max=160000000)
+	T4(default=0, max=160000000)
+	T5(default=0, max=160000000)
+	T6(default=0, max=160000000)
+	T7(default=0, max=160000000)
+	T8(default=0, max=160000000)
+	T9(default=0, max=160000000)
+	T10(default=0, max=160000000)
+	T11(default=0, max=160000000)
+	T12(default=0, max=160000000)
+	T13(default=0, max=160000000)
+	T14(default=0, max=160000000)
+	T15(default=0, max=160000000)
+	T16(default=0, max=160000000)
+	T17(default=0, max=160000000)
+	T18(default=0, max=160000000)
+	T19(default=0, max=160000000)
+	T20(default=0, max=160000000)
+	T21(default=0, max=160000000)
+	T22(default=0, max=160000000)
+	T23(default=0, max=160000000)
+	T24(default=0, max=160000000)
+	T25(default=0, max=160000000)
+	T26(default=0, max=160000000)
+	T27(default=0, max=160000000)
+	T28(default=0, max=160000000)
+	T29(default=0, max=160000000)
+	T30(default=0, max=160000000)
+	T31(default=0, max=160000000)
+	ROT(default=0, min=-1000000, max=1000000)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Frame(angle=90, option=1) {
+			S:Trim() {
+				S:Weight(angle=180) {
+					S:Weight(angle=180, option=4) {
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A0, power=T0, option=1600000, name=ARM0) { }
+							S:Arm(angle=A1, power=T1, option=1600000, name=ARM1) { }
+							S:Arm(angle=A2, power=T2, option=1600000, name=ARM2) { }
+							S:Arm(angle=A3, power=T3, option=1600000, name=ARM3) { }
+						}
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A4, power=T4, option=1600000, name=ARM4) { }
+							S:Arm(angle=A5, power=T5, option=1600000, name=ARM5) { }
+							S:Arm(angle=A6, power=T6, option=1600000, name=ARM6) { }
+							S:Arm(angle=A7, power=T7, option=1600000, name=ARM7) { }
+						}
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A8, power=T8, option=1600000, name=ARM8) { }
+							S:Arm(angle=A9, power=T9, option=1600000, name=ARM9) { }
+							S:Arm(angle=A10, power=T10, option=1600000, name=ARM10) { }
+							S:Arm(angle=A11, power=T11, option=1600000, name=ARM11) { }
+						}
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A12, power=T12, option=1600000, name=ARM12) { }
+							S:Arm(angle=A13, power=T13, option=1600000, name=ARM13) { }
+							S:Arm(angle=A14, power=T14, option=1600000, name=ARM14) { }
+							S:Arm(angle=A15, power=T15, option=1600000, name=ARM15) { }
+						}
+					}
+					S:Weight(angle=180, option=4) {
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A16, power=T16, option=1600000, name=ARM16) { }
+							S:Arm(angle=A17, power=T17, option=1600000, name=ARM17) { }
+							S:Arm(angle=A18, power=T18, option=1600000, name=ARM18) { }
+							S:Arm(angle=A19, power=T19, option=1600000, name=ARM19) { }
+						}
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A20, power=T20, option=1600000, name=ARM20) { }
+							S:Arm(angle=A21, power=T21, option=1600000, name=ARM21) { }
+							S:Arm(angle=A22, power=T22, option=1600000, name=ARM22) { }
+							S:Arm(angle=A23, power=T23, option=1600000, name=ARM23) { }
+						}
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A24, power=T24, option=1600000, name=ARM24) { }
+							S:Arm(angle=A25, power=T25, option=1600000, name=ARM25) { }
+							S:Arm(angle=A26, power=T26, option=1600000, name=ARM26) { }
+							S:Arm(angle=A27, power=T27, option=1600000, name=ARM27) { }
+						}
+						N:Weight(angle=-180, option=1) {
+							S:Arm(angle=A28, power=T28, option=1600000, name=ARM28) { }
+							S:Arm(angle=A29, power=T29, option=1600000, name=ARM29) { }
+							S:Arm(angle=A30, power=T30, option=1600000, name=ARM30) { }
+							S:Arm(angle=A31, power=T31, option=1600000, name=ARM31) { }
+						}
+					}
+				}
+			}
+		}
+		N:Weight(option=8) { }
+	}
+}
+Lua
+{
+	KEY_UP=0
+	KEY_DOWN=1
+	KEY_LEFT=2
+	KEY_RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+
+	ARMNUM=32
+	NUM=0
+	ROUND=32
+	CT=0
+	TARM=6
+
+	YAW=_AY(CORE)*180/math.pi
+	PITCH=0
+	PITCH_A=0
+
+	prevMx=_MX()
+	prevMy=_MY()
+
+function main()
+	local mvx=0
+	local mvy=0
+	local mx=_MX()/_HEIGHT()*2
+	local my=_MY()/_HEIGHT()*2
+
+	if _MR()==1 then
+		mvx=mx-prevMx
+		mvy=my-prevMy
+	end
+
+	prevMx=mx
+	prevMy=my
+
+	S=1+_KEY(KEY_Z)*9
+
+	YAW=YAW+mvx*60/S
+	PITCH=PITCH-mvy*60/S
+
+	if(_KEY(KEY_LEFT)==1)then
+		YAW=YAW-1/S
+	end
+	if(_KEY(KEY_RIGHT)==1)then
+		YAW=YAW+1/S
+	end
+
+	local disR=angle_correct(YAW-_AY(CORE)*180/math.pi)
+	ROT=ROT-disR
+
+	if(_KEY(KEY_UP)==1)then
+		PITCH=PITCH+1/S
+	end
+	if(_KEY(KEY_DOWN)==1)then
+		PITCH=PITCH-1/S
+	end
+
+	PITCH=math.min(25,math.max(-15,PITCH))
+
+	PITCH_C=-90+PITCH
+	PITCH_A=-90+PITCH
+
+	local ready=0
+
+	JET_SA1=-_VY(SA1)*25000
+	JET_SA2=_VY(SA2)*25000
+
+	for i=0,ARMNUM-1 do
+		if _OPTION(_G["ARM"..i])<=_E(_G["ARM"..i]) and _TOP(_G["ARM"..i])==CORE then
+			ready=ready+1
+		end
+		if i==NUM then
+			if _TOP(_G["ARM"..i])==CORE then
+				if TARM<=CT and (_KEY(KEY_X)==1 or (_ML()==1 and _MR()==1)) and _OPTION(_G["ARM"..i])<=_E(_G["ARM"..i]) then
+					_G["T"..i]=_OPTION(_G["ARM"..i])
+					JET_SA1=JET_SA1+_OPTION(_G["ARM"..i])/2
+					JET_SA2=JET_SA2+_OPTION(_G["ARM"..i])/2
+					CT=0
+					NUM=NUM+1
+				end
+				drawLine(_G["ARM"..i])
+				_G["A"..i]=_G["A"..i]-(PITCH_A-180)/(TARM-1)
+				if _G["A"..i]>=PITCH_A then _G["A"..i]=PITCH_A end
+			else
+				NUM=NUM+1
+			end
+		else
+			_G["A"..i]=_G["A"..i]+(PITCH_A-180)/(TARM-1)
+			_G["T"..i]=0
+		end
+	end
+
+	out(0,ready.." bullet ready")
+	NUM=math.mod(NUM,ARMNUM)
+	CT=CT+1
+end
+
+function drawLine(chipName)
+	if(_OPTION(chipName)<=_E(chipName))then
+		_SETCOLOR(tonumber("FF0000", 16))
+	else
+		_SETCOLOR(tonumber("FFFF00", 16))
+	end
+
+	local yaw=_AY(chipName)
+	local x=_X(chipName)
+	local y=_Y(chipName)
+	local z=_Z(chipName)
+	local tx=_X(chipName)+_ZX(chipName)*640
+	local ty=_Y(chipName)+_ZY(chipName)*640
+	local tz=_Z(chipName)+_ZZ(chipName)*640
+
+	_MOVE3D(x+math.sin(yaw+math.pi/2)*0.3,y,z+math.cos(yaw+math.pi/2)*0.3)
+	_LINE3D(tx+math.sin(yaw+math.pi/2)*0.3,ty,tz+math.cos(yaw+math.pi/2)*0.3)
+
+	_MOVE3D(x+math.sin(yaw-math.pi/2)*0.3,y,z+math.cos(yaw-math.pi/2)*0.3)
+	_LINE3D(tx+math.sin(yaw-math.pi/2)*0.3,ty,tz+math.cos(yaw-math.pi/2)*0.3)
+end
+
+-- Šp“x•â³ -------------------------------------------------------------------
+function angle_correct(a)
+	while(a<-180) do a=a+360 end
+	while(a>180) do a=a-360 end
+	return a
+end
+}

@@ -1,0 +1,114 @@
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+	}
+}
+Lua
+{
+
+data={};
+
+for i=0, 15 do
+	data[i]=0;
+end
+
+function main()
+	max=0
+	maxid=0
+	r=math.floor(math.random()*8+math.random()*8);
+	data[r]=data[r]+1
+	for i=0, 15 do
+		data[i]=data[i]*0.99;
+		out(i,i..": "..math.floor(data[i]));
+
+		if max<data[i] then max=data[i]; maxid=i; end
+	end
+	out(20,maxid);
+end
+
+----vectorクラス
+--RigidChipsで扱う用の3次元ベクトルを扱うクラスです
+
+---おおまかな使い方
+--変数名=Vector.new(X, Y, Z)ってやると{X, Y, Z}ベクトルが出来るって寸法
+--使い方のサンプルは上のほうにありんす
+
+---基本機能
+--ベクトル同士の足し算引き算は+,-でできる
+--ベクトルと実数の掛け算割り算は*,/でできる
+
+---便利機能(この辺あんまり確認してないから怪しい)
+--getLength()でベクトルの長さを返してくれる
+--getNormal()でベクトルの長さを1にしてくれる
+--ベクトル同士の内積は^でできる
+--ベクトル同士の外積は でできる(できない)
+
+Vector={};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+	}
+
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+		end,
+	}
+
+	setmetatable(obj, operation);
+
+	return obj;
+end
+
+}

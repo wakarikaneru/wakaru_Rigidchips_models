@@ -1,0 +1,136 @@
+// [RCD] 
+Val
+{
+	BAL1(default=90, max=180)
+	BAL2(default=0, min=-9999999999, max=9999999999)
+	F0(default=180, min=60, max=180)
+	F1(default=180, min=60, max=180)
+	F10(default=180, min=60, max=180)
+	F11(default=180, min=60, max=180)
+	F2(default=180, min=60, max=180)
+	F3(default=180, min=60, max=180)
+	F4(default=180, min=60, max=180)
+	F5(default=180, min=60, max=180)
+	F6(default=180, min=60, max=180)
+	F7(default=180, min=60, max=180)
+	F8(default=180, min=60, max=180)
+	F9(default=180, min=60, max=180)
+	WING(default=0, min=-45, max=45)
+}
+Key
+{
+	0:WING(step=1)
+	1:WING(step=-1)
+	4:p(step=500)
+}
+Body
+{
+	Core() {
+		S:Chip() {
+			W:Frame(angle=WING, name=B0) {
+				N:Chip(angle=F0) { }
+				W:Frame(name=B1) {
+					N:Chip(angle=F1) { }
+					W:Frame(name=B2) {
+						N:Chip(angle=F2) { }
+					}
+				}
+			}
+			E:Frame(angle=WING, name=B3) {
+				N:Chip(angle=F3) { }
+				E:Frame(name=B4) {
+					N:Chip(angle=F4) { }
+					E:Frame(name=B5) {
+						N:Chip(angle=F5) { }
+					}
+				}
+			}
+		}
+		S:Weight(option=1, angle=BAL1) { }
+		E:Frame(angle=WING, name=B6) {
+			N:Chip(angle=F6) { }
+			E:Frame(name=B7) {
+				N:Chip(angle=F7) { }
+				E:Frame(name=B8) {
+					N:Chip(angle=F8) { }
+				}
+			}
+		}
+		W:Frame(angle=WING, name=B9) {
+			N:Chip(angle=F9) { }
+			W:Frame(name=B10) {
+				N:Chip(angle=F10) { }
+				W:Frame(name=B11) {
+					N:Chip(angle=F11) { }
+				}
+			}
+		}
+		S:TrimF(angle=BAL2) { }
+	}
+}
+Lua
+{
+	require("wakaru/wakaru_eye.lua");
+	
+	VECX=Vector.new(-1,0,0);
+	wing=0;
+	vb=0;
+function main()
+	wing=wing+30/180*math.pi;
+	if _KEY(5)==1 then
+		WING=math.sin(wing)*45;
+	end
+	
+	BAL1=90+_AX(0)*180/math.pi;
+	vb=_AZ(0)*100
+	BAL2=BAL2+vb;
+	for i=0,11 do
+		cn=_G["B"..i];
+		if _DIR(cn)==1 then
+			xv=VECX;
+		elseif _DIR(cn)==3 then
+			xv=-VECX;
+		end
+		aa=getSpdVec(cn):getLVec(cn);
+		aa.z=0;
+		spd=aa:getLength();
+		aa=aa:getNormal();
+		if aa.y<0 then
+			out(i,-math.deg(math.acos(xv^aa)));
+			_G["F"..i]=step2(_G["F"..i], 180, 30);
+		else
+			out(i,math.deg(math.acos(xv^aa)));
+			_G["F"..i]=step2(_G["F"..i], 180-math.deg(math.acos(aa^VECX)), 30);
+		end
+	end
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Vector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Vector.new(0, 0, 0);
+	local posVec=Vector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+}

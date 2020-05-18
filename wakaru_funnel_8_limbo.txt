@@ -1,0 +1,731 @@
+Val
+{
+	F0_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F0_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F0_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F0_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F0_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F0_TRIG(default=0, min=-12800000, max=12800000)
+	F0_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+	F1_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F1_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F1_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F1_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F1_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F1_TRIG(default=0, min=-12800000, max=12800000)
+	F1_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+	F2_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F2_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F2_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F2_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F2_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F2_TRIG(default=0, min=-12800000, max=12800000)
+	F2_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+	F3_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F3_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F3_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F3_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F3_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F3_TRIG(default=0, min=-12800000, max=12800000)
+	F3_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+	F4_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F4_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F4_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F4_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F4_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F4_TRIG(default=0, min=-12800000, max=12800000)
+	F4_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+	F5_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F5_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F5_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F5_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F5_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F5_TRIG(default=0, min=-12800000, max=12800000)
+	F5_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+	F6_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F6_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F6_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F6_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F6_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F6_TRIG(default=0, min=-12800000, max=12800000)
+	F6_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+	F7_JET_AX(default=0, min=-2147483648, max=2147483647)
+	F7_JET_AZ(default=0, min=-2147483648, max=2147483647)
+	F7_JET_BX(default=0, min=-2147483648, max=2147483647)
+	F7_JET_BZ(default=0, min=-2147483648, max=2147483647)
+	F7_JET_Y(default=0, min=-2147483648, max=2147483647)
+	F7_TRIG(default=0, min=-12800000, max=12800000)
+	F7_WHEEL(default=0, min=-2147483648, max=2147483647)
+
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Jet(name=F0, angle=0, power=F0_JET_Y) {
+			N:Jet(angle=90, power=-F0_JET_BZ) { S:Arm(power=F0_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F0_JET_BX) { E:Arm(power=F0_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F0_JET_AZ) { N:Arm(power=-F0_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F0_JET_AX) { W:Arm(power=-F0_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F0_WHEEL, brake=1, USER2=30) { }
+		}
+		N:Jet(name=F1, angle=0, power=F1_JET_Y) {
+			N:Jet(angle=90, power=-F1_JET_BZ) { S:Arm(power=F1_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F1_JET_BX) { E:Arm(power=F1_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F1_JET_AZ) { N:Arm(power=-F1_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F1_JET_AX) { W:Arm(power=-F1_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F1_WHEEL, brake=1, USER2=30) { }
+		}
+		N:Jet(name=F2, angle=0, power=F2_JET_Y) {
+			N:Jet(angle=90, power=-F2_JET_BZ) { S:Arm(power=F2_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F2_JET_BX) { E:Arm(power=F2_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F2_JET_AZ) { N:Arm(power=-F2_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F2_JET_AX) { W:Arm(power=-F2_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F2_WHEEL, brake=1, USER2=30) { }
+		}
+		N:Jet(name=F3, angle=0, power=F3_JET_Y) {
+			N:Jet(angle=90, power=-F3_JET_BZ) { S:Arm(power=F3_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F3_JET_BX) { E:Arm(power=F3_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F3_JET_AZ) { N:Arm(power=-F3_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F3_JET_AX) { W:Arm(power=-F3_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F3_WHEEL, brake=1, USER2=30) { }
+		}
+		N:Jet(name=F4, angle=0, power=F4_JET_Y) {
+			N:Jet(angle=90, power=-F4_JET_BZ) { S:Arm(power=F4_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F4_JET_BX) { E:Arm(power=F4_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F4_JET_AZ) { N:Arm(power=-F4_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F4_JET_AX) { W:Arm(power=-F4_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F4_WHEEL, brake=1, USER2=30) { }
+		}
+		N:Jet(name=F5, angle=0, power=F5_JET_Y) {
+			N:Jet(angle=90, power=-F5_JET_BZ) { S:Arm(power=F5_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F5_JET_BX) { E:Arm(power=F5_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F5_JET_AZ) { N:Arm(power=-F5_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F5_JET_AX) { W:Arm(power=-F5_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F5_WHEEL, brake=1, USER2=30) { }
+		}
+		N:Jet(name=F6, angle=0, power=F6_JET_Y) {
+			N:Jet(angle=90, power=-F6_JET_BZ) { S:Arm(power=F6_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F6_JET_BX) { E:Arm(power=F6_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F6_JET_AZ) { N:Arm(power=-F6_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F6_JET_AX) { W:Arm(power=-F6_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F6_WHEEL, brake=1, USER2=30) { }
+		}
+		N:Jet(name=F7, angle=0, power=F7_JET_Y) {
+			N:Jet(angle=90, power=-F7_JET_BZ) { S:Arm(power=F7_TRIG, option=200000, USER2=10) { } }
+			W:Jet(angle=90, power=F7_JET_BX) { E:Arm(power=F7_TRIG, option=200000, USER2=11) { } }
+			S:Jet(angle=-90, power=-F7_JET_AZ) { N:Arm(power=-F7_TRIG, option=200000, USER2=20) { } }
+			E:Jet(angle=-90, power=F7_JET_AX) { W:Arm(power=-F7_TRIG, option=200000, USER2=21) { } }
+			N:RLW(angle=180, power=F7_WHEEL, brake=1, USER2=30) { }
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+	function analog(i)
+		if _ANALOG(i)==0 then
+			return 0;
+		else
+			return (_ANALOG(i)/1000)^2*(_ANALOG(i)/math.abs(_ANALOG(i)));
+		end
+	end
+
+	initflag=false;
+
+	require("wakaru/wakaru_eye.lua");
+	require("wakaru/wakaru_anti.lua");
+
+	function init()
+		initflag=true;
+
+		ticks=0;
+
+		eye=Wakaru_Eye.new(CORE, 1200);
+
+		VECX=Wector.new(1, 0, 0);
+		VECY=Wector.new(0, 1, 0);
+		VECZ=Wector.new(0, 0, 1);
+
+		fightRange=100;
+
+		targetSelect=0;
+		targetName=nil;
+		targetID=nil;
+
+		enemyList={};	--key:ID, val:Name
+
+		visible=false;
+
+		limbo=Wakaru_Limbo.new(8);
+	end
+
+	function main()
+		if not initflag then init(); end
+		ticks=ticks+1;
+
+		--
+		eye:tick();
+		--
+
+		math.randomseed((_WX(0)+_WY(0)+_WZ(0)+_TICKS())*123456789);
+
+		--����
+		out(24, _FPS())
+		if _PLAYERS()~=0 then
+			if _KEYDOWN(KEY_RIGHT)==1 then targetSelect=targetSelect+1; end
+			if _KEYDOWN(KEY_LEFT)==1 then targetSelect=targetSelect-1; end
+			if targetSelect<0 then targetSelect=_PLAYERS()-1 elseif _PLAYERS()<=targetSelect then targetSelect=0 end
+			out(0, "SELECT [<] ".._PLAYERNAME(targetSelect).." [>] ");
+
+			if not (_PLAYERMYID()==_PLAYERID(targetSelect)) then
+				if _KEYDOWN(KEY_X)==1 then
+					if targetID==_PLAYERID(targetSelect) then
+						targetID=nil;
+						targetName=nil;
+					else
+						targetID=_PLAYERID(targetSelect);
+						targetName=_PLAYERNAME(targetSelect);
+					end
+				end
+
+				if _KEYDOWN(KEY_Z)==1 then
+					if enemyList[_PLAYERID(targetSelect)]==nil then
+						enemyList[_PLAYERID(targetSelect)]=_PLAYERNAME(targetSelect);
+					else
+						enemyList[_PLAYERID(targetSelect)]=nil;
+					end
+				end
+			end
+
+			if not (targetID==nil) then
+				out(2, "TARGET [X] "..targetName);
+			else
+				out(2, "TARGET [X] NOTARGET");
+			end
+		else
+			out(0, "OFFLINE");
+		end
+
+		i=0;
+		out(6, "ENEMYLIST [Z] CLEAR [A]");
+		for key,value in enemyList do
+			out(7+i, value);
+			i=i+1;
+		end
+
+		if _KEYDOWN(KEY_A)==1 then
+			enemyList={};
+			targetID=nil;
+			targetName=nil;
+		end
+
+		if _KEY(KEY_UP)==1 then
+			fightRange=fightRange-10;
+		end
+		if _KEY(KEY_DOWN)==1 then
+			fightRange=fightRange+10;
+		end
+		fightRange=limit(fightRange, 0, 1200);
+		out(4, "RANGE [��][��] "..(fightRange).." [m]");
+
+
+		if _KEYDOWN(KEY_C)==1 then
+			attack=not attack;
+		end
+
+		if attack then
+			out(3, "ATTACK [C] ON");
+		else
+			out(3, "ATTACK [C] OFF");
+		end
+
+		if _KEYDOWN(KEY_V)==1 then
+			visible=not visible;
+			Wakaru_Funnel.anti:setDisp(visible);
+		end
+
+		if visible then
+			out(20, "VISIBLE [V] ON");
+		else
+			out(20, "VISIBLE [V] OFF");
+		end
+
+		--	�t�@���l���Ɏw�����o��
+		if _KEYDOWN(KEY_X)==1 then
+			limbo:setTarget(targetID);
+		end
+		limbo:setRange(fightRange);
+
+		--�t�@���l���̏���
+		limbo:tick();
+
+		--Wakaru_Funnel.anti:addBullet(0, 0, 0, (math.random()-math.random())*20, 20, (math.random()-math.random())*20, 1200, 1, 60);
+
+	end
+
+	--�t�@���l���Ǘ��N���X
+	Wakaru_Limbo={
+	};
+	function Wakaru_Limbo.new(num)
+		local obj={
+			funnelList={},
+			tick=function(self)
+				--�t�@���l���̈ړ����v�悷��
+				for key,value in self.funnelList do
+					self.funnelList[key]:plan();
+				end
+				--anti���X�V
+				Wakaru_Funnel.anti:tick();
+				--�t�@���l���𐧌䂷��
+				for key,value in self.funnelList do
+					self.funnelList[key]:action();
+				end
+			end,
+			setRange=function(self, range)
+				--�������ݒ肷��
+				for key,value in self.funnelList do
+					self.funnelList[key]:setRange(range);
+				end
+			end,
+			setTarget=function(self, id)
+				--�^�[�Q�b�g���ݒ肷��
+				for key,value in self.funnelList do
+					self.funnelList[key]:setTarget(id);
+				end
+			end,
+		};
+		for i=0, num-1 do
+			table.insert(obj.funnelList, Wakaru_Funnel.new(i));
+		end
+		return obj;
+	end
+
+	--�t�@���l���N���X
+	Wakaru_Funnel={
+		anti=Wakaru_Anti.new()
+	};
+	function Wakaru_Funnel.new(id)
+		tempId=id;
+		local obj={
+			id=tempId,
+			core=_G["F"..id],
+			live=true,
+			ARMA0=nil,
+			ARMA1=nil,
+			ARMB0=nil,
+			ARMB1=nil,
+			ARMUSE0=nil,
+			ARMUSE1=nil,
+			RLW=nil,
+			corePos=Wector.new(0, 0, 0),
+			coreMoveW=Wector.new(0, 0, 0),
+			coreMoveL=Wector.new(0, 0, 0),
+			coreSpdW=Wector.new(0, 0, 0),
+			coreSpdL=Wector.new(0, 0, 0),
+			armPos0=Wector.new(0, 0, 0),
+			armPos1=Wector.new(0, 0, 0),
+			armSpd0=Wector.new(0, 0, 0),
+			armSpd1=Wector.new(0, 0, 0),
+			armVec0=Wector.new(0, 0, 0),
+			armVec1=Wector.new(0, 0, 0),
+			targetID=nil,
+			mono=Wakaru_Mono.new(),
+			range=0,
+			rangeArea=1,
+			moveVec=Wector.new(0, 0, 0),
+			moveVecPrev=Wector.new(0, 0, 0),
+			prospectVec=Wector.new(0, 0, 0),
+			prospectRatio=0,
+			aimPos=Wector.new(0, 0, 0),
+			spdLimit=500/108,
+			useBackGun=false,
+			plan=function(self)
+				--�@�̂������Ă����ΐ��䂷��
+				if self.live then
+					--�@�̂̏��������W
+					self.corePos=Wector:getPosVec(self.core);
+					self.coreMoveW=getSpdVec(self.core)
+					self.coreMoveL=self.coreMoveW:getLVec(self.core);
+					self.coreSpdW=getSpdVec2(self.core);
+					self.coreSpdL=self.coreSpdW:getLVec(self.core);
+
+					--ARM���������W
+					if not self.useBackGun then
+						 self.armPos0=Wector:getPosVec(self.ARMA0);
+						 self.armPos1=Wector:getPosVec(self.ARMA1);
+						 self.armSpd0=getSpdVec2(self.ARMA0);
+						 self.armSpd1=getSpdVec2(self.ARMA1);
+						 self.armVec0=getArmVec(self.ARMA0);
+						 self.armVec1=getArmVec(self.ARMA1);
+						 self.ARMUSE0=self.ARMA0;
+						 self.ARMUSE1=self.ARMA1;
+					else
+						 self.armPos0=Wector:getPosVec(self.ARMB0);
+						 self.armPos1=Wector:getPosVec(self.ARMB1);
+						 self.armSpd0=getSpdVec2(self.ARMB0);
+						 self.armSpd1=getSpdVec2(self.ARMB1);
+						 self.armVec0=getArmVec(self.ARMB0);
+						 self.armVec1=getArmVec(self.ARMB1);
+						 self.ARMUSE0=self.ARMB0;
+						 self.ARMUSE1=self.ARMB1;
+					end
+
+					--�W�I�̏������擾
+					if  self.targetID ~= nil then
+						self.mono:tick(getPlayerPosVec(self.targetID)-Wakaru_Eye.noiseVec*(_PLAYERCHIPS(i)^(1/3)));
+					else
+						self.mono:tick(Wector:getPosVec(0));
+					end
+
+					--�`���[�W�����܂ŒZ��ARM���g�p����
+					local armATime=math.max((_OPTION(self.ARMA0)-_E(self.ARMA0))/5000, 0);
+					local armBTime=math.max((_OPTION(self.ARMB0)-_E(self.ARMB0))/5000, 0);
+
+					if armATime==armBTime then
+					else
+						self.useBackGun=false;
+						if armBTime<armATime then
+							self.useBackGun=true;
+						end
+
+					end
+
+					--�@�̂̐���
+
+					--�C�ʂƔ�������
+					local height=math.max(1, _Y(self.core));
+
+					if height<10 then
+						Wakaru_Funnel.anti:add(self.corePos.x, self.corePos.y-height, self.corePos.z, self.spdLimit*(10-height)/10, 1);
+					end
+
+					--�n�ʂƔ�������
+					local height=_H(self.core);
+
+					if 0<=height and height<10 then
+						Wakaru_Funnel.anti:add(self.corePos.x, self.corePos.y-height, self.corePos.z, self.spdLimit*(10-height)/10, 1);
+					end
+
+					--�n�`�Ɣ�������
+					local rader={self.core, self.ARMUSE0, self.ARMUSE1}
+					for key,value in rader do
+						local raderRange=_RANGE(rader[key])
+						if 0<=raderRange and raderRange<=30 then
+							local p=Wector:getPosVec(rader[key])+Wector.new(0, 0, -raderRange):getWVec(rader[key]);
+							Wakaru_Funnel.anti:add(p.x, p.y, p.z, self.spdLimit*(30-raderRange)/10, 1);
+						end
+					end
+
+					--�Օ�������������
+					local targetPos=self.mono:getPos();
+					local targetVec=targetPos-(self.armPos0+self.armPos1)/2;
+					local targetLength=targetVec:getLength();
+					local rader={self.ARMUSE0, self.ARMUSE1}
+					for key,value in rader do
+						local raderRange=_RANGE(rader[key])
+						if 0<=raderRange and raderRange<=targetLength-20 then
+							local rVec=Wector.new(0, 0, -raderRange):getWVec(rader[key]);
+							local p=Wector:getPosVec(rader[key])+rVec;
+							Wakaru_Funnel.anti:addRay(p.x, p.y, p.z, -rVec.x, -rVec.y, -rVec.z, 1200, 1.0, 10);
+						end
+					end
+
+					--�O�t���[���̈ړ��v���ʂ��Ɉړ����ł��Ă��Ȃ��ꍇ
+					--���Q���������̂ŁA��������
+					if 100*108<=self.prospectVec:getLength() then
+						local p=self.corePos+self.moveVecPrev
+						Wakaru_Funnel.anti:add(p.x, p.y, p.z, 1.0, 30);
+					end
+
+					--�����Ɩ��W���Ȃ��悤�ɋ@�̈ʒu�ɔ��d�͓_���ݒ肷��
+					Wakaru_Funnel.anti:add(self.corePos.x, self.corePos.y, self.corePos.z, 1.0, 1, self.id);
+					Wakaru_Funnel.anti:add(self.corePos.x, self.corePos.y, self.corePos.z, 0.1, 30);
+
+					--�ː��ɔ��d�͐����ݒ肷��
+					Wakaru_Funnel.anti:addRay(self.armPos0.x, self.armPos0.y, self.armPos0.z, self.armVec0.x, self.armVec0.y, self.armVec0.z, 1200, 1.0, 1, self.id);
+					Wakaru_Funnel.anti:addRay(self.armPos1.x, self.armPos1.y, self.armPos1.z, self.armVec1.x, self.armVec1.y, self.armVec1.z, 1200, 1.0, 1, self.id);
+
+					--���S�`�F�b�N
+					for i=self.core,self.core+9 do
+						if _TOP(i)~=self.core then
+							self.live=false;
+							break;
+						end
+					end;
+				end
+			end,
+			action=function(self)
+				--�@�̂������Ă����ΐ��䂷��
+				if self.live then
+					self:control();
+					self:attack();
+				else
+					self:dead();
+				end
+			end,
+			control=function(self)
+
+				--�@�̂̈ړ��ʂ��ݒ�
+				self.moveVec=toWector(Wakaru_Funnel.anti:effectWithoutID(self.corePos.x, self.corePos.y, self.corePos.z, self.id));
+
+				--�W�I�ɐڋ߂���
+				targetPos=self.mono:getPos();
+				targetVec=targetPos-self.corePos;
+				targetLength=targetVec:getLength();
+				targetNVec=targetVec:getNormal();
+				self.moveVec=self.moveVec+targetNVec*limit((targetLength-self.range), -self.rangeArea, self.rangeArea)/self.rangeArea*self.spdLimit;
+
+				--�ړ����x����
+				if self.spdLimit<self.moveVec:getLength() then
+					self.moveVec=self.moveVec:getNormal()*self.spdLimit;
+				end
+
+				--�ړ��̗\�����Ǘ�
+				self.prospectVec=self.moveVecPrev-self.coreMoveW;
+				self.prospectRatio=self.prospectVec:getLength()/math.max(10/108, self.moveVecPrev:getLength());
+				self.moveVecPrev=self.moveVec
+
+				--�ړ��ʂ����o�͂��ݒ�
+				powX=PID("F"..self.id.."POWERX", self.coreSpdW.x, self.moveVec.x, 200000, 2000, 200000, -2000, 2000, 0.9);
+				powY=PID("F"..self.id.."POWERY", self.coreSpdW.y, self.moveVec.y, 200000, 2000, 200000, -2000, 2000, 0.9);
+				powZ=PID("F"..self.id.."POWERZ", self.coreSpdW.z, self.moveVec.z, 200000, 2000, 200000, -2000, 2000, 0.9);
+
+				pow=Wector.new(powX, powY, powZ);
+				pow=pow:getLVec(self.core);
+
+				--�G�@���Ə�����
+				local armPos=(self.armPos0+self.armPos1)/2;
+				local armSpd=(self.armSpd0+self.armSpd1)/2;
+				self.aimPos=self.mono:getFuturePos2(armPos, armSpd); --�Ί��ǐ�
+
+				local aimVec=(self.aimPos-armPos):getLVec(self.core):getNormal();
+				if self.useBackGun then
+					aimVec=-aimVec;
+				end
+
+				vecX=Wector.new(aimVec.x, aimVec.y, 0):getNormal();
+				rotX=math.deg(math.acos(vecX^VECY));
+				if aimVec.x<0 then
+					rotX=-rotX;
+				end
+
+				vecZ=Wector.new(0, aimVec.y, aimVec.z):getNormal();
+				rotZ=math.deg(math.acos(vecZ^VECY));
+				if aimVec.z<0 then
+					rotZ=-rotZ;
+				end
+
+				aimX=PID("F"..self.id.."AIMX", rotX, 0, 5000, 50, 5000, -500, 500, 1.00);
+				aimZ=PID("F"..self.id.."AIMZ", rotZ, 0, 5000, 50, 5000, -500, 500, 1.00);
+
+				--JET�̏o�͂��ݒ肷��
+				_G["F"..self.id.."_JET_AX"]=pow.x-aimX;
+				_G["F"..self.id.."_JET_BX"]=pow.x+aimX;
+				_G["F"..self.id.."_JET_Y"]=pow.y*2;
+				_G["F"..self.id.."_JET_AZ"]=pow.z-aimZ;
+				_G["F"..self.id.."_JET_BZ"]=pow.z+aimZ;
+
+				--Y���̉��]���}������
+				_G["F"..self.id.."_WHEEL"]=-PID("F"..self.id.."ROLL", _WY(self.core), self.coreSpdW:getLength()*108/500*math.pi*2, 5000, 0, 0, -500, 500, 1.00);
+			end,
+			attack=function(self)
+				--�ˌ�
+				if _KEYDOWN(KEY_F)==1  then
+					local fireFlag=false;
+					if not self.useBackGun then
+						if _OPTION(self.ARMA0)<=_E(self.ARMA0) then
+							_G["F"..self.id.."_TRIG"]=_OPTION(self.ARMA0);
+							fireFlag=true;
+						end
+					else
+						if _OPTION(self.ARMB0)<=_E(self.ARMB0) then
+							_G["F"..self.id.."_TRIG"]=-_OPTION(self.ARMB0);
+							fireFlag=true;
+						end
+					end
+
+					--�����@�Ɍx������
+					if fireFlag then
+						Wakaru_Funnel.anti:addBullet(self.armPos0.x, self.armPos0.y, self.armPos0.z, self.armVec0.x, self.armVec0.y, self.armVec0.z, 1200, math.min(math.max(_OPTION(self.ARMA0), 50000), 200000)/50000, 60, self.id);
+						Wakaru_Funnel.anti:addBullet(self.armPos1.x, self.armPos1.y, self.armPos1.z, self.armVec1.x, self.armVec1.y, self.armVec1.z, 1200, math.min(math.max(_OPTION(self.ARMA1), 50000), 200000)/50000, 60, self.id);
+					end
+				else
+					_G["F"..id.."_TRIG"]=0;
+				end
+			end,
+			dead=function(self)
+				--�g���K�[������
+				_G["F"..self.id.."_TRIG"]=0;
+
+				--JET�̏o�͂�0�ɂ���
+				_G["F"..self.id.."_JET_AX"]=0;
+				_G["F"..self.id.."_JET_BX"]=0;
+				_G["F"..self.id.."_JET_Y"]=0;
+				_G["F"..self.id.."_JET_AZ"]=0;
+				_G["F"..self.id.."_JET_BZ"]=0;
+
+				--RWL�����~����
+				_G["F"..self.id.."_WHEEL"]=0;
+			end,
+			setRange=function(self, range)
+				--�^�[�Q�b�g���ݒ肷��
+				self.range=range;
+			end,
+			setTarget=function(self, id)
+				--�^�[�Q�b�g���ݒ肷��
+				self.targetID=id;
+				--mono�����Z�b�g����
+				if  self.targetID ~= nil then
+					self.mono:resetPos(getPlayerPosVec(self.targetID));
+				else
+					self.mono:resetPos(Wector:getPosVec(0));
+				end
+			end,
+		};
+		--�@�̂𕪗�����
+		_SPLIT(obj.core);
+
+		--�@�̏������ݒ肷��
+		for i=obj.core,_CHIPS()-1 do
+			local tmp = _USER2(i)
+			if not obj.ARMA0 and tmp==10 then obj.ARMA0=i
+			elseif not obj.ARMA1 and tmp==11 then obj.ARMA1=i
+			elseif not obj.ARMB0 and tmp==20 then obj.ARMB0=i
+			elseif not obj.ARMB1 and tmp==21 then obj.ARMB1=i
+			elseif not obj.RLW and tmp==30 then obj.RLW=i
+			end
+
+			if obj.ARMA0 and obj.ARMA1 and obj.ARMB0 and obj.ARMB1 and obj.RLW then break end
+		end;
+
+		return obj;
+	end
+
+
+	function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+		local p,i,d;
+
+		local dis=target-val;
+		if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+		if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+		p=dis*kp;
+
+		_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+		_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+		i=_G["PID_I_"..id];
+
+		d=(dis-_G["PID_D_"..id])*kd;
+		_G["PID_D_"..id]=dis;
+
+		if debug~=nil then
+			out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+		end
+
+		return p+i+d
+	end
+
+	function step2(val, target, step)
+		if math.abs(val-target)<=step then
+			val=target;
+		else
+			if target<val then
+				val=val-step;
+			else
+				val=val+step;
+			end
+		end
+		return val;
+	end
+
+	function step3(val, target, ratio)
+		return val+(target-val)/ratio;
+	end
+
+	function limit(val,min,max)
+		return math.max(min,math.min(max,val));
+	end
+
+	function getSpdVec(chipName)
+		if not _G["getSpdVec_init"..chipName] then
+			_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+			_G["getSpdVec_init"..chipName]=true;
+		end
+
+		local spdVec=Wector.new(0, 0, 0);
+		local posVec=Wector:getPosVec(chipName);
+		spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+		_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+		return spdVec;
+	end
+
+	function getSpdVec2(chipName)
+		return (Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+	end
+
+	function getArmVec(chipName)
+		local armSpd=getSpdVec2(chipName);
+		local armDir=Wector.new(0,0,-1):getWVec(chipName);
+		local armVec=armSpd+(armDir*20);
+		return armVec;
+	end
+
+	function getPlayerPosVec(playerID)
+		for i=0,_PLAYERS()-1 do
+			if playerID==_PLAYERID(i) then
+				playerNum=i;
+				break;
+			end
+		end
+		--[
+		local nt=_NTICKS();
+		local nx=(math.sin(nt/150)-math.sin(nt/350))/2;
+		local ny=(math.sin(nt/160)-math.sin(nt/360))/2;
+		local nz=(math.sin(nt/140)-math.sin(nt/340))/2;
+		--]
+
+		return getPlayerPosVec2(playerNum)-Wakaru_Eye.noiseVec*(_PLAYERCHIPS(playerNum)^(1/3));
+	end
+	function getPlayerPosVec2(playerNum)
+		math.randomseed(1519);	--���@�̂��܂��Ȃ�
+		local playerX=_PLAYERX(playerNum);
+		math.randomseed(1519);
+		local playerY=_PLAYERY(playerNum);
+		math.randomseed(1519);
+		local playerZ=_PLAYERZ(playerNum);
+
+		math.randomseed((_WX(0)+_WY(0)+_WZ(0)+_TICKS())*123456789);
+		return Wector.new(playerX, playerY, playerZ)
+	end
+
+	function toWector(p)
+		return Wector.new(p.x, p.y, p.z);
+	end
+}

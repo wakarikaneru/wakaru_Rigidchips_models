@@ -1,0 +1,180 @@
+--思いつき100%の竜巻シナリオ
+--日替わりで竜巻が楽しめる
+
+--コアつきの飛行機が対象です
+
+if type(loadlib)=="function" then	--Stolichnayaが入っているか確認
+	loadlib("Spirytus.DLL", "rc_OpenSpirytus")();	--Stolichnaya入れててSpirytus入れてないなんてないでしょー
+end
+
+--設定項目
+TORNADE_NUMBER=10;	--1km^2あたりの竜巻の数
+TORNADE_RANGE=300;	--竜巻を表示する範囲(水平距離[m])(1000m以上にしてもたぶん意味無い)
+TORNADE_QUALITY=10;	--竜巻の描画の質(小さいほうがきれい)
+TORNADE_HEIGHT_MAX=1000;	--竜巻の最高の高さ[m]
+TORNADE_HEIGHT_MIN=500;	--竜巻の最低の高さ[m]
+TORNADE_WIDTH_MAX=100;	--竜巻の最大の半径[m]
+TORNADE_WIDTH_MIN=50;	--竜巻の最小の半径[m]
+TORNADE_COLOR="C8E6FF"	--竜巻の色
+TORNADE_TIMER=30;	--竜巻が有効になるまでの時間[s]
+--
+
+TORNADE_RANGE2=TORNADE_RANGE^2;	--ルートかけるのがめんどいのでこっちを二乗しておく
+
+seed=0;
+tornadeTable={};
+
+windX=0;
+windZ=0;
+
+active=false;
+startTime=0;
+
+initFlag=false;
+function init()
+	initFlag=true;
+	
+	if type(_NTICKS)=="function" then	--Spirytusが入っているか確認
+		seed=GetLocalTime(year)+GetLocalTime(month)*1000+GetLocalTime(day)*1000^2;	--今日の日付を乱数の種にすればオンラインで共有できるはず
+	else
+		seed=_STICKS();	--入ってなかったらしかたないね
+	end
+	
+	math.randomseed(seed);
+	
+	for i=0, TORNADE_NUMBER-1 do
+		tornadeTable[i]=tornade.new();	--竜巻を生成する
+	end
+	
+	active=false;	--リスキル(?)されないように
+	startTime=_STICKS();
+end
+
+function main()
+	if not initFlag then init(); return end
+	
+	math.randomseed((_WX(0)+_WY(0)+_WZ(0)+_TICKS())*1234567890);	--おてがる乱数生成
+	
+	if not active then
+		if startTime+TORNADE_TIMER*_BASE()<_STICKS() then
+			active=true;
+		else
+			out(0, "tornade inactive "..math.floor((startTime+TORNADE_TIMER*_BASE()-_STICKS())/_BASE()).." seconds left");
+		end
+	else
+		out(0, "tornade active");
+	end
+	
+	_SETCOLOR(tonumber(TORNADE_COLOR, 16));
+	
+	--[[
+	_MOVE3D(_X(0)-500, 0, _Z(0)-500);
+	_LINE3D(_X(0)-500, 0, _Z(0)+500);
+	_LINE3D(_X(0)+500, 0, _Z(0)+500);
+	_LINE3D(_X(0)+500, 0, _Z(0)-500);
+	_LINE3D(_X(0)-500, 0, _Z(0)-500);
+	--]]
+	
+	windX=0;
+	windY=0;
+	windZ=0;
+	
+	for i=0, TORNADE_NUMBER-1 do
+		if active then tornadeTable[i]:effect(); end
+		tornadeTable[i]:disp();
+	end
+	
+	_SETWIND(windX, windY, windZ);
+end
+
+tornade={};
+function tornade.new()
+	local obj={
+		x=math.random()*1000,
+		z=math.random()*1000,
+		height=(TORNADE_HEIGHT_MAX-TORNADE_HEIGHT_MIN)*math.random()+TORNADE_HEIGHT_MIN,
+		width=(TORNADE_WIDTH_MAX-TORNADE_WIDTH_MIN)*math.random()+TORNADE_WIDTH_MIN,
+		width2=0;	--後で値を入れる
+		getPos=function(self)	--竜巻の座標を取得するメソッド としておく
+			local x=0;
+			local z=0;
+			local xk=math.floor(_X(0)/1000)*1000;	--いちいち求めるのは無駄だけどたかだか10回だしいっか
+			local zk=math.floor(_Z(0)/1000)*1000;	--z座標の1000の位
+			local xa=_X(0)-xk;	--あまり
+			local za=_Z(0)-zk;
+
+			if self.x<xa-500 then
+				x=xk+self.x+1000;
+			elseif self.x>xa+500 then
+				x=xk+self.x-1000;
+			else
+				x=xk+self.x;
+			end
+			
+			if self.z<za-500 then
+				z=zk+self.z+1000;
+			elseif self.z>za+500 then
+				z=zk+self.z-1000;
+			else
+				z=zk+self.z;
+			end
+			
+			return x,z;
+		end,
+		effect=function(self)	--モデルに影響をもたらすメソッド
+			local x,z=self:getPos();
+			local y=_Y(0)/self.height;
+			if (_X(0)-x)^2+(_Z(0)-z)^2<self.width2 and 0<=y then
+				local nx=x-_X(0);
+				local nz=z-_Z(0);
+				local dis=math.sqrt(nx^2+nz^2);
+				nx=nx/dis;
+				nz=nz/dis;
+				local pow=(1-dis/self.width)^2*200;
+				
+				if y<=1 then
+					if dis/self.width<=0.2 then
+						self:damage();
+					end
+					windX=windX+(nx+nz)*pow;
+					windY=windY+pow*(y+1)/4;
+					windZ=windZ+(nz-nx)*pow;
+				else
+					windX=windX+(nx+nz)*pow/y/10;
+					windZ=windZ+(nx+nz)*pow/y/10;
+				end
+			end
+		end,
+		disp=function(self)	--竜巻を表示するメソッド
+			local x,z=self:getPos();
+			local y=0;
+			local r=1;
+			if (_X(0)-x)^2+(_Z(0)-z)^2<TORNADE_RANGE2 then
+				for i=0, math.floor(self.height/TORNADE_QUALITY) do
+					y=i*TORNADE_QUALITY;
+					r=((y/self.height)^3)*self.width+self.width/10;
+					self:triangle (x, y, z, r);
+				end
+			end
+		end,
+		triangle=function(self, x, y, z, size)
+			local r=2*math.pi*math.random();
+			_MOVE3D(x+math.cos(r)*size, y, z+math.sin(r)*size);
+			for i=1, 3 do
+				r=r+math.pi/1.5;
+				_LINE3D(x+math.cos(r)*size, y, z+math.sin(r)*size);
+			end
+		end,
+		damage=function(self)	--なんか無理やりモデルにダメージを与える
+			local i=math.floor(math.random()*_CHIPS());
+			if _TOP(i)==0 then
+				hoge=_BYE(i);	--木っ端微塵に
+			end
+		end,
+	}
+	obj.width2=obj.width^2;	--スマートじゃない
+	return obj;
+end
+
+function OnInit()  initFlag=false; end
+function OnReset() initFlag=false; end

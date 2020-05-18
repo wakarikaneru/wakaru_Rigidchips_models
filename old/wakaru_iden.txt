@@ -1,0 +1,59 @@
+// [RCD] 
+Val
+{
+	L00(default=0, min=-30, max=30)
+	L01(default=0, max=90)
+	L02(default=0, max=90)
+	L10(default=0, min=-30, max=30)
+	L11(default=0, max=90)
+	L12(default=0, max=90)
+	L20(default=0, min=-30, max=30)
+	L21(default=0, max=90)
+	L22(default=0, max=90)
+	L30(default=0, min=-30, max=30)
+	L31(default=0, max=90)
+	L32(default=0, max=90)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Chip() {
+			W:RudderF(angle=L00) {
+				W:Frame(angle=L01) {
+					W:Frame(angle=L02) { }
+				}
+			}
+			E:RudderF(angle=L10) {
+				E:Frame(angle=L11) {
+					E:Frame(angle=L12) { }
+				}
+			}
+		}
+		S:Chip() {
+			W:RudderF(angle=L20) {
+				W:Frame(angle=L21) {
+					W:Frame(angle=L22) { }
+				}
+			}
+			E:RudderF(angle=L3) {
+				E:Frame(angle=L31) {
+					E:Frame() { }
+				}
+			}
+		}
+	}
+}
+Lua
+{
+	require("wakaru/wakaru_eye.lua");
+
+function init()
+end
+
+function main()
+end
+
+}

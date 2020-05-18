@@ -1,0 +1,19 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Jet(option=1, angle=90) { }
+	}
+}
+Lua
+{
+function main()
+	_BYE(1);
+end
+}

@@ -1,0 +1,226 @@
+// [RCD] 
+Val
+{
+	A0(default=-180, min=-180, max=0)
+	A1(default=-180, min=-180, max=0)
+	A10(default=-180, min=-180, max=0)
+	A11(default=-180, min=-180, max=0)
+	A2(default=-180, min=-180, max=0)
+	A3(default=-180, min=-180, max=0)
+	A4(default=-180, min=-180, max=0)
+	A5(default=-180, min=-180, max=0)
+	A6(default=-180, min=-180, max=0)
+	A7(default=-180, min=-180, max=0)
+	A8(default=-180, min=-180, max=0)
+	A9(default=-180, min=-180, max=0)
+	P(default=180, min=90, max=270)
+	R(default=0, min=-100000, max=100000)
+	T0(default=0, max=1600000)
+	T1(default=0, max=1600000)
+	T10(default=0, max=1600000)
+	T11(default=0, max=1600000)
+	T2(default=0, max=1600000)
+	T3(default=0, max=1600000)
+	T4(default=0, max=1600000)
+	T5(default=0, max=1600000)
+	T6(default=0, max=1600000)
+	T7(default=0, max=1600000)
+	T8(default=0, max=1600000)
+	T9(default=0, max=1600000)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Arm(angle=A0, power=T0, option=1600000, damper=0, name=ARM0) { }
+		N:Arm(angle=A1, power=T1, option=1600000, damper=0, name=ARM1) { }
+		N:Arm(angle=A2, power=T2, option=1600000, damper=0, name=ARM2) { }
+		N:Arm(angle=A3, power=T3, option=1600000, damper=0, name=ARM3) { }
+		N:Arm(angle=A4, power=T4, option=1600000, damper=0, name=ARM4) { }
+		// N:Arm(angle=A5, power=T5, option=100000, damper=0, name=ARM5) { }
+		// N:Arm(angle=A6, power=T6, option=100000, damper=0, name=ARM6) { }
+		// N:Arm(angle=A7, power=T7, option=100000, damper=0, name=ARM7) { }
+		// N:Arm(angle=A8, power=T8, option=100000, damper=0, name=ARM8) { }
+		// N:Arm(angle=A9, power=T9, option=100000, damper=0, name=ARM9) { }
+		// N:Arm(angle=A10, power=T10, option=100000, damper=0, name=ARM10) { }
+		// N:Arm(angle=A11, power=T11, option=100000, damper=0, name=ARM11) { }
+		N:Wheel(angle=P, power=-R, brake=100, option=1, effect=1, damper=0) {
+			N:Weight(angle=-150, option=8, damper=0) {
+				N:Weight(option=8, damper=0) {
+					N:Weight(angle=150, option=8, damper=0) { }
+				}
+				S:Weight(angle=-90, option=8, damper=0) { }
+				N:Weight(angle=120, option=8, damper=0) {
+					N:Weight(angle=-150, option=8, damper=0) { }
+					N:Weight(angle=30, option=8, damper=0) { }
+				}
+			}
+			E:Weight(angle=-150, option=8, damper=0) {
+				E:Weight(option=8, damper=0) {
+					E:Weight(angle=150, option=8, damper=0) { }
+				}
+				W:Weight(angle=-90, option=8, damper=0) { }
+				E:Weight(angle=120, option=8, damper=0) {
+					E:Weight(angle=-150, option=8, damper=0) { }
+					E:Weight(angle=30, option=8, damper=0) { }
+				}
+			}
+			S:Weight(angle=-150, option=8, damper=0) {
+				S:Weight(option=8, damper=0) {
+					S:Weight(angle=150, option=8, damper=0) { }
+				}
+				N:Weight(angle=-90, option=8, damper=0) { }
+				S:Weight(angle=120, option=8, damper=0) {
+					S:Weight(angle=-150, option=8, damper=0) { }
+					S:Weight(angle=30, option=8, damper=0) { }
+				}
+			}
+			W:Weight(angle=-150, option=8, damper=0) {
+				W:Weight(option=8, damper=0) {
+					W:Weight(angle=150, option=8, damper=0) { }
+				}
+				E:Weight(angle=-90, option=8, damper=0) { }
+				W:Weight(angle=120, option=8, damper=0) {
+					W:Weight(angle=-150, option=8, damper=0) { }
+					W:Weight(angle=30, option=8, damper=0) { }
+				}
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0
+	KEY_DOWN=1
+	KEY_LEFT=2
+	KEY_RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+
+	YAW=_AY(CORE)*180/math.pi
+	PITCH=180
+	T=0
+
+	Num=0
+
+	bx=_X(CORE)
+	by=_Y(CORE)
+	bz=_Z(CORE)
+
+function main()
+	T=T+1
+	S=1+_KEY(KEY_Z)*9
+	if(_KEY(KEY_LEFT)==1)then
+		YAW=YAW-1/S
+	end
+	if(_KEY(KEY_RIGHT)==1)then
+		YAW=YAW+1/S
+	end
+	if(180<YAW)then
+		YAW=YAW-360
+	elseif(YAW<-180)then
+		YAW=YAW+360
+	end
+
+	if 150<=T then
+		R=getRJetPower(0,YAW,2500,0,2500,0)
+
+		if(_KEY(KEY_UP)==1)then
+			PITCH=PITCH+1/S
+		end
+		if(_KEY(KEY_DOWN)==1)then
+			PITCH=PITCH-1/S
+		end
+		P=PITCH
+
+		for i=0,4 do
+			if i==Num then
+				if 0<_T(_G["ARM"..i]) then
+					if _G["A"..i]==0 and _KEY(KEY_X)==1 and _E(_G["ARM"..i])==_OPTION(_G["ARM"..i]) then
+						_G["T"..i]=1600000
+						Num=Num+1
+					end
+					drawLine(_G["ARM"..i],1000)
+					_G["A"..i]=_G["A"..i]+30
+					if _G["A"..i]>=0 then _G["A"..i]=0 end
+				else
+					Num=Num+1
+				end
+			else
+				_G["A"..i]=_G["A"..i]-30
+				_G["T"..i]=0
+			end
+		end
+
+		Num=math.mod(Num,5)
+	end
+end
+
+function getRJetPower(chipName,targetR,kp,ki,kd,ks)
+	local p
+	local i
+	local d
+	local s
+
+	local disR=targetR-_AY(CORE)*180/math.pi
+	if 180<disR then
+		disR=disR-360
+	elseif disR<-180 then
+		disR=disR+360
+	end
+	if _G["IROT"..chipName]==nil then _G["IROT"..chipName]=0 end
+	if _G["DROT"..chipName]==nil then _G["DROT"..chipName]=disR end
+
+	--
+	p=-disR*kp
+
+	--
+	_G["IROT"..chipName]=_G["IROT"..chipName]+disR*ki
+	_G["IROT"..chipName]=math.min(ki*5,math.max(-ki*5,_G["IROT"..chipName]))
+	i=_G["IROT"..chipName]
+
+	--
+	d=(_G["DROT"..chipName]-disR)*kd
+	_G["DROT"..chipName]=disR
+
+	--
+	s=_AY(chipName)*ks
+
+	--
+	return (p+i+d+s)
+end
+	function drawLine(num,length)
+		--弾の速度は20m/fらしい
+		--コアの速度*length/20を足せばおｋのはず
+		local x=_X(CORE)
+		local y=_Y(CORE)
+		local z=_Z(CORE)
+
+		if(num==CORE)then
+			_SETCOLOR(tonumber("FF00FF", 16))
+		elseif(_E(num)==_OPTION(num))then
+			_SETCOLOR(tonumber("FF0000", 16))
+		else
+			_SETCOLOR(tonumber("FFFF00", 16))
+		end
+
+ 		_MOVE3D(_X(num),_Y(num),_Z(num))
+ 		_LINE3D(_X(num)+_ZX(num)*-length+(x-bx)*length/20,_Y(num)+_ZY(num)*-length+(y-by)*length/20,_Z(num)+_ZZ(num)*-length+(z-bz)*length/20)
+		bx=x
+		by=y
+		bz=z
+	end
+}

@@ -1,0 +1,20 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Frame() {
+			W:Wheel(angle=90) { }
+			E:Wheel(angle=90) { }
+		}
+		S:Frame() {
+			E:Wheel(angle=90, power=2500) { }
+			W:Wheel(angle=90, power=-2500) { }
+		}
+	}
+}

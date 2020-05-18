@@ -1,0 +1,307 @@
+// [RCD] 
+// VALとBODYの書式固定しすぎてごめんね
+Val{
+	//ARMのpower -方向も使う(重要)
+	M1ARMP(default=0,min=-2147483648)
+	//JETのpower
+	M1JPA1(default=0,min=-2147483648)
+	M1JPA2(default=0,min=-2147483648)
+	M1JPB1(default=0,min=-2147483648)
+	M1JPB2(default=0,min=-2147483648)
+	M1JPS(default=0,min=-2147483648)
+	M1JY(default=0,min=-2147483648)
+	//ここまでで1機分
+	
+	M2ARMP(default=0,min=-2147483648)
+	M2JPA1(default=0,min=-2147483648)
+	M2JPA2(default=0,min=-2147483648)
+	M2JPB1(default=0,min=-2147483648)
+	M2JPB2(default=0,min=-2147483648)
+	M2JPS(default=0,min=-2147483648)
+	M2JY(default=0,min=-2147483648)
+	
+	M3ARMP(default=0,min=-2147483648)
+	M3JPA1(default=0,min=-2147483648)
+	M3JPA2(default=0,min=-2147483648)
+	M3JPB1(default=0,min=-2147483648)
+	M3JPB2(default=0,min=-2147483648)
+	M3JPS(default=0,min=-2147483648)
+	M3JY(default=0,min=-2147483648)
+	
+	M4ARMP(default=0,min=-2147483648)
+	M4JPA1(default=0,min=-2147483648)
+	M4JPA2(default=0,min=-2147483648)
+	M4JPB1(default=0,min=-2147483648)
+	M4JPB2(default=0,min=-2147483648)
+	M4JPS(default=0,min=-2147483648)
+	M4JY(default=0,min=-2147483648)
+	
+	M5ARMP(default=0,min=-2147483648)
+	M5JPA1(default=0,min=-2147483648)
+	M5JPA2(default=0,min=-2147483648)
+	M5JPB1(default=0,min=-2147483648)
+	M5JPB2(default=0,min=-2147483648)
+	M5JPS(default=0,min=-2147483648)
+	M5JY(default=0,min=-2147483648)
+	
+	M6ARMP(default=0,min=-2147483648)
+	M6JPA1(default=0,min=-2147483648)
+	M6JPA2(default=0,min=-2147483648)
+	M6JPB1(default=0,min=-2147483648)
+	M6JPB2(default=0,min=-2147483648)
+	M6JPS(default=0,min=-2147483648)
+	M6JY(default=0,min=-2147483648)
+	
+	M7ARMP(default=0,min=-2147483648)
+	M7JPA1(default=0,min=-2147483648)
+	M7JPA2(default=0,min=-2147483648)
+	M7JPB1(default=0,min=-2147483648)
+	M7JPB2(default=0,min=-2147483648)
+	M7JPS(default=0,min=-2147483648)
+	M7JY(default=0,min=-2147483648)
+	
+	M8ARMP(default=0,min=-2147483648)
+	M8JPA1(default=0,min=-2147483648)
+	M8JPA2(default=0,min=-2147483648)
+	M8JPB1(default=0,min=-2147483648)
+	M8JPB2(default=0,min=-2147483648)
+	M8JPS(default=0,min=-2147483648)
+	M8JY(default=0,min=-2147483648)
+	
+	
+}
+Key{
+
+}
+Body{
+	Core(name=CORE){
+		//1機めのcoreに当たるパーツ(JET) これにのみnameを使用する
+		S:Jet(angle=180,power=M1JPS,name=M1JS){
+			//JETBのUSER2の10の位は2
+			S:Jet(angle=90,power=M1JPB1,USER2=21){
+				S:Arm(power=-M1ARMP,option=800000){}
+				W:Jet(angle=-45,power=M1JY){}
+			}
+			E:Jet(angle=90,power=M1JPB2,USER2=22){
+				E:Arm(power=-M1ARMP,option=800000){}
+			}
+			//JETAは1
+			N:Jet(angle=-90,power=M1JPA1,USER2=11){
+				//裏面ARMの1つにUSER2=31を。
+				S:Arm(USER2=31,power=-M1ARMP,option=800000){}
+				N:Arm(option=800000,power=M1ARMP){}
+			}
+			W:Jet(angle=-90,power=M1JPA2,USER2=12){
+				E:Arm(power=-M1ARMP,option=800000){}
+				W:Arm(option=800000,power=M1ARMP){}
+			}
+			//ARMのOpは好きに設定してOK
+			//全機同じじゃなくてもOK
+			S:Arm(angle=-90,option=800000,power=M1ARMP){}
+			E:Arm(angle=-90,option=800000,power=M1ARMP){
+				N:Jet(angle=45,power=M1JY){}
+			}
+			//2機目を生やすのは1機目を全パーツ記述した後
+			S:Jet(angle=180,power=M2JPS,name=M2JS){
+				S:Jet(angle=90,power=M2JPB1,USER2=21){
+					S:Arm(power=-M2ARMP,option=800000){}
+					W:Jet(angle=-45,power=M2JY){}
+				}
+				E:Jet(angle=90,power=M2JPB2,USER2=22){
+					E:Arm(power=-M2ARMP,option=800000){}
+				}
+				N:Jet(angle=-90,power=M2JPA1,USER2=11){
+					S:Arm(USER2=31,power=-M2ARMP,option=800000){}
+					N:Arm(option=800000,power=M2ARMP){}
+				}
+				W:Jet(angle=-90,power=M2JPA2,USER2=12){
+					E:Arm(power=-M2ARMP,option=800000){}
+					W:Arm(option=800000,power=M2ARMP){}
+				}
+				S:Arm(angle=-90,option=800000,power=M2ARMP){}
+				E:Arm(angle=-90,option=800000,power=M2ARMP){
+					N:Jet(angle=45,power=M2JY){}
+				}
+				//3
+				S:Jet(angle=180,power=M3JPS,name=M3JS){
+					S:Jet(angle=90,power=M3JPB1,USER2=21){
+						S:Arm(power=-M3ARMP,option=800000){}
+						W:Jet(angle=-45,power=M3JY){}
+					}
+					E:Jet(angle=90,power=M3JPB2,USER2=22){
+						E:Arm(power=-M3ARMP,option=800000){}
+					}
+					N:Jet(angle=-90,power=M3JPA1,USER2=11){
+						S:Arm(USER2=31,power=-M3ARMP,option=800000){}
+						N:Arm(option=800000,power=M3ARMP){}
+					}
+					W:Jet(angle=-90,power=M3JPA2,USER2=12){
+						E:Arm(power=-M3ARMP,option=800000){}
+						W:Arm(option=800000,power=M3ARMP){}
+					}
+					S:Arm(angle=-90,option=800000,power=M3ARMP){}
+					E:Arm(angle=-90,option=800000,power=M3ARMP){
+						N:Jet(angle=45,power=M3JY){}
+					}
+					//4
+					S:Jet(angle=180,power=M4JPS,name=M4JS){
+						S:Jet(angle=90,power=M4JPB1,USER2=21){
+							S:Arm(power=-M4ARMP,option=800000){}
+							W:Jet(angle=-45,power=M4JY){}
+						}
+						E:Jet(angle=90,power=M4JPB2,USER2=22){
+							E:Arm(power=-M4ARMP,option=800000){}
+						}
+						N:Jet(angle=-90,power=M4JPA1,USER2=11){
+							S:Arm(USER2=31,power=-M4ARMP,option=800000){}
+							N:Arm(option=800000,power=M4ARMP){}
+						}
+						W:Jet(angle=-90,power=M4JPA2,USER2=12){
+							E:Arm(power=-M4ARMP,option=800000){}
+							W:Arm(option=800000,power=M4ARMP){}
+						}
+						S:Arm(angle=-90,option=800000,power=M4ARMP){}
+						E:Arm(angle=-90,option=800000,power=M4ARMP){
+							N:Jet(angle=45,power=M4JY){}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+Lua{
+require("wakaru/wakaru_eye.lua");
+require("cel/Science/Vector.lua");
+require("cel/Science/BasePhysic.lua");
+require("nyori/stdlib.lua"); --実は動作に不要
+require("nyori/2DGraphic.lua"); --実は動作に不要
+require("hikeo/stdlib.lua");
+require("hikeo/2Dlinelib.lua"); --実は動作に不要
+require("hikeo/network.lua"); --実は動作に不要
+require("hikeo/indra.lua");
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+
+ind={}
+
+
+function main()
+	if spmj1 then --分離後
+		eye:tick();
+		
+		--一番最初に情報更新
+		for i=1,4 do
+			ind[i]:Renew();
+		end
+		
+		--次にいんどらに命令入力
+			
+		if _PLAYERS()~=0 then
+			if _KEYDOWN(KEY_C)==1 then target=target+1; end
+			if _KEYDOWN(KEY_Z)==1 then target=target-1; end
+			if target<0 then target=_PLAYERS()-1 elseif _PLAYERS()<=target then target=0 end
+			out(5, "TARGET (Z) ".._PLAYERNAME(target).." (C) ");
+		else
+			out(5, "OffLine");
+		end
+		
+		for i=1,4 do
+			ind[i]:SetFire(_KEY(KEY_X)==1);
+		end
+		
+		tgt=eye:getPos(_PLAYERID(target));
+		tgt=Wector.new(0, 0, 0);
+		r=r+math.rad(5)/30/10;
+		for i=1,4 do
+			ind[i]:SetPos(tgt.x+math.cos(r+2*math.pi*i/4)*600, tgt.y+600, tgt.z+math.sin(r+2*math.pi*i/4)*600);
+		end
+		
+		for i=1,4 do
+			cn=ind[i].core;
+			pos=ind[i].MyPos;
+			vel=Wector.new(_VX(cn), _VY(cn), _VZ(cn)):getWVec(cn, true)/_BASE();
+			tpos=eye:getFuturePos2(_PLAYERID(target), Wector.new(pos.x, pos.y, pos.z), vel);
+			ind[i]:SetTarget(tpos.x, tpos.y, tpos.z);
+		end
+		
+		--最後に実行
+		for i=1,4 do
+			ind[i]:main();
+			
+			ind[i]:Line(); --おまけに線を引く
+		end
+		
+	else --分離前(最初の1Fのみ実行される)
+		eye=Wakaru_Eye.new();
+		target=0;
+		r=0;
+		for i=1,4 do
+			--切り離しもnewに統合すべき?
+			local d=_SPLIT(_G["M"..i.."JS"]);
+			ind[i]=Indra.new(i);
+			
+			--パラメータ書き換え(少々強引だが動けば正義)
+			ind[i].pid={33,25,100};
+			ind[i].pidlim={-40,40};
+			ind[i].pidwz={20,0.05,6};
+			ind[i].pidwzlim={-11,11};
+			ind[i]:SetAcc(0.0);
+		end
+		
+		spmj1=true;
+		
+	end
+	
+	out(0,string.format("  FPS : %2.1f  Chips : %d  Weight : %.1f    %3.1f km/h",_FPS(),_CHIPS(),_WEIGHT(),-(_VZ(0)*3.6))) ;
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function step3(val, target, ratio)
+	return val+(target-val)/ratio;
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+}

@@ -1,0 +1,200 @@
+// [RCD] 
+Val
+{
+	PR(default=0, min=-2000000, max=2000000)
+	PX1(default=0, min=-2000000, max=2000000)
+	PX2(default=0, min=-2000000, max=2000000)
+	PY1(default=0, min=-2000000, max=2000000)
+	PY2(default=0, min=-2000000, max=2000000)
+	PY3(default=0, min=-2000000, max=2000000)
+	PY4(default=0, min=-2000000, max=2000000)
+	PZ1(default=0, min=-2000000, max=2000000)
+	PZ2(default=0, min=-2000000, max=2000000)
+	R(default=50, min=-100000)
+	TRIG(default=0, max=10000)
+	Y(default=50, min=-100000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Jet(power=PY1, name=JETY1) { }
+		E:Jet(power=PY2, name=JETY2) { }
+		S:Jet(power=PY3, name=JETY3) { }
+		W:Jet(power=PY4, name=JETY4) { }
+		N:TrimF(angle=90) {
+			N:Jet(power=-PX1, name=JETX1, angle=180) { }
+		}
+		E:TrimF(angle=90) {
+			E:Jet(power=-PZ1, name=JETZ1, angle=180) { }
+		}
+		W:TrimF(angle=90) {
+			W:Jet(power=-PZ2, name=JETZ2, angle=180) { }
+		}
+		S:TrimF(angle=90) {
+			S:Jet(power=-PX2, name=JETX2, angle=180) { }
+		}
+		N:Weight(angle=180, option=1) {
+			W:Weight(angle=180, option=1) {
+				S:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				W:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				N:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				E:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+			}
+			N:Weight(angle=180, option=8) {
+				W:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				N:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				E:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				S:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+			}
+			E:Weight(angle=180, option=8) {
+				N:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				E:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				S:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				W:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+			}
+			S:Weight(angle=180, option=1) {
+				E:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				S:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				W:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+				N:Arm(angle=180, power=TRIG, option=0.0000000001) { }
+			}
+		}
+	}
+}
+Lua
+{
+	--キー番号を分かりやすくするやつ
+	UP=0
+	DOWN=1
+	LEFT=2
+	RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+		bx=_X(CORE)
+		by=_Y(CORE)
+		bz=_Z(CORE)
+	
+	function OnInit()
+		R=_AY(CORE)*180/math.pi
+		Y=_Y(CORE)
+	end
+
+function main()
+	out(0, _FPS());
+	j1=_Y(JETY1)
+	j2=_Y(JETY2)
+	j3=_Y(JETY3)
+	j4=_Y(JETY4)
+
+	if(_KEY(KEY_X)==1)then
+		TRIG=10000
+	else
+		TRIG=0
+	end
+
+	if(_KEY(KEY_F)==1)then
+		Y=Y+0.5
+	elseif(_KEY(KEY_V)==1)then
+		Y=Y-0.5
+	end
+
+	if(0<_H(0) and _H(0)<1.5)then
+		Y=Y+(1.5-_H(0))
+	end
+
+	if(_KEY(KEY_Z)==1)then
+		R=R-5
+	elseif(_KEY(KEY_C)==1)then
+		R=R+5
+	end
+
+	j=Y-j1
+	PY1=j*200000-_VY(JETY1)*20000
+	j=Y-j2
+	PY2=j*200000-_VY(JETY2)*20000
+	j=Y-j3
+	PY3=j*200000-_VY(JETY3)*20000
+	j=Y-j4
+	PY4=j*200000-_VY(JETY4)*20000
+
+	if(180<R)then
+		R=R-360
+	elseif(R<-180)then
+		R=R+360
+	end
+
+	r=_AY(CORE)*180/math.pi
+	j=R-r
+	if(180<j)then
+		j=j-360
+	elseif(j<-180)then
+		j=j+360
+	end
+	vr=_WY(CORE)*180/math.pi
+	PR=j*1000-vr*100
+
+	PX1=PR
+	PX2=PR
+	PZ1=PR
+	PZ2=PR
+
+	if(_KEY(UP)==1)then
+		PZ1=PR-50000
+		PZ2=PR+50000
+	end
+	if(_KEY(DOWN)==1)then
+		PZ1=PR+50000
+		PZ2=PR-50000
+	end
+	if(_KEY(LEFT)==1)then
+		PX1=PR-50000
+		PX2=PR+50000
+	end
+	if(_KEY(RIGHT)==1)then
+		PX1=PR+50000
+		PX2=PR-50000
+	end
+
+	vx=_VX(CORE)
+	vz=_VZ(CORE)
+	PX1=PX1+_VY(JETX1)*5000
+	PX2=PX2+_VY(JETX2)*5000
+	PZ1=PZ1+_VY(JETZ1)*5000
+	PZ2=PZ2+_VY(JETZ2)*5000
+end
+	function drawLine(num,length)
+		--弾の速度は20m/fらしい
+		--コアの速度*length/20を足せばおｋのはず
+		local x=_X(CORE)
+		local y=_Y(CORE)
+		local z=_Z(CORE)
+
+		if(num==CORE)then
+			_SETCOLOR(tonumber("FF00FF", 16))
+		elseif(_E(num)==10000)then
+			_SETCOLOR(tonumber("FF0000", 16))
+		else
+			_SETCOLOR(tonumber("FFFF00", 16))
+		end
+
+ 		_MOVE3D(_X(num),_Y(num),_Z(num))
+ 		_LINE3D(_X(num)+_ZX(num)*-length+(x-bx)*length/20,_Y(num)+_ZY(num)*-length+(y-by)*length/20,_Z(num)+_ZZ(num)*-length+(z-bz)*length/20)
+		bx=x
+		by=y
+		bz=z
+	end
+}

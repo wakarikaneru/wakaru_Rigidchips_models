@@ -1,0 +1,25 @@
+// [RCD] 
+Val
+{
+	R1(default=90, max=180)
+	R2(default=180, min=90, max=270)
+}
+Key
+{
+	0:R2(step=-1)
+	1:R2(step=1)
+	2:R1(step=-1)
+	3:R1(step=1)
+}
+Body
+{
+	Core() {
+		S:TrimF(angle=R1, option=1) {
+			N:RudderF(angle=R2, option=1) {
+				N:Arm() { }
+			}
+		}
+		S:Weight() { }
+		S:Weight(angle=180) { }
+	}
+}

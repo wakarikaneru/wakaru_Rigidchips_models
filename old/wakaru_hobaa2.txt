@@ -1,0 +1,32 @@
+// [RCD] 
+Val
+{
+	Y(default=50)
+	P1(default=0, min=-200000, max=200000)
+	P2(default=0, min=-200000, max=200000)
+	P3(default=0, min=-200000, max=200000)
+	P4(default=0, min=-200000, max=200000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Jet(power=P1, name=JET1) { }
+		E:Jet(power=P2, name=JET2) { }
+		S:Jet(power=P3, name=JET3) { }
+		W:Jet(power=P4, name=JET4) { }
+	}
+}
+Script
+{
+	if _KEY(0){Y=Y+1}
+	if _KEY(1){Y=Y-1}
+
+	P1=(Y-_Y(JET1))*10000-_VY(JET1)*1000
+	P2=(Y-_Y(JET2))*10000-_VY(JET2)*1000
+	P3=(Y-_Y(JET3))*10000-_VY(JET3)*1000
+	P4=(Y-_Y(JET4))*10000-_VY(JET4)*1000
+end
+}

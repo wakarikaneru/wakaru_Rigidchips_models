@@ -1,0 +1,90 @@
+// [RCD] 
+Val
+{
+	JET_X(default=0, min=-1000000, max=1000000)
+	JET_Y(default=0, min=-1000000, max=1000000)
+	JET_Z(default=0, min=-1000000, max=1000000)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		E:TrimF(angle=-90, option=1) {
+			W:Jet(power=-JET_Z) { }
+		}
+		N:TrimF(angle=90, option=1) {
+			S:Jet(power=-JET_X) { }
+		}
+		S:TrimF(angle=-90, option=1) {
+			N:Jet(power=-JET_X) { }
+		}
+		W:TrimF(angle=90, option=1) {
+			E:Jet(power=-JET_Z) { }
+		}
+		E:Jet(angle=180, power=-JET_Y) { }
+		W:Jet(angle=180, power=-JET_Y) { }
+	}
+}
+
+lua{
+	KEY_UP=0
+	KEY_DOWN=1
+
+	Y=math.floor(_Y(CORE))+10
+
+function main()
+	if _KEY(KEY_UP)==1 then Y=Y+1 end
+	if _KEY(KEY_DOWN)==1 then Y=Y-1 end
+
+	out(0,"TARGET Y="..Y)
+	out(1,"Y=".._Y(CORE))
+
+	local YPOW=getJetPower(CORE,Y,10000,1000,100000)
+
+	local JX,JY,JZ=WtoL(0,YPOW,0,CORE)
+	JET_X=JX
+	JET_Y=JY
+	JET_Z=JZ
+end
+
+function getJetPower(chipName,targetY,kp,ki,kd)
+	local p
+	local i
+	local d
+	local s
+
+	local disY=targetY-_Y(chipName)
+	if _G["I"..chipName]==nil then _G["I"..chipName]=0 end
+	if _G["D"..chipName]==nil then _G["D"..chipName]=disY end
+
+	--
+	p=disY*kp
+
+	--
+	_G["I"..chipName]=_G["I"..chipName]+disY*ki
+	_G["I"..chipName]=math.min(ki*10,math.max(-ki*10,_G["I"..chipName]))
+	i=_G["I"..chipName]
+
+	--
+	d=(_G["D"..chipName]-_Y(chipName))*kd
+	_G["D"..chipName]=_Y(chipName)
+
+	--
+
+	out(3,"P="..p)
+	out(4,"I="..i)
+	out(5,"D="..d)
+	out(6,"P+I+D="..p+i+d)
+
+	return p+i+d
+end
+
+function WtoL(x,y,z,chipName)
+	local vecX=_XX(chipName)*x+_XY(chipName)*y+_XZ(chipName)*z
+	local vecY=_YX(chipName)*x+_YY(chipName)*y+_YZ(chipName)*z
+	local vecZ=_ZX(chipName)*x+_ZY(chipName)*y+_ZZ(chipName)*z
+	return vecX,vecY,vecZ
+end
+}

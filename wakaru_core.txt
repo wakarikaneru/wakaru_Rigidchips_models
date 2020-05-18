@@ -1,0 +1,52 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Arm() { }
+	}
+}
+Lua
+{
+
+	require("wakaru/wakaru_eye.lua");
+	_BYE(1);
+	
+function main()
+	local power=math.pow(math.abs(_VY(CORE))*0.36, 1.3)/10;
+	out(0,power);
+	
+	local pos=Wector:getPosVec(BODY);
+	local o=Wector.new(0.01, 0, 0):getWVec(Core);
+	
+	_SETCOLOR(tonumber("FF0000", 16));
+	local a=Wector.new(0, power, 0):getWVec(Core);
+	_MOVE3D(pos.x+o.x, pos.y+o.y, pos.z+o.z);
+	_LINE3D(pos.x+a.x+o.x, pos.y+a.y+o.y, pos.z+a.z+o.z);
+	
+	 o=Wector.new(0.02, 0, 0):getWVec(Core);
+	 a=Wector.new(0, power, 0):getWVec(Core)*1;
+	_MOVE3D(pos.x+o.x, pos.y+o.y, pos.z+o.z);
+	_LINE3D(pos.x+a.x+o.x, pos.y+a.y+o.y, pos.z+a.z+o.z);
+	
+	 o=Wector.new(0.03, 0, 0):getWVec(Core);
+	 a=Wector.new(0, power, 0):getWVec(Core)*2;
+	_MOVE3D(pos.x+o.x, pos.y+o.y, pos.z+o.z);
+	_LINE3D(pos.x+a.x+o.x, pos.y+a.y+o.y, pos.z+a.z+o.z);
+	
+	 o=Wector.new(0.04, 0, 0):getWVec(Core);
+	 a=Wector.new(0, power, 0):getWVec(Core)*3;
+	_MOVE3D(pos.x+o.x, pos.y+o.y, pos.z+o.z);
+	_LINE3D(pos.x+a.x+o.x, pos.y+a.y+o.y, pos.z+a.z+o.z);
+	
+	 o=Wector.new(0.05, 0, 0):getWVec(Core);
+	 a=Wector.new(0, power, 0):getWVec(Core)*4;
+	_MOVE3D(pos.x+o.x, pos.y+o.y, pos.z+o.z);
+	_LINE3D(pos.x+a.x+o.x, pos.y+a.y+o.y, pos.z+a.z+o.z);
+end
+}

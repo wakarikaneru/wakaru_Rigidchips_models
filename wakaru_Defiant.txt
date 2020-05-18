@@ -1,0 +1,901 @@
+// [RCD] 
+Val
+{
+	ARM_0(default=0, min=-90, max=90)
+	ARM_1(default=260, min=109, max=260)
+	BREAK(default=0, max=80)
+	COLOR0(default=#5F4838)
+	COLOR1(default=#4C6C4A)
+	COLOR2(default=#524792)
+	COLOR3(default=#FEFEFF)
+	COLOR4(default=#404040)
+	GEAR(default=120, min=120, max=180)
+	GUN_0_0(default=110, min=90, max=180)
+	GUN_0_1(default=110, min=90, max=180)
+	GUN_0_2(default=110, min=90, max=180)
+	GUN_0_3(default=110, min=90, max=180)
+	GUN_1_0(default=140, min=90, max=180)
+	GUN_1_1(default=140, min=90, max=180)
+	GUN_1_2(default=140, min=90, max=180)
+	GUN_1_3(default=140, min=90, max=180)
+	GUN_TRIG_0(default=0, max=50000)
+	GUN_TRIG_1(default=0, max=50000)
+	GUN_TRIG_2(default=0, max=50000)
+	GUN_TRIG_3(default=0, max=50000)
+	HANDLE(default=0, min=-30, max=30)
+	PITCH(default=0, min=-30, max=30)
+	POWER(default=0, max=720000)
+	PROP0(default=0, min=-180, max=180)
+	PROP1(default=0, min=-180, max=180)
+	ROLL(default=180, min=150, max=210)
+	YAW(default=0, min=-30, max=30)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE, user2=811) {
+		S:RudderF(color=COLOR4) {
+			N:Frame(angle=60, color=COLOR4) {
+				N:Weight(angle=-60, option=4, color=COLOR0, name=BODY) {
+					N:Weight(option=3, color=COLOR1) {
+						N:Jet(angle=30, color=COLOR0) {
+							N:RLW(angle=-120, power=POWER, color=COLOR3, name=ENGINE0) {
+								N:Trim(angle=PROP0, color=COLOR4) { }
+								S:Trim(angle=PROP0, color=COLOR4) { }
+							}
+							N:RLW(angle=-120, power=-POWER, color=COLOR3, name=ENGINE1) {
+								N:Trim(angle=-PROP1, color=COLOR4) { }
+								S:Trim(angle=-PROP1, color=COLOR4) { }
+							}
+						}
+						S:Trim(angle=90, color=COLOR0) {
+							W:Weight(angle=-90, color=COLOR1) {
+								W:Weight(color=COLOR0) {
+									W:Chip(angle=-5, color=COLOR0) {
+										W:Chip(color=COLOR0) {
+											W:Chip(color=COLOR0) {
+												W:Chip(color=COLOR1) { }
+											}
+										}
+									}
+									S:TrimF(angle=90, option=1, color=COLOR4) {
+										S:RudderF(angle=GEAR, color=COLOR4) {
+											S:RLW(option=1, color=COLOR3, effect=2) { }
+										}
+									}
+								}
+							}
+							W:Weight(angle=90, color=COLOR1) {
+								W:Weight(color=COLOR0) {
+									W:Chip(angle=5, color=COLOR1) {
+										W:Chip(color=COLOR1) {
+											W:Chip(color=COLOR0) {
+												W:Chip(color=COLOR0) { }
+											}
+										}
+									}
+									S:TrimF(angle=90, option=1, color=COLOR4) {
+										S:RudderF(angle=-GEAR, color=COLOR4) {
+											S:RLW(option=1, color=COLOR3, effect=2) { }
+										}
+									}
+								}
+							}
+						}
+					}
+					S:Trim(angle=90, color=COLOR1) {
+						W:Chip(angle=90, color=COLOR0) {
+							W:Chip(color=COLOR0) {
+								W:Chip(angle=5, color=COLOR0) {
+									W:Rudder(angle=10, color=COLOR1) {
+										W:Frame(option=1, color=COLOR4) {
+											W:Frame(option=1, color=COLOR4) {
+												N:Chip(angle=ROLL, color=COLOR1) { }
+											}
+											N:Chip(angle=ROLL, color=COLOR0) { }
+										}
+									}
+								}
+								N:Chip(angle=160, color=COLOR0) { }
+								N:Chip(angle=-160, color=COLOR0) { }
+							}
+						}
+						W:Chip(angle=-90, color=COLOR1) {
+							W:Chip(color=COLOR1) {
+								W:Chip(angle=-5, color=COLOR0) {
+									W:Rudder(angle=10, color=COLOR1) {
+										W:Frame(option=1, color=COLOR4) {
+											W:Frame(option=1, color=COLOR4) {
+												N:Chip(angle=ROLL, color=COLOR0) { }
+											}
+											N:Chip(angle=ROLL, color=COLOR0) { }
+										}
+									}
+								}
+								N:Chip(angle=-160, color=COLOR1) { }
+								N:Chip(angle=160, color=COLOR1) { }
+							}
+						}
+						S:Trim(color=COLOR0) {
+							E:Chip(angle=ARM_0, color=COLOR4) {
+								E:Rudder(angle=ARM_1, color=COLOR4, name=ARM) {
+									W:Frame(angle=GUN_0_0, option=1, color=COLOR4) {
+										W:Frame(angle=GUN_1_0, option=1, color=COLOR4) {
+											W:Arm(angle=GUN_0_0, option=50000, power=GUN_TRIG_0, color=COLOR4, name=GUN_0) { }
+										}
+									}
+									W:Frame(angle=-GUN_0_1, option=1, color=COLOR4) {
+										W:Frame(angle=-GUN_1_1, option=1, color=COLOR4) {
+											W:Arm(angle=-GUN_0_1, option=50000, power=GUN_TRIG_1, color=COLOR4, name=GUN_1) { }
+										}
+									}
+									W:Frame(angle=GUN_0_2, option=1, color=COLOR4) {
+										W:Frame(angle=GUN_1_2, option=1, color=COLOR4) {
+											W:Arm(angle=GUN_0_2, option=50000, power=GUN_TRIG_2, color=COLOR4, name=GUN_2) { }
+										}
+									}
+									W:Frame(angle=-GUN_0_3, option=1, color=COLOR4) {
+										W:Frame(angle=-GUN_1_3, option=1, color=COLOR4) {
+											W:Arm(angle=-GUN_0_3, option=50000, power=GUN_TRIG_3, color=COLOR4, name=GUN_3) { }
+										}
+									}
+								}
+							}
+							S:Trim(color=COLOR1) {
+								S:Trim(color=COLOR1) {
+									S:Trim(color=COLOR0) {
+										S:RudderF(angle=45, color=COLOR4, spring=0.1, damper=0.5) {
+											S:RLW(angle=HANDLE, color=COLOR3, effect=2, break=BREAK) { }
+										}
+										S:Trim(color=COLOR1) {
+											E:Chip(angle=90, color=COLOR0) {
+												S:Chip(angle=PITCH, color=COLOR0) {
+													E:Chip(color=COLOR1) { }
+												}
+												E:Rudder(angle=45, color=COLOR1) { }
+											}
+											E:Chip(angle=-90, color=COLOR0) {
+												S:Chip(angle=-PITCH, color=COLOR1) {
+													E:Chip(color=COLOR0) { }
+												}
+												E:Rudder(angle=45, color=COLOR0) { }
+											}
+											S:Chip(angle=-YAW, color=COLOR0) {
+												E:Chip(color=COLOR0) { }
+											}
+											E:Rudder(angle=45, color=COLOR0) { }
+										}
+									}
+								}
+							}
+							E:Jet(power=300, option=2, color=COLOR4) { }
+						}
+					}
+				}
+			}
+			N:Cowl(angle=-30, option=1, color=COLOR4) {
+				N:Cowl(angle=30, option=1, color=COLOR4) {
+					N:Cowl(angle=60, option=1, color=COLOR4) {
+						W:Cowl(angle=90, option=1, color=COLOR4) { }
+						E:Cowl(angle=90, option=1, color=COLOR4) { }
+					}
+					E:Cowl(angle=90, option=1, color=COLOR4) { }
+					W:Cowl(angle=90, option=1, color=COLOR4) { }
+				}
+				W:Cowl(angle=90, option=1, color=COLOR4) { }
+				E:Cowl(angle=90, option=1, color=COLOR4) { }
+			}
+		}
+	}
+}
+Lua
+{
+
+	KEY_UP=0;
+	KEY_DOWN=1;
+	KEY_LEFT=2;
+	KEY_RIGHT=3;
+	KEY_Z=4;
+	KEY_X=5;
+	KEY_C=6;
+	KEY_A=7;
+	KEY_S=8;
+	KEY_D=9;
+	KEY_V=10;
+	KEY_B=11;
+	KEY_F=12;
+	KEY_G=13;
+	KEY_Q=14;
+	KEY_W=15;
+	KEY_E=16;
+	
+	initflag=false;
+	
+	require("wakaru/wakaru_eye.lua");
+	require("cel/Science/BasePhysic.lua");
+	
+function init()
+	initflag=true;
+	
+	eye=Wakaru_Eye.new();
+	BomberCharge=loadlib("BomberDLL.dll", "bomber_Charge");
+	
+	VECX=Wector.new(1, 0, 0);
+	VECY=Wector.new(0, 1, 0);
+	VECZ=Wector.new(0, 0, 1);
+	VEC0=Wector.new(0, 0, 0);
+	
+	power=0;
+	airBreak=0;
+	gear=true;
+	
+	fire=false;
+	fireNum=0;
+	
+	bodyPhys=BasePhysic.new(BODY);
+	engPhys0=BasePhysic.new(ENGINE0);
+	engPhys1=BasePhysic.new(ENGINE1);
+	
+	Eg0=trit_Component.AE10:new();
+	Eg1=trit_Component.AE10:new();
+	
+	--oasobi
+	fbt=0;
+end
+
+function main()
+	if not initflag then init() end
+	_ZOOM(100);
+	
+	eye:tick();
+	LimitAmmoRegulation();
+	bomberRegulation();
+	
+	--
+	bodyPhys:Renew();
+	engPhys0:Renew();
+	engPhys1:Renew();
+	
+	bodySpdW=getSpdVec(BODY);
+	bodySpdL=bodySpdW:getLVec(BODY);
+	bodyPos=Wector:getPosVec(BODY);
+	
+	disp();
+	
+	s=limit(math.abs(27.78/bodyPhys.lvz), 0, 1);
+	
+	--動翼の制御
+	ROLL=step2(ROLL, PID("ROLL", -math.deg(bodyPhys.wz), (_KEY(KEY_LEFT)-_KEY(KEY_RIGHT))*90, 1, 0.1, 2, -30, 30, 1.00)*s+180, 5);
+	PITCH=step2(PITCH, PID("PITCH", -math.deg(bodyPhys.wx), (_KEY(KEY_UP)-_KEY(KEY_DOWN))*90, 1, 0.1, 2, -30, 30, 1.00)*s, 5);
+	YAW=step2(YAW, PID("YAW", -math.deg(bodyPhys.wy), (_KEY(KEY_Z)-_KEY(KEY_C))*90, 1, 0.1, 2, -30, 30, 1.00)*s, 5);
+	
+	POWER=limit(POWER+(_KEY(KEY_Q)-_KEY(KEY_A))*360000/30, 0, 360000);
+	
+	if _KEYDOWN(KEY_E)==1 then park=not park; end
+	
+	if not park then
+		Eg0:SetParameter(engPhys0.wy, -_VY(ENGINE0));
+		Eg1:SetParameter(engPhys1.wy, -_VY(ENGINE1));
+		Eg0();Eg1();
+		PROP0=step2(PROP0, Eg0:GetAngle(), 5);
+		PROP1=step2(PROP1, Eg1:GetAngle(), 5);
+	else
+		PROP0=limit(PROP0, step2(PROP0, -PID("PROP0", (getSpdVec(ENGINE0):getLVec(ENGINE0)*_BASE()).y, 0, 1, 0.5, 30, -30, 30, 0.99), 15), -45, 45);
+		PROP1=limit(PROP1, step2(PROP1, -PID("PROP1", (getSpdVec(ENGINE1):getLVec(ENGINE1)*_BASE()).y, 0, 1, 0.5, 30, -30, 30, 0.99), 15), -45, 45);
+	end
+	
+	airBreak=step2(airBreak, _KEY(KEY_X), 1/15);
+	Eg0:SetPerBladeBrake(airBreak);
+	Eg1:SetPerBladeBrake(airBreak);
+	
+	--ギアの制御
+	if _KEYDOWN(KEY_W)==1 then
+		gear=not gear;
+	end
+	
+	if gear then
+		GEAR=step2(GEAR, 135, 1);
+		
+		HANDLE=step2(HANDLE, (_KEY(KEY_C)-_KEY(KEY_Z))*60, 5);
+		BREAK=step2(BREAK, _KEY(KEY_X)*80, 80/15);
+	else
+		GEAR=step2(GEAR, 180, 1);
+		HANDLE=step2(HANDLE, 0, 5);
+	end
+	
+	--武装に関する処理
+	if LimitAmmo<=0 then
+		fire=false;
+	elseif _KEYDOWN(KEY_F)==1  then
+		fire=not fire;
+	end
+	fcs();
+	
+	if _ML()*_MR()==1 then
+		LimitAmmo=600;
+	end
+	
+end
+
+COF=math.cos(math.rad(3));
+fireRate=3;
+
+THREATLINE=math.cos(math.rad(30));	--これ以下の角度で接近してきた敵機を攻撃対象にする
+
+function fcs()
+	target=nil;
+	gunTrig=false;
+	local aimVec=-VECZ;
+	local threatMax=-1;
+	
+	if LimitAmmo<=100*2 then	--弾が少なくなったら攻撃を控える
+		threatMax=THREATLINE;
+	else
+		threatMax=-1;
+	end
+	
+	gunSpd=getSpdVec2(ARM);
+	
+	for i=0,_PLAYERS()-1 do
+		id=_PLAYERID(i);
+		if (eye:getPos(id)-bodyPos):getLength()<=300 then
+			if eye:getState(id)==2 then
+				drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-bodyPos):getLength(), "FF0000");
+				
+				if fire then
+					fp=eye:getFuturePos(_PLAYERMYID(), eye:getReadTime2(id, bodyPos, bodySpdW));
+					aimVec=(fp-eye:getPos(id)):getNormal();
+					
+					if eye:getVel(id):getLength()<0.05 then
+						threat=-1;
+					else
+						threat=aimVec^eye:getVel(id):getNormal();
+					end
+					
+					aimVec=(eye:getFuturePos2(id, bodyPos, bodySpdW)-Wector:getPosVec(ARM)):getLVec(BODY):getNormal();
+					if 0<=aimVec.y then
+						if threatMax<=threat then
+							threatMax=threat;
+							target=id;
+						end
+					end
+				end
+				
+			else
+				if 200<(eye:getPos(id)-bodyPos):getLength() then
+					drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-bodyPos):getLength(), "00AA00");
+				elseif 100<(eye:getPos(id)-bodyPos):getLength() then
+					drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-bodyPos):getLength(), "00CC00");
+				else
+					drawTarget(CORE, eye:getNextPos(id), (eye:getPos(id)-bodyPos):getLength(), "00FF00");
+				end
+			end
+		end
+	end
+	
+	if target~=nil then
+		aimVec=eye:getFuturePos2(target, Wector:getPosVec(ARM), gunSpd)-Wector:getPosVec(ARM);
+		aimVec=aimVec:getLVec(BODY):getNormal();
+		
+		ARM_1=step2(ARM_1, math.deg(math.acos(aimVec^-VECZ))+90, 5);
+		
+		aimVec.z=0;
+		aimVec=aimVec:getNormal();
+		if 0<aimVec.x then
+			ARM_0=step2(ARM_0, -math.deg(math.acos(aimVec^VECY)), 5);
+		else
+			ARM_0=step2(ARM_0, math.deg(math.acos(aimVec^VECY)), 5);
+		end
+		
+		aimVec=eye:getFuturePos2(target, Wector:getPosVec(ARM), gunSpd)-Wector:getPosVec(ARM);
+		aimVec=aimVec:getLVec(ARM):getNormal();
+		if COF<(VECZ)^aimVec then
+			gunTrig=true;
+			fireRate=math.floor((eye:getPos(target)-bodyPos):getLength()/50+2);
+		end
+	else
+		ARM_0=step2(ARM_0, 0, 5);
+		ARM_1=step2(ARM_1, 260, 5);
+	end
+	
+	
+	if gunTrig then
+		fireFlag=false;
+		for i=0, 3 do
+			if fireNum==i then
+				if _OPTION(_G["GUN_"..i])<=_E(_G["GUN_"..i]) and _G["GUN_0_"..i]==90 then
+					_G["GUN_TRIG_"..i]=_OPTION(_G["GUN_"..i]);
+					fireFlag=true;
+					_G["GUN_0_"..i]=step2(_G["GUN_0_"..i], 110, 20/fireRate);
+					_G["GUN_1_"..i]=step2(_G["GUN_1_"..i], 140, 40/fireRate);
+				else
+					_G["GUN_TRIG_"..i]=0;
+					_G["GUN_0_"..i]=step2(_G["GUN_0_"..i], 90, 20/fireRate);
+					_G["GUN_1_"..i]=step2(_G["GUN_1_"..i], 180, 40/fireRate);
+				end
+			else
+				_G["GUN_TRIG_"..i]=0;
+				_G["GUN_0_"..i]=step2(_G["GUN_0_"..i], 110, 20/fireRate);
+				_G["GUN_1_"..i]=step2(_G["GUN_1_"..i], 140, 40/fireRate);
+			end
+		end
+		if fireFlag then
+			local n=0;
+			local m=0;
+			for i=0, 3 do
+				if _TOP(_G["GUN_"..i])==CORE then
+					if m<_E(_G["GUN_"..i]) and fireNum~=i then
+						n=i;
+						m=_E(_G["GUN_"..i]);
+					end
+				end
+			end
+			fireNum=n;
+			_G["GUN_0_"..fireNum]=step2(_G["GUN_0_"..fireNum], 90, 20/fireRate);
+			_G["GUN_1_"..fireNum]=step2(_G["GUN_1_"..fireNum], 180, 40/fireRate);
+		end
+	else
+		for i=0, 3 do
+			_G["GUN_TRIG_"..i]=0;
+		end
+	end
+	
+end
+
+
+function disp()
+	--FPS
+	out(0, string.format("[FPS] %02d", _FPS()));
+	--座標
+	out(1, string.format("[X] %+05d [Z] %+05d", math.floor(_X(BODY)+0.5), math.floor(_Z(BODY)+0.5)));
+
+	--絶対的な速度を視覚的に表示
+	drawGround(bodyPos, "000000");
+	
+	--自機から垂直な線を表示
+	drawPin(bodyPos, "00FF00");
+	
+	--出力の表示
+	local i=0;
+	local str="["
+	while i<math.floor(POWER/12000) do
+		i=i+1;
+		str=str.."|"
+	end
+	while i<30 do
+		i=i+1;
+		str=str.." "
+	end
+	str=str.."]";
+	out(24, str);
+	
+	--着陸状態の表示
+	if park then
+	else
+		--進行方向を視覚的に表示
+		fbt=math.mod(fbt+1, 30);
+		
+		drawFBody(BODY, bodyPos+bodySpdW*(30-fbt), "00FF00");
+		drawFBody(BODY, bodyPos+bodySpdW*(60-fbt), "00FF00");
+		drawFBody(BODY, bodyPos+bodySpdW*(90-fbt), "00FF00");
+	end
+	
+	--射撃状態の表示
+	if fire then
+		out(22, "ARM: ON");
+	else
+		out(22, "ARM: OFF");
+	end
+	
+	--残弾数の表示
+	out(23, "AMMO: ", math.floor(LimitAmmo/2));
+	
+	--EYE操作盤の表示
+	eye:dispPlayer(3, KEY_G, KEY_B, KEY_V);
+	
+	--HOSTILE設定された敵機の一覧を表示
+	enemyList="";
+	for i=0,_PLAYERS()-1 do
+		if eye:getState(_PLAYERID(i))==Player.STATE_HOSTILE then
+			enemyList=enemyList.." [ ".._PLAYERNAME(i).." ] ";
+		end
+	end
+	out(4, "ENEMY: "..enemyList);
+end
+
+function step2(val, target, step)
+	if math.abs(val-target)<=step then
+		val=target;
+	else
+		if target<val then
+			val=val-step;
+		else
+			val=val+step;
+		end
+	end
+	return val;
+end
+
+function PID(id, val, target, kp, ki, kd, min, max, damper, debug)
+	local p,i,d;
+	
+	local dis=target-val;
+	if _G["PID_I_"..id]==nil then _G["PID_I_"..id]=0 end;
+	if _G["PID_D_"..id]==nil then _G["PID_D_"..id]=dis end;
+
+	p=dis*kp;
+
+	_G["PID_I_"..id]=_G["PID_I_"..id]*damper+dis*ki;
+	_G["PID_I_"..id]=limit(_G["PID_I_"..id], min, max);
+	i=_G["PID_I_"..id];
+
+	d=(dis-_G["PID_D_"..id])*kd;
+	_G["PID_D_"..id]=dis;
+
+	if debug~=nil then
+		out(debug,id,"  p= ", p, " i= ", i, " d= ", d)
+	end
+
+	return p+i+d
+end
+
+function limit(val,min,max)
+	return math.max(min,math.min(max,val));
+end
+
+function getSpdVec(chipName)
+	if not _G["getSpdVec_init"..chipName] then
+		_G["getSpdVec_prevSpdVec"..chipName]=Wector:getPosVec(chipName);
+		_G["getSpdVec_init"..chipName]=true;
+	end
+
+	local spdVec=Wector.new(0, 0, 0);
+	local posVec=Wector:getPosVec(chipName);
+	spdVec=posVec-_G["getSpdVec_prevSpdVec"..chipName];
+	
+	_G["getSpdVec_prevSpdVec"..chipName]=posVec;
+
+	return spdVec;
+end
+
+function getSpdVec2(chipName)
+	return (Wector.new(_VX(chipName), _VY(chipName), _VZ(chipName))/_BASE()):getWVec(chipName, true);
+end
+
+function drawTarget(chip, pos, dis, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	local p1=(Wector.new(1, 1, 0)*dis/60):getWVec(chip)+pos;
+	local p2=(Wector.new(1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p3=(Wector.new(-1, -1, 0)*dis/60):getWVec(chip)+pos;
+	local p4=(Wector.new(-1, 1, 0)*dis/60):getWVec(chip)+pos;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+end
+
+function drawFBody(chip, pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	local p=pos;
+	local p1=Wector.new(-3.6, -1.2, 0):getWVec(chip)+p;
+	local p2=Wector.new(-3.6, 1.2, 0):getWVec(chip)+p;
+	local p3=Wector.new(3.6, 1.2, 0):getWVec(chip)+p;
+	local p4=Wector.new(3.6, -1.2, 0):getWVec(chip)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	if gear then
+		local p5=Wector.new(-0.9, -1.2-0.6, 0):getWVec(chip)+p;
+		local p6=Wector.new(-0.9, -1.2+0.6, 0):getWVec(chip)+p;
+		local p7=Wector.new(0.9, -1.2-0.6, 0):getWVec(chip)+p;
+		local p8=Wector.new(0.9, -1.2+0.6, 0):getWVec(chip)+p;
+		_MOVE3D(p5.x,p5.y,p5.z);
+		_LINE3D(p6.x,p6.y,p6.z);
+		_MOVE3D(p7.x,p7.y,p7.z);
+		_LINE3D(p8.x,p8.y,p8.z);
+	end
+end
+
+function drawGround(pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	local p=Wector.new(math.floor(pos.x/100)*100+50, pos.y-10, math.floor(pos.z/100)*100+50);
+
+	local p1=Wector.new(350, 0, 50)+p;
+	local p2=Wector.new(-350, 0, 50)+p;
+	local p3=Wector.new(-350, 0, -50)+p;
+	local p4=Wector.new(350, 0, -50)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	p1=Wector.new(250, 0, 150)+p;
+	p2=Wector.new(-250, 0, 150)+p;
+	p3=Wector.new(-250, 0, -150)+p;
+	p4=Wector.new(250, 0, -150)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);	
+	
+	p1=Wector.new(150, 0, 250)+p;
+	p2=Wector.new(-150, 0, 250)+p;
+	p3=Wector.new(-150, 0, -250)+p;
+	p4=Wector.new(150, 0, -250)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+	
+	p1=Wector.new(50, 0, 350)+p;
+	p2=Wector.new(-50, 0, 350)+p;
+	p3=Wector.new(-50, 0, -350)+p;
+	p4=Wector.new(50, 0, -350)+p;
+	
+	_MOVE3D(p1.x,p1.y,p1.z);
+	_LINE3D(p2.x,p2.y,p2.z);
+	_LINE3D(p3.x,p3.y,p3.z);
+	_LINE3D(p4.x,p4.y,p4.z);
+	_LINE3D(p1.x,p1.y,p1.z);
+end
+
+function drawPin(pos, col)
+	if col==nil then col="00FF00"; end
+	_SETCOLOR(tonumber(col, 16));
+	
+	_MOVE3D(pos.x,pos.y-5,pos.z);
+	_LINE3D(pos.x,0,pos.z);
+	
+	_MOVE3D(pos.x-1,pos.y-10,pos.z);
+	_LINE3D(pos.x+1,pos.y-10,pos.z);
+	_MOVE3D(pos.x,pos.y-10,pos.z-1);
+	_LINE3D(pos.x,pos.y-10,pos.z+1);
+end
+
+function bomberRegulation()
+	for i=0, 3 do
+		BomberCharge(_G["GUN_"..i]);
+	end
+end
+
+LimitAmmo = 0;           --自機の持つ残り弾薬ポイント。残弾表示やフラグに使ってください。
+LimitAmmoMax = 0;
+isJetPlaneLimitAmmo = false;--ジェット機ならtrueに汁
+isBomberLimitAmmo = true;--爆撃機ならtrueに汁
+isLimitAmmoInitialized = false;--内部的な初期化フラグ。いじったらだめーよｗ
+Cost100k = 12;           --100k(Option=100000)以上のARMの弾薬コスト
+Cost50k = 2;             --50k以上100k未満の弾薬コスト
+ListChipType = {};       --ARMのチップ番号を格納
+ArmCostList = {}; --発見されたArmのコストを順に収納
+function LimitAmmoRegulation()
+	--初期設定
+	if not isLimitAmmoInitialized then
+		--重量に応じて弾薬ポイントを決定
+		if isJetPlaneLimitAmmo then
+			LimitAmmo = 1200;
+		elseif isBomberLimitAmmo then
+			LimitAmmo = 600;
+		elseif 2200<=_WEIGHT() then
+			LimitAmmo = 500;
+		else
+			LimitAmmo = math.max(_WEIGHT()-1300, 0)/100*20+350;
+		end
+		LimitAmmoMax= LimitAmmo;
+		local chipNum = _CHIPS() - 1;
+		for i = 1, chipNum do
+			--ARMチェック
+			if _TYPE(i) == 10 then
+				--50kの場合、100kの場合でそれぞれ弾薬コストを格納
+				if _OPTION(i) == 50000 then
+					table.insert(ListChipType, i);
+					table.insert(ArmCostList, Cost50k);
+				elseif _OPTION(i) >= 100000 then
+					table.insert(ListChipType, i);
+					table.insert(ArmCostList, Cost100k);
+				end
+			end 
+		end
+		isLimitAmmoInitialized = true;
+	elseif _TICKS() > 150 then
+		--発射カウント
+		local n = table.getn(ListChipType);
+		for i = 1, n do
+			--発射判定
+			if _E(ListChipType[i]) == 0 and _TOP(ListChipType[i]) == 0 then
+				LimitAmmo = LimitAmmo - ArmCostList[i];  --弾薬ポイントから弾薬コストを減算
+			end
+		end
+		local h = _H(0);
+		local speed = _VZ(0);
+		if (0 < h and h < 2) and math.abs(speed) < 1.5 then
+			if isJetPlaneLimitAmmo then
+				LimitAmmo = LimitAmmo + 1;
+			else
+				LimitAmmo = LimitAmmo + 0.5;
+			end
+			if LimitAmmo > LimitAmmoMax then LimitAmmo = LimitAmmoMax; end
+		end
+	end
+end
+
+require "Boot" {"cel/Equa"}
+
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--trit_Component_AE10 "Radiata"
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+--
+--trit製航空機用発動機 trit_Component_AE10 "Radiata" Manual (Ver.Equa)
+--
+--■導入
+--	当製品は全速度、全高度に於いて理論上最高効率を実現するため演繹的手法により制御を行う。
+--
+--■搭載方法
+--	例
+--	□Main関数, OnFrame関数の前に記述すること
+--
+--		--"■"線で囲った部分を記述する。
+--		Eg = trit_Component.AE10:new() --Objectの生成
+--
+--	□Main関数, OnFrame関数の内部に記述すること
+--
+--		Eg:SetParameter( RLWの回転速度,　RLWのY軸並進速度, Bladeに該当するチップのRLWからの距離 )　
+--		--RLWのY軸並進速度は前進時に正の数になるよう代入する。 RLWの回転速度の符号は特に指定しない。
+--		--Bladeに該当するチップのRLWからの距離はデフォルトで0.6，この引数は省略可能である。
+--
+--		Eg() --内部で演算を行う。
+--		angEgBlade = Eg:GetAngle() --Bladeの角度を取得する。　なお代入する際、適宜符号を調節する。
+--
+--■運用条件
+--	高度  大気中(約10000mまで)
+--	速度  全速度域
+--	Bladeは偶数ならば何枚でも可
+--
+--■各種機能
+--	□推力、空気抵抗の調節機能
+--		method "SetPerConvert"に0~1の任意の値を代入することで、
+--		推力、空気抵抗の割合を変更する。
+--		0を代入した場合、推力0、進行方向の空気抵抗も0となり惰性飛行を行うことが出来る。
+--		Default値は1である。
+--
+--	□BladeBrake機能
+--		method "SetPerBladeBrake"に0~1の任意の値を代入することで、
+--		Bladeを減速に使用することができる。
+--		Default値は0である。
+--
+--■その他
+--	□角速度の取得について
+--		RC標準関数"_WY(cn)"は得られる値の精度が低いため、
+--		他の関数からの算出を推奨する。
+--
+--■Log
+--Ver.6 2011.08.12 説明を加筆
+--Ver.5 2011.03.25 大径プロペラに正式対応　
+--Ver.4 2010.11.04 修正版公開　
+--	回転速度の符号が乱れるため絶対値で演算するようにした。
+--	今後、method SetParameterに代入するRLWの回転速度の符号は任意とする。
+--
+--Ver.3 2010.11.01 公開
+require "Boot" {"cel/Equa"}
+namespace "trit_Component"
+{
+	concept "IAeroEngine"
+	{
+		method "GetVer"
+		:description "Versionの取得。";
+
+		method "SetParameter"
+		:description "第一引数にRLWの回転速度、第二引数にRLWのY軸並進速度、第三引数にプロペラの半径(0.6*プロペラ一枚あたりのチップ数)を代入する。第三引数は省略可(自動的に0.6となる。)";
+
+		method "SetPerConvert"
+		:description "推力、空気抵抗の割合を変更する。";
+
+		method "SetPerBladeBrake"
+		:description "Bladeを減速に使用する。";
+
+		method "GetAngle"
+		:description "Bladeの角度を取得する。";
+
+		metamethod "__call"
+		:description "発動機の制御を行う。";
+	};
+}
+
+namespace "trit_Component"
+{
+	class  "AE10"
+	:implements(trit_Component.IAeroEngine)
+	{
+		metamethod "_init"
+		:body(
+			function(self)
+				self.ver = 6
+				self.m_per_sec_x_Trim = 0
+				self.rev_per_sec_y_Wheel = 0
+				self.m_per_sec_y_Wheel = 0
+				self.m_rad = 0.6
+				self.angBlade = 45
+				self.perConvert = 1
+				self.perBladeBrake = 0
+
+			end
+		);
+
+		method "GetVer"
+		:body(
+			function(self)
+				return self.ver
+			end
+		);
+
+		method "SetParameter"
+		:body(
+			function(self,w,v,r)
+				self.rev_per_sec_y_Wheel = math.abs(w)
+
+				if v > 0 then
+					self.m_per_sec_y_Wheel = v
+				else
+					self.m_per_sec_y_Wheel = 0
+				end
+				self.m_rad = r or 0.6
+				self.m_per_sec_x_Trim = self.rev_per_sec_y_Wheel*self.m_rad
+			end
+		);
+
+		method "SetPerConvert"
+		:body(
+			function(self,per)
+				self.perConvert = per
+			end
+		);
+
+		method "SetPerBladeBrake"
+		:body(
+			function(self,per)
+				self.perBladeBrake = per
+			end
+		);
+
+		method "GetAngle"
+		:body(
+			function(self)
+				return self.angBlade
+			end
+		);
+
+		metamethod "__call"
+		:body(
+			function(self)
+				self.angBlade = math.deg(math.pi/2+math.atan2(self.m_per_sec_y_Wheel,math.abs(self.m_per_sec_x_Trim)))/(1+self.perConvert)*(1-self.perBladeBrake)
+			end
+		);
+	};
+}
+--
+--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+}

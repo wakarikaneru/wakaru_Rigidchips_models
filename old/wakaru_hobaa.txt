@@ -1,0 +1,143 @@
+// [RCD] 
+Val
+{
+	PR(default=0, min=-200000, max=200000)
+	PX1(default=0, min=-200000, max=200000)
+	PX2(default=0, min=-200000, max=200000)
+	PY1(default=0, min=-200000, max=200000)
+	PY2(default=0, min=-200000, max=200000)
+	PY3(default=0, min=-200000, max=200000)
+	PY4(default=0, min=-200000, max=200000)
+	PZ1(default=0, min=-200000, max=200000)
+	PZ2(default=0, min=-200000, max=200000)
+	R(default=50, min=-100000)
+	Y(default=50, min=-100000)
+	MODE(default=0, min=0, max=1)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		N:Jet(power=PY1, name=JETY1) { }
+		E:Jet(power=PY2, name=JETY2) { }
+		S:Jet(power=PY3, name=JETY3) { }
+		W:Jet(power=PY4, name=JETY4) { }
+		N:TrimF(angle=90) {
+			N:Jet(power=-PX1, name=JETX1, angle=180) { }
+		}
+		E:TrimF(angle=90) {
+			E:Jet(power=-PZ1, name=JETZ1, angle=180) { }
+		}
+		W:TrimF(angle=90) {
+			W:Jet(power=-PZ2, name=JETZ2, angle=180) { }
+		}
+		S:TrimF(angle=90) {
+			S:Jet(power=-PX2, name=JETX2, angle=180) { }
+		}
+	}
+}
+Lua
+{
+	--ÉLÅ[î‘çÜÇï™Ç©ÇËÇ‚Ç∑Ç≠Ç∑ÇÈÇ‚Ç¬
+	UP=0
+	DOWN=1
+	LEFT=2
+	RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+	
+	function OnInit()
+		R=_AY(CORE)*180/math.pi
+		Y=_Y(CORE)
+	end
+
+function main()
+	j1=_Y(JETY1)
+	j2=_Y(JETY2)
+	j3=_Y(JETY3)
+	j4=_Y(JETY4)
+
+	if(_KEY(KEY_F)==1)then
+		Y=Y+0.5
+	elseif(_KEY(KEY_V)==1)then
+		Y=Y-0.5
+	end
+
+	if(0<_H(0) and _H(0)<1.5)then
+		Y=Y+(1.5-_H(0))
+	end
+
+	if(_KEY(KEY_Z)==1)then
+		R=R-5
+	elseif(_KEY(KEY_C)==1)then
+		R=R+5
+	end
+
+	j=Y-j1
+	PY1=j*200000-_VY(JETY1)*20000
+	j=Y-j2
+	PY2=j*200000-_VY(JETY2)*20000
+	j=Y-j3
+	PY3=j*200000-_VY(JETY3)*20000
+	j=Y-j4
+	PY4=j*200000-_VY(JETY4)*20000
+
+	if(180<R)then
+		R=R-360
+	elseif(R<-180)then
+		R=R+360
+	end
+
+	r=_AY(CORE)*180/math.pi
+	j=R-r
+	if(180<j)then
+		j=j-360
+	elseif(j<-180)then
+		j=j+360
+	end
+	vr=_WY(CORE)*180/math.pi
+	PR=j*1000-vr*100
+
+	PX1=PR
+	PX2=PR
+	PZ1=PR
+	PZ2=PR
+
+	if(_KEY(UP)==1)then
+		PZ1=PR-50000
+		PZ2=PR+50000
+	end
+	if(_KEY(DOWN)==1)then
+		PZ1=PR+50000
+		PZ2=PR-50000
+	end
+	if(_KEY(LEFT)==1)then
+		PX1=PR-50000
+		PX2=PR+50000
+	end
+	if(_KEY(RIGHT)==1)then
+		PX1=PR+50000
+		PX2=PR-50000
+	end
+
+	vx=_VX(CORE)
+	vz=_VZ(CORE)
+	PX1=PX1+_VY(JETX1)*5000
+	PX2=PX2+_VY(JETX2)*5000
+	PZ1=PZ1+_VY(JETZ1)*5000
+	PZ2=PZ2+_VY(JETZ2)*5000
+end
+}

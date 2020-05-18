@@ -1,0 +1,30 @@
+// [RCD] 
+Val
+{
+	RED(default=0)
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		N:Frame(angle=-90, option=1) {
+			N:Frame(option=1) {
+				N:Frame(angle=90, option=1) {
+					N:Chip(angle=-90, color=#FF0000) {
+						S:Chip() { }
+						W:Chip() { }
+						E:Chip() { }
+						N:Chip() { }
+					}
+				}
+			}
+		}
+		N:Arm() {
+			N:Wheel(angle=60, brake=100) { }
+		}
+		E:Wheel(angle=60, brake=100) { }
+		W:Wheel(angle=60, brake=100) { }
+	}
+}

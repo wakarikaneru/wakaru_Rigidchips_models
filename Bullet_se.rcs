@@ -1,0 +1,112 @@
+loadlib("NATSound.dll", "Load")();
+
+initFlag=false;
+
+soundFlag=true;
+idCount=0;
+
+soundShot1="material/Bullet_se/shot1.wav";
+soundShot2="material/Bullet_se/shot2.wav";
+soundHit1="material/Bullet_se/hitNormal1.wav";
+soundHit2="material/Bullet_se/hitNormal2.wav";
+soundBrk1="material/Bullet_se/hitWeight1.wav";
+soundBrk2="material/Bullet_se/hitWeight2.wav";
+
+function init()
+	initFlag=true;
+	
+	for i=0, _CHIPS()-1 do
+		_G["chip_T"..i]=_T(i);
+		_G["chip_E"..i]=_E(i);
+	end
+
+end
+
+function main()
+	if not initFlag then
+		init();
+		return;
+	end
+	
+	if _SKEYDOWN(0)==1 then
+		soundFlag=not soundFlag;
+	end
+	
+	if soundFlag then
+		out(0, "SOUND ON [H]");
+	else
+		out(0, "SOUND OFF[H]");
+		return;
+	end
+	
+	shotFlag=false;
+	shotPow=0;
+	brkFlag=false;
+	brkPow=0;
+	hitFlag=false;
+	hitPow=0;
+	
+	for i=0, _CHIPS()-1 do
+		if _T(i)<_G["chip_T"..i] then
+			if _T(i)<=-1 then
+				brkFlag=true;
+			end
+			hitFlag=true;
+		end
+		if _E(i)<_G["chip_E"..i] then
+			if shotPow<_OPTION(i) then
+				shotPow=_OPTION(i);
+			end
+			shotFlag=true;
+		end
+		_G["chip_T"..i]=_T(i);
+		_G["chip_E"..i]=_E(i);
+	end
+	
+	if shotFlag then
+		if shotPow<100000 then
+			playSound(soundShot1, 1, math.random()*0.2+0.9);
+		else
+			playSound(soundShot2, 1, math.random()*0.2+0.9);
+		end
+	end
+	
+	if brkFlag then
+		if math.random()<0.5 then
+			playSound(soundBrk1, 1,  math.random()*0.5+0.75);
+		else
+			playSound(soundBrk2, 1,  math.random()*0.5+0.75);
+		end
+	else
+		if hitFlag then
+			if math.random()<0.5 then
+				playSound(soundHit1, 1,  math.random()*0.5+0.75);
+			else
+				playSound(soundHit2, 1, math.random()*0.5+0.75);
+			end
+		end
+	end
+	
+	--[[
+	if _SKEYDOWN(1)==1 then
+		playSound(soundShot, 1);
+	end
+	if _SKEYDOWN(2)==1 then
+		playSound(soundHit1, 1);
+	end
+	if _SKEYDOWN(3)==1 then
+		playSound(soundHit2, 1);
+	end
+	--]]
+end
+
+function playSound(path, vol, spd)
+	_G["sound"..idCount]=LoadSound(path);
+	SetVolume(_G["sound"..idCount], vol)
+	SetPlaySpeed(_G["sound"..idCount], spd);
+	Play(_G["sound"..idCount]);
+	idCount=math.mod(idCount+1, 32);
+end
+
+function OnInit()  initFlag=false; end
+function OnReset() initFlag=false; end

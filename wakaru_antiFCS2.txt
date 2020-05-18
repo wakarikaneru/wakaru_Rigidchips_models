@@ -1,0 +1,18 @@
+// [RCD] 
+Val
+{
+}
+Key
+{
+}
+Body
+{
+	Core() {
+		S:Wheel(power=1000) {
+			E:Weight(angle=45, option=8) { }
+			N:Weight(angle=45, option=8) { }
+			W:Weight(angle=45, option=8) { }
+			S:Weight(angle=45, option=8) { }
+		}
+	}
+}

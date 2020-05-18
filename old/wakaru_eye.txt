@@ -1,0 +1,615 @@
+----Wakaru_Eyeクラス
+--オンライン上の他プレイヤーに関する処理
+--主に外部インターフェース、RadarとPlayerList間のやりとりの役割
+Wakaru_Eye={
+	MYNAME="",
+	noiseVec={x=0, y=0, z=0},	--仮のVector
+	timeOffset=4;	--ラグとかを補正したいときに使う デフォは４
+};
+for i=0,_PLAYERS()-1 do
+	if _PLAYERMYID()==_PLAYERID(i) then
+		Wakaru_Eye.MYNAME=_PLAYERNAME(i);
+	end
+end
+function Wakaru_Eye.new(chipName, range)
+	local obj={
+		list=PlayerList.new(),
+		rader=Radar.new(chipName, range),
+		select=0,
+
+		tick=function(self)
+			if _PLAYERS()~=0 then
+				self.list:putData(self.rader:scan(Wakaru_Eye.MYNAME));
+				self.list:tick();
+				self.list:setMarker(self.rader:getMarker(Wakaru_Eye.MYNAME));
+			end
+		end,
+		dispPlayer=function(self, line, enter, right, left)
+			if _PLAYERS()~=0 then
+				if _KEYDOWN(enter)==1 then self.list:setState(_PLAYERID(self.select)) end
+				if _KEYDOWN(right)==1 then self.select=self.select+1; end
+				if _KEYDOWN(left)==1 then self.select=self.select-1; end
+				if self.select<0 then self.select=_PLAYERS()-1 elseif _PLAYERS()<=self.select then self.select=0 end
+				out(line, "Wakaru/Eye:Player < ".._PLAYERNAME(self.select).." > "..Player.STATE_TABLE[self.list:getState(_PLAYERID(self.select))]);
+			else
+				out(line, "Wakaru/Eye:Player OffLine");
+			end
+		end,
+		dispOffset=function(self, line, enter, right, left)
+			if _KEYDOWN(enter)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset+1; end
+			if _KEYDOWN(right)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset+1; end
+			if _KEYDOWN(left)==1 then Wakaru_Eye.timeOffset=Wakaru_Eye.timeOffset-1; end
+			if Wakaru_Eye.timeOffset<=0 then Wakaru_Eye.timeOffset=0; elseif 15<=Wakaru_Eye.timeOffset then Wakaru_Eye.timeOffset=15; end
+			out(line, "Wakaru/Eye:TimeOffset < "..Wakaru_Eye.timeOffset.."frame > "..math.floor(Wakaru_Eye.timeOffset*1000/30).."ms ");
+
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self, id)
+			return self.list:getPos(id);
+		end,
+		getFuturePos=function(self, id, t)
+			return self.list:getFuturePos(id, t);
+		end,
+		getVel=function(self, id)
+			return self.list:getVel(id);
+		end,
+		getAcc=function(self, id)
+			return self.list:getAcc(id);
+		end,
+		getDis=function(self, id)
+			return self.list:getDis(id);
+		end,
+		getFutureDis=function(self, id)
+			return self.list:getFutureDis(id);
+		end,
+		getReadTime=function(self, id)
+			return self.list:getReadTime(id);
+		end,
+		getChip=function(self, id)
+			return self.list:getChip(id);
+		end,
+		getState=function(self, id)
+			return self.list:getState(id);
+		end,
+		getInRange=function(self, id)
+			return self.list:getInRange(id);
+		end,
+	}
+	return obj;
+end
+
+----Radarクラス
+--実際に敵の座標や距離の取得を行う
+--マーカーの設定や2次ノイズの処理もここでしてしまうことにした
+Radar={};
+function Radar.new(chipName, setRange)
+	local obj={
+		chip=chipName,
+		range=setRange;
+
+		scan=function(self, myName)
+			--2次ノイズ除去用
+			local markerNum=nil;
+			Wakaru_Eye.noiseVec=Vector.new(0, 0, 0);
+			for i=0,_PLAYERS()-1 do
+				if myName==_PLAYERNAME(i) and  _PLAYERMYID()~=_PLAYERID(i) then
+					Wakaru_Eye.noiseVec=(self:getPos(i)-Vector.new(100, 100, 100))/(_PLAYERCHIPS(i)^(1/3));
+					break;
+				end
+			end
+			local arr={};
+			local pos=Vector:getPosVec(self.chip);
+			for i=0,_PLAYERS()-1 do
+				arr[_PLAYERID(i)]={};
+				arr[_PLAYERID(i)].num=i;
+				if _PLAYERMYID()==_PLAYERID(i) then
+					arr[_PLAYERID(i)].pos=self:getPos(i);
+				else
+					arr[_PLAYERID(i)].pos=self:getPos(i)-Wakaru_Eye.noiseVec*(_PLAYERCHIPS(i)^(1/3));	--自機以外のデータからノイズ分を引く
+				end
+				arr[_PLAYERID(i)].dis=(arr[_PLAYERID(i)].pos-pos):getLength();
+				arr[_PLAYERID(i)].inRange=arr[_PLAYERID(i)].dis<=self.range;
+			end
+			return arr;
+		end,
+		getPos=function(self, playerNum)
+			math.randomseed(1519);	--魔法のおまじない
+			local x=_PLAYERX(playerNum);
+			math.randomseed(1519);
+			local y=_PLAYERY(playerNum);
+			math.randomseed(1519);
+			local z=_PLAYERZ(playerNum);
+			return Vector.new(x, y, z);
+		end,
+		getMarker=function(self, myName)	--番号が最も若い自分と同じ名前のモデルをマーカーに設定する
+			for i=0,_PLAYERS()-1 do
+				if myName==_PLAYERNAME(i) and _PLAYERMYID()~=_PLAYERID(i) then
+					return _PLAYERID(i);
+				end
+			end
+			return nil;
+		end,
+	}
+	return obj;
+end
+
+----PlayerListクラス
+--オンラインの他プレイヤーをリストにまとめ、管理を行う
+--PlayerIDをキーにしたテーブル
+PlayerList={};
+function PlayerList.new()
+	local obj={
+		list={},
+		
+		tick=function(self)
+			for key,value in self.list do
+				if self.list[key]:tick(self.noiseVec) then
+					self.list[key]=nil;
+				end
+			end
+		end,
+		putData=function(self, arr)
+			for key,value in arr do
+				if self.list[key]==nil then
+					self.list[key]={};
+					self.list[key]=Player.new(value);
+				else
+					self.list[key]:putData(value);
+				end
+			end
+		end,
+		setState=function(self, id)
+			return self.list[id]:setState();
+		end,
+		setMarker=function(self, id)
+			if id~=nil then
+				self.list[id]:setMarker();
+			end
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self, id)
+			return self.list[id]:getPos();
+		end,
+		getFuturePos=function(self, id, t)
+			return self.list[id]:getFuturePos(t);
+		end,
+		getVel=function(self, id)
+			return self.list[id]:getVel();
+		end,
+		getAcc=function(self, id)
+			return self.list[id]:getAcc();
+		end,
+		getDis=function(self, id)
+			return self.list[id]:getDis();
+		end,
+		getFutureDis=function(self, id)
+			return self.list[id]:getFutureDis();
+		end,
+		getReadTime=function(self, id)
+			return self.list[id]:getReadTime();
+		end,
+		getChip=function(self, id)
+			return self.list[id]:getChip();
+		end,
+		getState=function(self, id)
+			return self.list[id]:getState();
+		end,
+		getInRange=function(self, id)
+			return self.list[id]:getInRange();
+		end,
+	}
+	return obj;
+end
+
+----Playerクラス
+--オンラインのプレイヤーの情報、属性、状態を持ち、管理を行う
+Player={
+	STATE_MYSELF=-2,	--自分
+	STATE_MARKER=-1,	--2次ノイズ除去に用いるマーカーのプレイヤー
+	STATE_NEWTRAL=0,	--ARMを装備していないプレイヤー
+	STATE_FRIEND=1,	--交戦中で無いプレイヤー
+	STATE_HOSTILE=2,	--交戦中のプレイヤー
+	STATE_TABLE={},
+};
+	Player.STATE_TABLE[Player.STATE_MYSELF]="MYSELF";
+	Player.STATE_TABLE[Player.STATE_MARKER]="MARKER";
+	Player.STATE_TABLE[Player.STATE_NEWTRAL]="NEWTRAL";
+	Player.STATE_TABLE[Player.STATE_FRIEND]="FRIEND";
+	Player.STATE_TABLE[Player.STATE_HOSTILE]="HOSTILE";
+function Player.new(initData)
+	local obj={
+		num=initData.num,	--何番目か
+		chip=_PLAYERCHIPS(initData.num),	--チップの枚数 ノイズ除去やモデルロード検出に
+		arm=_PLAYERARMS(initData.num),	--ARMの枚数
+		state=Player.STATE_NEWTRAL,	--識別
+		inRange=false;	--レーダーの範囲内かどうか
+		locus=Locus.new(initData),	--座標や距離のデータ
+		refresh=true;	--更新チェック 更新されなかったPLAYERは消去される
+		reset=_PLAYERRESETS(initData.num)+_PLAYERINITS(initData.num);	--リセットチェック リセットされたら一旦消去する
+		
+		tick=function(self)
+			if self:checkLost() or self:checkReset() or self:checkChange() then return true; else return false; end;
+		end,
+
+		setState=function(self)
+			if _PLAYERID(self.num)==_PLAYERMYID() then
+				self.state=Player.STATE_MYSELF;
+			elseif self.state==Player.STATE_MARKER then
+				self.state=Player.STATE_MARKER;
+			elseif self.arm==0 then
+				self.state=Player.STATE_NEWTRAL;
+			elseif self.state==Player.STATE_FRIEND then
+				self.state=Player.STATE_HOSTILE;
+			else
+				self.state=Player.STATE_FRIEND;
+			end
+		end,
+		setMarker=function(self)
+			self.state=Player.STATE_MARKER;
+		end,
+		putData=function(self, data)
+			self.refresh=true;
+			self.num=data.num;
+			self.inRange=data.inRange;
+			self.locus:putData(data);
+		end,
+		checkReset=function(self)
+			if self.reset==_PLAYERRESETS(self.num)+_PLAYERINITS(self.num) then
+				return false;
+			else
+				return true;
+			end;
+		end,
+		checkLost=function(self)
+			if self.refresh==true then
+				self.refresh=false; return false;
+			else
+				return true;
+			end
+		end,
+		checkChange=function(self)
+			if self.chip==_PLAYERCHIPS(self.num) and self.arm==_PLAYERARMS(self.num) then
+				return false;
+			else
+				return true;
+			end;
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self)
+			return self.locus:getPos();
+		end,
+		getNextPos=function(self)
+			return self.locus:getNextPos();
+		end,
+		getFuturePos=function(self, t)
+			return self.locus:getFuturePos(t);
+		end,
+		getVel=function(self)
+			return self.locus:getVel();
+		end,
+		getAcc=function(self)
+			return self.locus:getAcc();
+		end,
+		getDis=function(self)
+			return self.locus:getDis();
+		end,
+		getFutureDis=function(self)
+			return self.locus:getFutureDis();
+		end,
+		getReadTime=function(self)
+			return self.locus:getReadTime();
+		end,
+		getChip=function(self)
+			return self.chip;
+		end,
+		getState=function(self)
+			return self.state;
+		end,
+		getInRange=function(self, id)
+			return self.inRange;
+		end,
+	}
+	obj:setState();
+	return obj;
+end
+
+----Locusクラス
+--過去16フレーム分の座標データを持ち、座標、速度、加速度等の解析を行う
+--座標と距離を格納した配列　最小二乗法を用いた2次関数への近似
+Locus={
+	LS2={	{0.00017507002801, 0.00262605042017, 0.00612745098039},
+				{0.00262605042017, 0.04233193277311, 0.11397058823529},
+				{0.00612745098039, 0.11397058823529, 0.44240196078431}},
+};
+function Locus.new(initData)
+	local obj={
+		logPos=Fifo.new(16, initData.pos);
+		pos=initData.pos;	--現在の位置
+		nextPos=initData.pos;	--次フレームの予測位置
+		futurePos=initData.pos;	--弾が当たる瞬間の予測位置
+		errorPos=Vector.new(0, 0, 0);
+		
+		vel=Vector.new(0, 0, 0);	--現在の速度
+		acc=Vector.new(0, 0, 0);	--現在の加速度(正確には違う)
+		
+		logDis=Fifo.new(16, initData.dis);
+		dis=initData.dis;	--現在の距離
+		nextDis=initData.dis;	--次フレームの予測距離
+		futureDis=initData.dis;	--弾が当たる瞬間の予測距離
+		errorDis=0;
+		
+		readTime=math.floor(initData.dis/20)+Wakaru_Eye.timeOffset;
+		
+		putData=function(self, data)
+			self.errorPos=data.pos-self.nextPos;
+			self.errorDis=data.dis-self.nextDis;
+			self.logPos:put(data.pos);
+			self.logDis:put(data.dis);
+			self:analyze();
+		end,
+		analyze=function(self)
+			self:leastSquaresDis();
+			self:leastSquaresPos();
+		end,
+		leastSquaresDis=function(self)
+			--3次関数の解を求めるのは大変なので2次関数に近似する
+			local sum_y=0;
+			local sum_xy=0;
+			local sum_xxy=0;
+			local i=0;
+			for i=0, 15 do	--データ数は16個固定
+				sum_y=sum_y+self.logDis:get(i);
+				sum_xy=sum_xy+self.logDis:get(i)*(-i);	--インデックスが大きいほど過去なので
+				sum_xxy=sum_xxy+self.logDis:get(i)*((-i)^2);
+			end
+			local a=sum_xxy*Locus.LS2[1][1]+sum_xy*Locus.LS2[1][2]+sum_y*Locus.LS2[1][3];
+			local b=sum_xxy*Locus.LS2[2][1]+sum_xy*Locus.LS2[2][2]+sum_y*Locus.LS2[2][3];
+			local c=sum_xxy*Locus.LS2[3][1]+sum_xy*Locus.LS2[3][2]+sum_y*Locus.LS2[3][3];
+
+			self.dis=self.logDis:get(0);
+			self.nextDis=a+b+self.dis;
+			
+			--着弾までの時間を求める
+			local v=b-20;	--接近速度から弾の速度を引く
+			if v<=0 then	--速度が弾の速度より速い→当たらない
+				if a~=0 then
+					local r=v^2-4*a*self.dis;
+					if 0<=r then	--2次関数の解がない→当たらない
+						r=math.sqrt(r);
+						self.readTime=(-v-r)/(2*a);
+					else
+						self.readTime=self.dis/20;
+					end
+				else
+					self.readTime=-self.dis/v;
+				end
+			else
+				self.readTime=self.dis/20;
+			end
+			self.readTime=math.floor(self.readTime)+Wakaru_Eye.timeOffset;
+			self.futureDis=a*self.readTime^2+b*self.readTime+self.dis;
+
+		end,
+		leastSquaresPos=function(self)
+			--本来3次関数で近似する予定だったがラグに対して敏感に反応してしまうため2次関数で近似
+			local sum_y=Vector.new(0, 0, 0);
+			local sum_xy=Vector.new(0, 0, 0);
+			local sum_xxy=Vector.new(0, 0, 0);
+			local i=0;
+			for i=0, 15 do	--データ数は16個固定
+				sum_y=sum_y+self.logPos:get(i);
+				sum_xy=sum_xy+self.logPos:get(i)*(-i);	--インデックスが大きいほど過去なので
+				sum_xxy=sum_xxy+self.logPos:get(i)*((-i)^2);
+			end
+			local a=sum_xxy*Locus.LS2[1][1]+sum_xy*Locus.LS2[1][2]+sum_y*Locus.LS2[1][3];
+			local b=sum_xxy*Locus.LS2[2][1]+sum_xy*Locus.LS2[2][2]+sum_y*Locus.LS2[2][3];
+			local c=sum_xxy*Locus.LS2[3][1]+sum_xy*Locus.LS2[3][2]+sum_y*Locus.LS2[3][3];
+
+			self.acc=a;
+			self.vel=b;
+			self.pos=c;
+			
+			self.nextPos=a+b+c;
+			self.futurePos=a*self.readTime^2+b*self.readTime+c;
+		end,
+		
+		--アクセサいろいろ
+		getPos=function(self)
+			return self.pos;
+		end,
+		getNextPos=function(self)
+			return self.nextPos;
+		end,
+		getFuturePos=function(self, t)
+			if t==nil then
+				return self.futurePos;
+			else
+				return self.acc*t^2+self.vel*t+self.pos;
+			end
+		end,
+		getVel=function(self)
+			return self.vel;
+		end,
+		getAcc=function(self)
+			return self.acc;
+		end,
+		getDis=function(self)
+			return self.dis;
+		end,
+		getFutureDis=function(self)
+			return self.futureDis;
+		end,
+		getReadTime=function(self)
+			return self.readTime;
+		end,
+	}
+	return obj;
+end
+
+----Fifoクラス
+--FIFO型のリスト
+--配列を使ってそれっぽくしてみた
+Fifo={};
+function Fifo.new(length, init)
+	local obj={
+		arr={},
+		len=length,
+		head=-1,
+		
+		put=function(self, val)
+			self.head=math.mod(self.head+1, self.len);
+			self.arr[self.head]=val;
+		end,
+		get=function(self, key)
+			key=math.mod(key, self.len);
+			if key<=self.head then
+				return self.arr[math.mod(self.head-key, self.len)];
+			else
+				return self.arr[self.len+math.mod(self.head-key, self.len)];
+			end
+		end,
+		getLength=function(self)
+			return self.len;
+		end,
+	}
+	for i=0, obj.len-1 do
+		obj.arr[i]=init;
+	end
+	return obj;
+end
+
+----Vectorクラス
+--このゲーム内の、空間上のベクトルを扱う
+Vector={
+	getPosVec=function(self, chipName)
+		return Vector.new(_X(chipName), _Y(chipName), _Z(chipName));
+	end,
+};
+function Vector.new(vecX, vecY, vecZ)
+	local obj={
+		x=vecX,
+		y=vecY,
+		z=vecZ,
+
+		getLength=function(self)
+			return math.sqrt(self.x^2+self.y^2+self.z^2);
+		end,
+
+		getNormal=function(self)
+			local length=self:getLength();
+			if length~=0 then
+				return self/length;
+			else
+				return self;
+			end
+		end,
+
+		getWVec=function(self, chipName)
+			local t;
+			local lx; local ly; local lz;
+			local wx; local wy; local wz;
+			
+			lx=self.x;
+			ly=self.y;
+			lz=self.z;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx
+				lx=-lz;
+				lz=t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx
+				lx=lz;
+				lz=-t;
+			end
+			
+			wx=_XX(chipName)*lx+_YX(chipName)*ly+_ZX(chipName)*lz;
+			wy=_XY(chipName)*lx+_YY(chipName)*ly+_ZY(chipName)*lz;
+			wz=_XZ(chipName)*lx+_YZ(chipName)*ly+_ZZ(chipName)*lz;
+
+			return Vector.new(wx, wy, wz);
+		end,
+
+		getLVec=function(self, chipName)
+			local t;
+			local wx; local wy; local wz;
+			local lx; local ly; local lz;
+			
+			wx=self.x;
+			wy=self.y;
+			wz=self.z;
+				
+			lx=_XX(chipName)*wx+_XY(chipName)*wy+_XZ(chipName)*wz;
+			ly=_YX(chipName)*wx+_YY(chipName)*wy+_YZ(chipName)*wz;
+			lz=_ZX(chipName)*wx+_ZY(chipName)*wy+_ZZ(chipName)*wz;
+			
+			if chipName==0 then
+				--
+			elseif _DIR(chipName)==0 then--
+				lx=-lx;
+				lz=-lz;
+			elseif _DIR(chipName)==1 then
+				t=lx;
+				lx=lz;
+				lz=-t;
+			elseif _DIR(chipName)==2 then
+				--
+			elseif _DIR(chipName)==3 then
+				t=lx;
+				lx=-lz;
+				lz=t;
+			end
+			
+			return Vector.new(lx, ly, lz);
+		end,
+	}
+	local operation={
+		__metatable = "vector",
+
+		__add=function(vec1, vec2)
+			return Vector.new(vec1.x+vec2.x, vec1.y+vec2.y, vec1.z+vec2.z);
+		end,
+		__sub=function(vec1, vec2)
+			return Vector.new(vec1.x-vec2.x, vec1.y-vec2.y, vec1.z-vec2.z);
+		end,
+		__mul=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x*num, vec.y*num, vec.z*num);
+		end,
+		__div=function(op1, op2)
+			local vec,num;
+			if type(op2)=="number" then vec=op1; num=op2; else vec=op2; num=op1; end
+			return Vector.new(vec.x/num, vec.y/num, vec.z/num);
+		end,
+
+		__unm=function(self)
+			return Vector.new(-self.x, -self.y, -self.z);
+		end,
+
+		__pow=function(vec1,vec2)
+			return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z;
+		end,
+--[[
+		__lt=function(vec1,vec2)
+			return Vector.new(vec1.y*vec2.z-vec1.z*vec2.y, vec1.z*vec2.x-vec1.x*vec2.z, vec1.x*vec2.y-vec1.y*vec2.x);
+		end,
+]]--
+		__tostring=function(self)
+			return "x="..self.x..",y="..self.y..",z="..self.z;
+			--return "x="..math.floor(self.x)..",y="..math.floor(self.y)..",z="..math.floor(self.z);
+		end,
+	}
+	setmetatable(obj, operation);
+	return obj;
+end

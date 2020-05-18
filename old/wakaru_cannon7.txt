@@ -1,0 +1,212 @@
+// [RCD] 
+Val
+{
+	ROT(default=0, min=-1000000, max=1000000)
+	ANGLE(default=-90, min=-180, max=180)
+	TRIG(default=0)
+	ANGLE_BODY(default=180, min=90, max=180)
+	ANGLE_WHEEL(default=90, min=0, max=90)
+	ANGLE_WHEELL(default=90, min=0, max=180)
+	ANGLE_WHEELR(default=90, min=0, max=180)
+	ANGLE_SA(default=0, min=0, max=90)
+	POWERL(default=0, min=-2500, max=2500, step=100)
+	POWERR(default=0, min=-2500, max=2500, step=100)
+	BRAKE(default=15, min=15, max=100, step=10)
+}
+Key
+{
+}
+Body
+{
+	Core(name=CORE) {
+		S:Jet(angle=ANGLE, spring=1, damper=0) {
+			N:Trim(angle=ROT) {
+				N:Jet(angle=ANGLE_BODY) {
+					W:Wheel(angle=-ANGLE_WHEEL, power=POWERR, brake=BRAKE, option=0, spring=0.25, damper=0) { }
+					E:Wheel(angle=-ANGLE_WHEEL, power=-POWERL, brake=BRAKE, option=0, spring=0.25, damper=0) { }
+				}
+				N:Jet(angle=-ANGLE_BODY) {
+					E:Wheel(angle=ANGLE_WHEEL, power=POWERR, brake=BRAKE, option=0, spring=0.25, damper=0) { }
+					W:Wheel(angle=ANGLE_WHEEL, power=-POWERL, brake=BRAKE, option=0, spring=0.25, damper=0) { }
+				}
+			}
+		}
+		N:Frame(angle=150, option=1) {
+			N:Jet(angle=120, power=-JET_SA) {
+				W:Arm(angle=90, power=TRIG, option=400000, name=ARM1) { }
+				E:Arm(angle=90, power=TRIG, option=400000, name=ARM2) { }
+			}
+		}
+	}
+}
+Lua
+{
+	KEY_UP=0
+	KEY_DOWN=1
+	KEY_LEFT=2
+	KEY_RIGHT=3
+	KEY_Z=4
+	KEY_X=5
+	KEY_C=6
+	KEY_A=7
+	KEY_S=8
+	KEY_D=9
+	KEY_V=10
+	KEY_B=11
+	KEY_F=12
+	KEY_G=13
+	KEY_Q=14
+	KEY_W=15
+	KEY_E=16
+
+	mode=0
+	zoom=100
+
+	YAW=_AY(CORE)*180/math.pi
+	PITCH=0
+
+	prevMx=_MX()
+	prevMy=_MY()
+
+	bx=_X(CORE)
+	by=_Y(CORE)
+	bz=_Z(CORE)
+
+function main()
+	out(0,"ARM1 "..math.floor(_E(ARM1)/_OPTION(ARM1)*100).."%")
+	out(1,"ARM2 "..math.floor(_E(ARM2)/_OPTION(ARM2)*100).."%")
+	local mvx=0
+	local mvy=0
+	local mx=_MX()/_HEIGHT()*2
+	local my=_MY()/_HEIGHT()*2
+
+	if _MR()==1 then
+		mvx=mx-prevMx
+		mvy=my-prevMy
+		cross(2)
+	else
+		cross(0.1)
+	end
+	if _MM()==1 then
+		zoom=zoom+(my-prevMy)*100
+	end
+
+	prevMx=mx
+	prevMy=my
+
+	zoom=math.min(100,math.max(1,zoom))
+
+	local S=1/_ZOOM(zoom)
+
+	YAW=YAW+mvx/S
+	ANGLE=ANGLE+mvy/S
+
+
+	if _KEYDOWN(KEY_G)==1 then
+		if mode==0 then
+			mode=1
+			YAW=_AY(CORE)*180/math.pi
+		else
+			mode=0
+		end
+	end
+
+	if mode==0 then
+		local disR=angle_correct(YAW-_AY(CORE)*180/math.pi)
+		disR=math.min(10,math.max(-10,disR))
+		ROT=ROT-disR
+
+		ANGLE_BODY=ANGLE_BODY+10
+		ANGLE_WHEEL=ANGLE_WHEEL+10
+		if _KEY(KEY_E)==1 then
+			POWERR=2500
+			POWERL=2500
+		elseif _KEY(KEY_D)==1 then
+			POWERR=-2500
+			POWERL=-2500
+		end
+		if _KEY(KEY_S)==1 then
+			POWERR=2500
+			POWERL=-2500
+		elseif _KEY(KEY_F)==1 then
+			POWERR=-2500
+			POWERL=2500
+		end
+	else
+		local disR=angle_correct(YAW-_AY(CORE)*180/math.pi)
+		disR=math.min(10,math.max(-10,disR))
+		ROT=ROT-disR
+
+		ANGLE_BODY=ANGLE_BODY-10
+		ANGLE_WHEEL=ANGLE_WHEEL-10
+		BRAKE=80
+		if (_ML()==1 and _MR()==1) and ((_OPTION(ARM1)<=_E(ARM1) and _TOP(ARM1)==CORE) or (_OPTION(ARM2)<=_E(ARM2) and _TOP(ARM2)==CORE)) then
+			TRIG=_OPTION(ARM1)
+			zoom=100
+		else
+			TRIG=0
+		end
+		if _KEY(KEY_E)==1 then
+			zoom=zoom-1
+		elseif _KEY(KEY_D)==1 then
+			zoom=zoom+1
+		end
+	end
+
+
+
+end
+
+function cross(l)
+	local x=_X(CORE)
+	local y=_Y(CORE)
+	local z=_Z(CORE)
+
+	local vx=x-bx
+	local vy=y-by
+	local vz=z-bz
+
+	bx=x
+	by=y
+	bz=z
+
+	local lx,ly,lz=getlvec(vx,vy,vz,CORE)
+
+	local VX=(math.atan2(20-lz,lx)*180/math.pi-90)/(_ZOOM(0)/2)
+	local VY=(math.atan2(20-lz,-ly)*180/math.pi-90)/(_ZOOM(0)/2)
+
+	--local VX=(math.atan2(20-_VZ(CORE)/_BASE(),_VX(CORE)/_BASE())*180/math.pi-90)/(_ZOOM(0)/2)
+	--local VY=(math.atan2(20-_VZ(CORE)/_BASE(),-_VY(CORE)/_BASE())*180/math.pi-90)/(_ZOOM(0)/2)
+
+	_SETCOLOR(tonumber("FF0000", 16))
+
+	_MOVE2D(VX,VY-0.05)
+	_LINE2D(VX,VY+0.05)
+
+	_MOVE2D(VX-0.05,VY)
+	_LINE2D(VX+0.05,VY)
+
+	_SETCOLOR(tonumber("000000", 16))
+
+	_MOVE2D(0,-l)
+	_LINE2D(0,l)
+
+	_MOVE2D(-l,0)
+	_LINE2D(l,0)
+end
+
+-- ワールドベクトル→ローカルベクトル変換 -------------------------------------
+function getlvec(wx,wy,wz,cn)
+	local lx=_XX(cn)*wx+_XY(cn)*wy+_XZ(cn)*wz
+	local ly=_YX(cn)*wx+_YY(cn)*wy+_YZ(cn)*wz
+	local lz=_ZX(cn)*wx+_ZY(cn)*wy+_ZZ(cn)*wz
+	return lx,ly,lz
+end
+
+-- 角度補正 -------------------------------------------------------------------
+function angle_correct(a)
+	while(a<-180) do a=a+360 end
+	while(a>180) do a=a-360 end
+	return a
+end
+}
